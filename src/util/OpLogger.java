@@ -23,7 +23,7 @@ public class OpLogger {
 			Formatter formatter = new Formatter() {
 				@Override
 				public String format(LogRecord lr) {
-					return "[S] ";
+					return "[S] "+lr.getMessage();
 				}
 			};
 			fh.setFormatter(formatter);
@@ -39,12 +39,12 @@ public class OpLogger {
 		ArrayList<Player> admins = new ArrayList<Player>();
 		ArrayList<Player> jugadores = new ArrayList<Player>(Bukkit.getOnlinePlayers());
 		
-		for(int ii =0; ii<=jugadores.size(); ii++) {
+		for(int ii =0; ii<jugadores.size(); ii++) {
 			if(jugadores.get(ii).hasPermission("") || jugadores.get(ii).isOp()) {
 				admins.add(jugadores.get(ii));
 			}
 		}
-		for(int i=0; i<=admins.size(); i++) {
+		for(int i=0; i<admins.size(); i++) {
 			Player tmp =admins.get(i);
 			tmp.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&7S&8] &7&i"+issuer.getName()+": "+info));
 		}

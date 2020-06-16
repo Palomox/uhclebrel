@@ -25,7 +25,7 @@ public class ChatCmd implements CommandExecutor{
 			String mensaje = String.join(" ", args.toString());
 			Set<Player> jugatas = new HashSet<Player>();
 			jugatas.addAll(Bukkit.getServer().getOnlinePlayers());
-			plugin.getPm().callEvent(new AsyncPlayerChatEvent(true, ejecutor, mensaje, jugatas));
+			plugin.getPm().callEvent(new AsyncPlayerChatEvent(false, ejecutor, mensaje, jugatas));
 			return true;
 			
 		}

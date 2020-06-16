@@ -10,3 +10,7 @@ commands:
       description: Te Teletransporta al spawn.
    banhammer:
       description: Te da el gran poder del BanHammer en tus manos.
+   c:
+      description: Lanza un evento de chat.
+   sudo:
+      description: Fuerzas a realizar un comando a alguien.

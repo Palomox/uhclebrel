@@ -1,7 +1,9 @@
 package comandos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,11 +26,14 @@ public class SudoCmd implements CommandExecutor{
 		}else {
 			Player ejecutor = (Player) sender;
 			Player vistima = Bukkit.getPlayer(args[0]);
-			List<String> cmdl = Arrays.asList(args);
-			cmdl.remove(0);
-			String cmd = String.join(" ", cmdl.toString());
-			Bukkit.dispatchCommand(vistima, cmd);
-			plugin.getALogger().logCmd("Ha forzado a "+vistima.getName()+" a ejecutar '"+cmd+"'.", ejecutor);
+			ArrayList<String> argsl = new ArrayList<String>(Arrays.asList(args));
+			argsl.remove(0);
+			StringJoiner sj = new StringJoiner(" ");
+			for(int i=0; i<argsl.size(); i++) {
+				sj.add(argsl.get(i));
+			}
+			Bukkit.dispatchCommand(vistima, sj.toString());
+			plugin.getALogger().logCmd("Ha forzado a "+vistima.getName()+" a ejecutar '"+sj.toString()+"'.", ejecutor);
 			return true;
 		}
 			

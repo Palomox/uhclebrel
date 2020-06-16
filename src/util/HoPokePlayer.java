@@ -20,7 +20,9 @@ public class HoPokePlayer {
 		this.UUID = UUID;
 		this.firstjoin = firstjoin;
 	}
-	
+	public String getUUID() {
+		return this.UUID;
+	}
 	public Player getPlayer() {
 		Player jugador = Bukkit.getPlayer(this.UUID);
 		return jugador;
@@ -29,21 +31,14 @@ public class HoPokePlayer {
 		return this.firstjoin;
 	}
 	public static HoPokePlayer getHPPlayer(Player jugador, Main plugin) {
-		if(plugin.getHoPokePlayers().size() == 0) {
-			return null;
-		}else {
-		for(int i=0; i<=plugin.getHoPokePlayers().size(); i++) {
-			
-			Player acomparar = plugin.getHoPokePlayers().get(i).getPlayer();
-			if(jugador == acomparar) {
-				return plugin.getHoPokePlayers().get(i);
+		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
+			HoPokePlayer tmp = plugin.getHoPokePlayers().get(i);
+			Player tmpp = tmp.getPlayer();
+			if(tmpp == jugador) {
+				return tmp;
 			}
-			
-		}
 		}
 		return null;
-		
-		
 	}
 	
 }

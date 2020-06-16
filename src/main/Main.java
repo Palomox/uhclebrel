@@ -25,6 +25,7 @@ import comandos.Banhammer;
 import comandos.ChatCmd;
 import comandos.Setspawn;
 import comandos.Spawn;
+import comandos.SudoCmd;
 import eventos.Banhammereado;
 import eventos.NewPlayer;
 import fr.minuskube.inv.InventoryManager;
@@ -46,8 +47,9 @@ public class Main extends JavaPlugin{
 	private String dbprefix;
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
+	private Thread pthread = new Thread("HoCore");
 		public void onEnable() {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CTW]El Plugin ha sido Activado Correctamente");
+		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
 		registerConfig();
 		registerEvents();
 		registrarComandos();
@@ -90,7 +92,7 @@ public class Main extends JavaPlugin{
 			String uuid = rs.getString("UUID");
 			LocalDate fj = LocalDate.parse(rs.getString("primeraunion"));
 			HoPokePlayer pl = new HoPokePlayer(uuid, fj);
-			this.addPlayer(pl);
+			this.players.add(pl);
 		}
 			
 	
@@ -108,6 +110,14 @@ public class Main extends JavaPlugin{
 			e.printStackTrace();
 		}
 		
+	}
+	public void removeHPPlayer(HoPokePlayer pl) {
+		for(int i=0; i<this.players.size(); i++) {
+			HoPokePlayer tmp = this.players.get(i);
+			if(tmp == pl) {
+				this.players.remove(i);
+			}
+		}
 	}
 	public ResultSet consulta(String query) {
 		try {
@@ -137,11 +147,21 @@ public class Main extends JavaPlugin{
 		//saveDb();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CTW]El Plugin ha sido Desactivado Correctamente");
 	}
+	public void removeAdmin(Player acomparar) {
+		ArrayList<Player> admins = this.admins;
+		for(int i=0; i< admins.size(); i++) {
+			if(admins.get(i)==acomparar) {
+				admins.remove(i);
+			}
+		}
+	}
+	
 	public void registrarComandos() {
 		this.getCommand("setspawn").setExecutor(new Setspawn(this));
 		this.getCommand("spawn").setExecutor(new Spawn(this));
 		this.getCommand("banhammer").setExecutor(new Banhammer(this));
-		this.getCommand("c:").setExecutor(new ChatCmd(this));
+		this.getCommand("c").setExecutor(new ChatCmd(this));
+		this.getCommand("sudo").setExecutor(new SudoCmd(this));
 		}
 	/*public void saveToSQL(ArrayList<HoPokePlayer> jugadores) {
 		for(int i=0; i<= jugadores.size(); i++) {
@@ -170,15 +190,15 @@ public class Main extends JavaPlugin{
 	public PluginManager getPm() {
 		return this.getServer().getPluginManager();
 	}
-	public void loadAdmins() {
+	/*public void loadAdmins() {
 		ArrayList<Player> jugadores = new ArrayList<Player>(Bukkit.getOnlinePlayers());
 		
-		for(int ii =0; ii<=jugadores.size(); ii++) {
+		for(int ii =0; ii<jugadores.size(); ii++) {
 			if(jugadores.get(ii).hasPermission("hopoke.admin") || jugadores.get(ii).isOp()) {
 				admins.add(jugadores.get(ii));
 			}
 		}		
-	}
+	}*/
 	public ArrayList<Player> getAdmins(){
 		return this.admins;
 	}

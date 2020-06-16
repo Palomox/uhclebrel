@@ -28,8 +28,9 @@ public class NewPlayer implements Listener{
 		}
 		//Comprueba si es nuevo o no.
 		try {
-		if(plugin.consulta("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'").next()) {
+		if(!(plugin.consulta("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'").next())) {
 			//Jugador es nuevo
+			Bukkit.getConsoleSender().sendMessage("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'");
 			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&4¡Es la primera vez que "+jugador.getName()+" se une a HoPoke!"));
 			LocalDate fj = LocalDate.now();
 			HoPokePlayer hpp = new HoPokePlayer(jugador.getUniqueId().toString(), fj);
@@ -44,22 +45,13 @@ public class NewPlayer implements Listener{
 			HoPokePlayer hppo = new HoPokePlayer(uuid, fj2);
 			plugin.getHoPokePlayers().add(hppo);
 		}
+		
+		
 		}catch(SQLException e) {
+			Bukkit.getConsoleSender().sendMessage("Sqle en el guey este");
 			e.printStackTrace();
 		}
 		
-		
-		
-		
-		/*if(HoPokePlayer.getHPPlayer(jugador, plugin) !=null) {
-			
-		}else {
-			//Jugador es nuevo.
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&4¡Es la primera vez que "+jugador.getName()+" se une a HoPoke!"));
-			HoPokePlayer hpplayer = new HoPokePlayer(jugador.getUniqueId().toString(), LocalDate.now());
-			plugin.addPlayer(hpplayer);
-			plugin.query("INSERT INTO "+plugin.getDBPrefix()+"usuarios (UUID, primeraunion) VALUES ('"+hpplayer.getUUID()+"', '"+hpplayer.getFJ()+"')");
-		}*/
-	}
 
+	}
 }

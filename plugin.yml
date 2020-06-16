@@ -1,5 +1,5 @@
 main: main.Main
-version: 0.1
+version: 0.2
 api-version: 1.13
 name: HoCore
 depend: [SmartInvs]
@@ -14,3 +14,5 @@ commands:
       description: Lanza un evento de chat.
    sudo:
       description: Fuerzas a realizar un comando a alguien.
+   channel: 
+      description: Te permite dejar o unirte a un canal.

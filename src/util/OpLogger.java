@@ -13,10 +13,12 @@ import org.bukkit.entity.Player;
 import main.Main;
 
 public class OpLogger {
+	private Main plugin;
+	
 	Logger oplog = Logger.getLogger("StaffLog");
 	FileHandler fh;
 	public OpLogger(Main plugin) {
-		
+		this.plugin = plugin;
 		try {
 			fh = new FileHandler(plugin.getDataFolder().getAbsolutePath()+"/stafflog.log");
 			oplog.addHandler(fh);
@@ -36,17 +38,11 @@ public class OpLogger {
 	}
 	
 	public void logCmd(String info, Player issuer) {
-		ArrayList<Player> admins = new ArrayList<Player>();
-		ArrayList<Player> jugadores = new ArrayList<Player>(Bukkit.getOnlinePlayers());
+		ArrayList<Player> admins = plugin.getAdmins();
 		
-		for(int ii =0; ii<jugadores.size(); ii++) {
-			if(jugadores.get(ii).hasPermission("") || jugadores.get(ii).isOp()) {
-				admins.add(jugadores.get(ii));
-			}
-		}
 		for(int i=0; i<admins.size(); i++) {
 			Player tmp =admins.get(i);
-			tmp.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&7S&8] &7&i"+issuer.getName()+": "+info));
+			tmp.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&3S&8 | &7&o"+issuer.getName()+": "+info+"&r&8]"));
 		}
 		oplog.info(issuer.getName()+": "+info);
 	}

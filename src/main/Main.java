@@ -21,13 +21,17 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import chat.Channel;
 import comandos.Banhammer;
+import comandos.ChannelCmd;
 import comandos.ChatCmd;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
 import eventos.Banhammereado;
+import eventos.InitialChannel;
 import eventos.NewPlayer;
+import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
 import util.ConectorSQL;
 import util.HoPokePlayer;
@@ -48,6 +52,8 @@ public class Main extends JavaPlugin{
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
 	private Thread pthread = new Thread("HoCore");
+	private ArrayList<Channel> canales = new ArrayList<Channel>();
+	
 		public void onEnable() {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
 		registerConfig();
@@ -78,10 +84,26 @@ public class Main extends JavaPlugin{
 
 		}
 		loadDb();
-		
+		Channel staff = new Channel(this, "Staff");
+		Channel global= new Channel(this, "Global");
+		this.canales.add(0, staff);
+		this.canales.add(1, global);
+	}
+	public ArrayList<Channel> getCanales(){
+		return this.canales;
 	}
 	public OpLogger getALogger() {
 		return this.alogger;
+	}
+	public Channel getChannelByName(String name) {
+		for(int i=0; i<this.canales.size(); i++) {
+			String tmp = this.canales.get(i).getName();
+			if(tmp.equalsIgnoreCase(name)) {
+				return this.canales.get(i);
+			}
+			
+		}
+		return null;
 	}
 	public void loadDb() {
 		Connection db = this.conexion.getConnection();
@@ -162,6 +184,7 @@ public class Main extends JavaPlugin{
 		this.getCommand("banhammer").setExecutor(new Banhammer(this));
 		this.getCommand("c").setExecutor(new ChatCmd(this));
 		this.getCommand("sudo").setExecutor(new SudoCmd(this));
+		this.getCommand("channel").setExecutor(new ChannelCmd(this));
 		}
 	/*public void saveToSQL(ArrayList<HoPokePlayer> jugadores) {
 		for(int i=0; i<= jugadores.size(); i++) {
@@ -206,6 +229,8 @@ public class Main extends JavaPlugin{
 		PluginManager pm = this.getPm();
 		pm.registerEvents(new Banhammereado(), this);
 		pm.registerEvents(new NewPlayer(this), this);
+		pm.registerEvents(new QuitarListaAdmins(this), this);
+		pm.registerEvents(new InitialChannel(this), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

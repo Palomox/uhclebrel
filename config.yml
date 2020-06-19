@@ -1,0 +1,6 @@
+chat:
+   channels:
+      global:
+         format: "%luckperms_prefix% %luckperms_meta_namecolor% %player_name% &8> &r%luckperms_meta_chatcolor%"
+         name: "global"
+         

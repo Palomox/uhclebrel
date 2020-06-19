@@ -19,6 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import chat.Channel;
@@ -29,10 +30,11 @@ import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
 import eventos.Banhammereado;
-import eventos.InitialChannel;
+import eventos.MensajeEnviado;
 import eventos.NewPlayer;
 import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
+import net.milkbowl.vault.economy.Economy;
 import util.ConectorSQL;
 import util.HoPokePlayer;
 import util.OpLogger;
@@ -51,8 +53,9 @@ public class Main extends JavaPlugin{
 	private String dbprefix;
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
-	private Thread pthread = new Thread("HoCore");
+	//private Thread pthread = new Thread("HoCore");
 	private ArrayList<Channel> canales = new ArrayList<Channel>();
+	private static Economy econ = null;
 	
 		public void onEnable() {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
@@ -60,6 +63,7 @@ public class Main extends JavaPlugin{
 		registerEvents();
 		registrarComandos();
 		registerDatabase();
+		setupEconomy();
 		alogger = new OpLogger(this);
 		
 		FileConfiguration databasefile = getDatabase();
@@ -84,13 +88,30 @@ public class Main extends JavaPlugin{
 
 		}
 		loadDb();
-		Channel staff = new Channel(this, "Staff");
-		Channel global= new Channel(this, "Global");
-		this.canales.add(0, staff);
-		this.canales.add(1, global);
+		for(String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
+			String channelName = getConfig().getString("chat.channels."+nombre+".name");
+			String tmp = getConfig().getString("chat.channels."+nombre+".fastprefix");
+			char pre = tmp.charAt(0);
+			registerChannels(channelName, pre);
+		}
+	}
+	private boolean setupEconomy() {
+	      RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+	      if (rsp == null) {
+	          return false;
+	          }
+       econ = rsp.getProvider();
+       return econ != null;
+    }
+	public Economy getEcon() {
+		return econ;
 	}
 	public ArrayList<Channel> getCanales(){
 		return this.canales;
+	}
+	public void registerChannels(String nombre, char pr) {
+		Channel tmp = new Channel(this, nombre, pr);
+		this.canales.add(tmp);
 	}
 	public OpLogger getALogger() {
 		return this.alogger;
@@ -230,7 +251,8 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new Banhammereado(), this);
 		pm.registerEvents(new NewPlayer(this), this);
 		pm.registerEvents(new QuitarListaAdmins(this), this);
-		pm.registerEvents(new InitialChannel(this), this);
+		//pm.registerEvents(new InitialChannel(this), this);
+		pm.registerEvents(new MensajeEnviado(this), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

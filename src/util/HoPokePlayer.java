@@ -19,6 +19,7 @@ public class HoPokePlayer {
 	private String UUID;
 	private Channel escribiendo;
 	private ArrayList<Channel> leyendo;
+	private long dinero;
 	
 	
 	public HoPokePlayer(String UUID, LocalDate firstjoin) {
@@ -26,12 +27,13 @@ public class HoPokePlayer {
 		this.firstjoin = firstjoin;
 		this.escribiendo = null;
 		this.leyendo = new ArrayList<Channel>();
+		this.dinero = 0;
 	}
 	
 	public boolean estaLeyendo(Channel c) {
 		for (int i=0; i<leyendo.size(); i++) {
 			Channel tmp = leyendo.get(i);
-			if(tmp == c) {
+			if(tmp.equals(c)) {
 				return true;
 			}
 		}
@@ -45,8 +47,24 @@ public class HoPokePlayer {
 		Player jugador = Bukkit.getPlayer(java.util.UUID.fromString(UUID));
 		return jugador;
 	}
+	public void setDinero(long dinero) {
+		this.dinero = dinero;
+	}
+	public void addDinero(int dinero) {
+		this.dinero = this.dinero + dinero;
+	}
+	public void removeDinero(int aremover) {
+		this.dinero = this.dinero - dinero;
+	}
+	public long getDinero() {
+		return this.dinero;
+	}
 	public LocalDate getFJ() {
 		return this.firstjoin;
+	}
+	
+	public ArrayList<Channel> getLeyendo() {
+		return leyendo;
 	}
 	public void setWritingChannel(Channel channel) {
 		this.escribiendo = channel;
@@ -55,11 +73,13 @@ public class HoPokePlayer {
 		return this.escribiendo;
 	}
 	public void addReadingChannel(Channel channel) {
-		this.leyendo.add(channel);
+		if(!(this.estaLeyendo(channel))) {
+			this.leyendo.add(channel);
+		}
 	}
 	public void removeReadingChannel(Channel channel) {
 		for(int i =0; i<this.leyendo.size(); i++) {
-			if(this.leyendo.get(i) == channel) {
+			if(this.leyendo.get(i).equals(channel)) {
 				this.leyendo.remove(i);
 			}
 		}
@@ -68,7 +88,7 @@ public class HoPokePlayer {
 		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
 			HoPokePlayer tmp = plugin.getHoPokePlayers().get(i);
 			Player tmpp = tmp.getPlayer();
-			if(tmpp == jugador) {
+			if(tmpp.equals(jugador)) {
 				return tmp;
 			}
 			}

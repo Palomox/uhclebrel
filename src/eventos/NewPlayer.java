@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import chat.Channel;
 import main.Main;
 import util.HoPokePlayer;
 
@@ -28,21 +29,24 @@ public class NewPlayer implements Listener{
 		}
 		//Comprueba si es nuevo o no.
 		try {
-		if(!(plugin.consulta("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'").next())) {
+			ResultSet rs = plugin.consulta("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'");
+		if(!(rs.next())) {
 			//Jugador es nuevo
 			Bukkit.getConsoleSender().sendMessage("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'");
 			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&4¡Es la primera vez que "+jugador.getName()+" se une a HoPoke!"));
 			LocalDate fj = LocalDate.now();
 			HoPokePlayer hpp = new HoPokePlayer(jugador.getUniqueId().toString(), fj);
 			plugin.getHoPokePlayers().add(hpp);
+			plugin.getEcon().createPlayerAccount(hpp.getPlayer().getPlayer());
 			plugin.query("INSERT INTO "+plugin.getDBPrefix()+"usuarios VALUES ('"+jugador.getUniqueId()+"', '"+fj.toString()+"')");
 		}else {
 			//Ya hay registros nerd
-			ResultSet rs = plugin.consulta("SELECT * FROM "+plugin.getDBPrefix()+"usuarios WHERE UUID = '"+jugador.getUniqueId()+"'");
 			rs.next();
 			String uuid = rs.getString("UUID");
 			LocalDate fj2 = LocalDate.parse(rs.getString("primeraunion"));
 			HoPokePlayer hppo = new HoPokePlayer(uuid, fj2);
+			long dinero = rs.getLong("money"); 
+			hppo.setDinero(dinero);
 			plugin.getHoPokePlayers().add(hppo);
 		}
 		
@@ -51,7 +55,28 @@ public class NewPlayer implements Listener{
 			Bukkit.getConsoleSender().sendMessage("Sqle en el guey este");
 			e.printStackTrace();
 		}
-		
-
+		//Canal por defecto
+		HoPokePlayer pl = HoPokePlayer.getHPPlayer(jugador, plugin);
+		for(String disc : plugin.getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
+			String perm = plugin.getConfig().getString("chat.channels."+disc+".autojoinperm");
+			Channel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels."+disc+".name"));
+			if(perm.equalsIgnoreCase("none")) {
+				pl.addReadingChannel(tmp);
+				if(tmp.addLector(pl.getPlayer())) {
+					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora también lees "+tmp.getName());
+				}else {
+					jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"No puedes leer "+tmp.getName()+" porque ya lo estas leyendo!");
+				}			
+			}
+			if(pl.getPlayer().hasPermission(perm)) {
+				pl.addReadingChannel(tmp);
+				if(tmp.addLector(pl.getPlayer())) {
+					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora también lees "+tmp.getName());
+				}else {
+					jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"No puedes leer "+tmp.getName()+" porque ya lo estas leyendo!");
+				}			}
+		}
+		Channel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
+		pl.setWritingChannel(wr);		
 	}
 }

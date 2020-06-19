@@ -35,6 +35,7 @@ public class ChannelCmd implements CommandExecutor{
 					}
 					String operacion = args[0];
 					if(deseado !=null) {
+						if(jugador.getPlayer().hasPermission(plugin.getConfig().getString("chat.channels."+deseado.getName()+".perm"))) {
 						switch(operacion) {
 						case "write":	
 						String dejado = jugador.getWritingChannel().getName();
@@ -43,8 +44,11 @@ public class ChannelCmd implements CommandExecutor{
 						break;
 						case "read":
 						jugador.addReadingChannel(deseado);
-						deseado.getLectores().add(jugador.getPlayer());
-						jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora también lees "+deseado.getName());
+						if(deseado.addLector(ejecutor)) {
+							jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora también lees "+deseado.getName());
+						}else {
+							jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"No puedes leer "+deseado.getName()+" porque ya lo estas leyendo!");
+						}
 						break;
 						case "leave":
 						if(jugador.estaLeyendo(deseado)) {
@@ -60,6 +64,7 @@ public class ChannelCmd implements CommandExecutor{
 							break;
 						default:
 							jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"El primer argumento ha de ser leave, read, o write");
+					}
 					}
 					}else {
 						jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"Ese canal no existe");

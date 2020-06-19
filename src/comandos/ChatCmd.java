@@ -1,7 +1,11 @@
 package comandos;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -22,7 +26,12 @@ public class ChatCmd implements CommandExecutor{
 			return false;
 		}else {
 			Player ejecutor = (Player) sender;
-			String mensaje = String.join(" ", args.toString());
+			StringJoiner sj = new StringJoiner(" ");
+			ArrayList<String> aforzar = new ArrayList<String>(Arrays.asList(args));
+			for(int i=0; i<aforzar.size(); i++) {
+				sj.add(aforzar.get(i));
+			}
+			String mensaje = sj.toString();
 			Set<Player> jugatas = new HashSet<Player>();
 			jugatas.addAll(Bukkit.getServer().getOnlinePlayers());
 			plugin.getPm().callEvent(new AsyncPlayerChatEvent(false, ejecutor, mensaje, jugatas));

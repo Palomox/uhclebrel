@@ -1,15 +1,14 @@
 package util;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import chat.Channel;
 import main.Main;
 
 public class OpLogger {
@@ -38,12 +37,8 @@ public class OpLogger {
 	}
 	
 	public void logCmd(String info, Player issuer) {
-		ArrayList<Player> admins = plugin.getAdmins();
-		
-		for(int i=0; i<admins.size(); i++) {
-			Player tmp =admins.get(i);
-			tmp.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&3S&8 | &7&o"+issuer.getName()+": "+info+"&r&8]"));
-		}
+		Channel staff = plugin.getChannelByName("Staff");
+		staff.sendRawMessage(ChatColor.translateAlternateColorCodes('&', "&8[&3S&8 | &7&o"+issuer.getName()+": "+info+"&r&8]"));
 		oplog.info(issuer.getName()+": "+info);
 	}
 	

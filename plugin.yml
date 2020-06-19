@@ -1,8 +1,8 @@
 main: main.Main
-version: 0.2
+version: 0.2.5
 api-version: 1.13
 name: HoCore
-depend: [SmartInvs]
+depend: [SmartInvs, Vault, PlaceholderAPI, Netherboard]
 commands:
    setspawn:
       description: Pone el Spawn
@@ -16,3 +16,7 @@ commands:
       description: Fuerzas a realizar un comando a alguien.
    channel: 
       description: Te permite dejar o unirte a un canal.
+   eco:
+      description: Comando principal de la economia.
+   hocore:
+      description: Comando principal del plugin.

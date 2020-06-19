@@ -21,8 +21,16 @@ public class SudoCmd implements CommandExecutor{
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {
 		if(!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"¡No puedes ejecutar este comando desde la consola!");
-			return false;
+			Player vistima = Bukkit.getPlayer(args[0]);
+			ArrayList<String> argsl = new ArrayList<String>(Arrays.asList(args));
+			argsl.remove(0);
+			StringJoiner sj = new StringJoiner(" ");
+			for(int i=0; i<argsl.size(); i++) {
+				sj.add(argsl.get(i));
+			}
+			Bukkit.dispatchCommand(vistima, sj.toString());
+			plugin.getALogger().logCmd("Ha forzado a "+vistima.getName()+" a ejecutar '"+sj.toString()+"'.", null);
+			return true;		
 		}else {
 			Player ejecutor = (Player) sender;
 			Player vistima = Bukkit.getPlayer(args[0]);

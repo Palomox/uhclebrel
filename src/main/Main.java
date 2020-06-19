@@ -26,6 +26,8 @@ import chat.Channel;
 import comandos.Banhammer;
 import comandos.ChannelCmd;
 import comandos.ChatCmd;
+import comandos.EcoCMD;
+import comandos.HoCoreCMD;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
@@ -186,6 +188,15 @@ public class Main extends JavaPlugin{
 			}
 		}
 	}*/
+	public HoPokePlayer getHPByName(String name) {
+		for(HoPokePlayer p: this.players) {
+			Player tmp = p.getPlayer();
+			if(tmp.getName().equalsIgnoreCase(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
 	public void onDisable() {
 		//saveDb();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CTW]El Plugin ha sido Desactivado Correctamente");
@@ -206,6 +217,8 @@ public class Main extends JavaPlugin{
 		this.getCommand("c").setExecutor(new ChatCmd(this));
 		this.getCommand("sudo").setExecutor(new SudoCmd(this));
 		this.getCommand("channel").setExecutor(new ChannelCmd(this));
+		this.getCommand("eco").setExecutor(new EcoCMD(this));
+		this.getCommand("hocore").setExecutor(new HoCoreCMD(this));
 		}
 	/*public void saveToSQL(ArrayList<HoPokePlayer> jugadores) {
 		for(int i=0; i<= jugadores.size(); i++) {

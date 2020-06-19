@@ -19,7 +19,7 @@ public class HoPokePlayer {
 	private String UUID;
 	private Channel escribiendo;
 	private ArrayList<Channel> leyendo;
-	private long dinero;
+	private double dinero;
 	
 	
 	public HoPokePlayer(String UUID, LocalDate firstjoin) {
@@ -47,16 +47,16 @@ public class HoPokePlayer {
 		Player jugador = Bukkit.getPlayer(java.util.UUID.fromString(UUID));
 		return jugador;
 	}
-	public void setDinero(long dinero) {
+	public void setDinero(double dinero) {
 		this.dinero = dinero;
 	}
-	public void addDinero(int dinero) {
+	public void addDinero(double dinero) {
 		this.dinero = this.dinero + dinero;
 	}
-	public void removeDinero(int aremover) {
+	public void removeDinero(double aremover) {
 		this.dinero = this.dinero - dinero;
 	}
-	public long getDinero() {
+	public double getDinero() {
 		return this.dinero;
 	}
 	public LocalDate getFJ() {

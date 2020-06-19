@@ -3,6 +3,8 @@ package eventos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import chat.Channel;
+import fr.minuskube.netherboard.Netherboard;
+import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
+import me.clip.placeholderapi.PlaceholderAPI;
 import util.HoPokePlayer;
 
 public class NewPlayer implements Listener{
@@ -41,16 +46,13 @@ public class NewPlayer implements Listener{
 			plugin.query("INSERT INTO "+plugin.getDBPrefix()+"usuarios VALUES ('"+jugador.getUniqueId()+"', '"+fj.toString()+"')");
 		}else {
 			//Ya hay registros nerd
-			rs.next();
 			String uuid = rs.getString("UUID");
 			LocalDate fj2 = LocalDate.parse(rs.getString("primeraunion"));
 			HoPokePlayer hppo = new HoPokePlayer(uuid, fj2);
-			long dinero = rs.getLong("money"); 
+			double dinero = rs.getDouble("money"); 
 			hppo.setDinero(dinero);
 			plugin.getHoPokePlayers().add(hppo);
 		}
-		
-		
 		}catch(SQLException e) {
 			Bukkit.getConsoleSender().sendMessage("Sqle en el guey este");
 			e.printStackTrace();
@@ -78,5 +80,17 @@ public class NewPlayer implements Listener{
 		}
 		Channel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
 		pl.setWritingChannel(wr);		
+		/*
+		 * Creacion de la Scoreboard
+		 */
+		BPlayerBoard board = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");
+		board.setName(ChatColor.translateAlternateColorCodes('&', "&4&lHoPoke"));
+		int i=1;
+		for(String linea : plugin.getConfig().getConfigurationSection("scoreboard.lines").getKeys(false)) {
+			String texto = plugin.getConfig().getString("scoreboard.lines."+linea);
+			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+			board.set(texto, i);
+			i++;
+		}	
 	}
 }

@@ -29,9 +29,9 @@ public class EcoCMD implements CommandExecutor {
 					if(ejecutor.hasPermission("hopoke.economy.set")||ejecutor.isOp()) {
 					 EconomyResponse r = eco.depositPlayer(ejecutor.getPlayer(), new Double(args[1]));
 					 if(r.transactionSuccess()) {
-						 
+						 ejecutor.sendMessage(ChatColor.translateAlternateColorCodes('&', "La transacción se ha realizado con éxito."));
 					 }else {
-						 
+						 ejecutor.sendMessage(ChatColor.translateAlternateColorCodes('&', "Algo ha salido mal!"));
 					 }
 					}
 				case "add":

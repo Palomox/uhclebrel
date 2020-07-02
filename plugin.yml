@@ -1,22 +1,18 @@
 main: main.Main
 version: 0.2.5
 api-version: 1.13
-name: HoCore
-depend: [SmartInvs, Vault, PlaceholderAPI, Netherboard]
+name: UHCLebrel
+depend: []
 commands:
    setspawn:
       description: Pone el Spawn
    spawn:
       description: Te Teletransporta al spawn.
-   banhammer:
-      description: Te da el gran poder del BanHammer en tus manos.
    c:
       description: Lanza un evento de chat.
    sudo:
       description: Fuerzas a realizar un comando a alguien.
    channel: 
       description: Te permite dejar o unirte a un canal.
-   eco:
-      description: Comando principal de la economia.
-   hocore:
+   uhc:
       description: Comando principal del plugin.

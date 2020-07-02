@@ -5,11 +5,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import chat.Channel;
+import chat.NChannel;
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
-import util.HoPokePlayer;
+import util.Mamerto;
 
 public class QuitarListaAdmins implements Listener{
 	private Main plugin;
@@ -22,9 +22,9 @@ public class QuitarListaAdmins implements Listener{
 		if(jugador.hasPermission("hopoke.admin") || jugador.isOp()) {
 			plugin.removeAdmin(jugador);
 		}
-		HoPokePlayer hpplayer = HoPokePlayer.getHPPlayer(jugador, plugin);
+		Mamerto hpplayer = Mamerto.getHPPlayer(jugador, plugin);
 		for(int i=0; i<hpplayer.getLeyendo().size(); i++) {
-			Channel tmp = hpplayer.getLeyendo().get(i);
+			NChannel tmp = hpplayer.getLeyendo().get(i);
 			tmp.getLectores().remove(hpplayer.getPlayer());
 		}
 		plugin.removeHPPlayer(hpplayer);

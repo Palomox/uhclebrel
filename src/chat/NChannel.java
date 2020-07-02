@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 
 import main.Main;
 
-public class Channel {
+public class NChannel implements IChannel{
 	private Main plugin;
 	private ArrayList<Player> lectores;
 	private String name;
 	private char prefix;
 	
-	public Channel(Main plugin, String name, char prefix) {
+	public NChannel(Main plugin, String name, char prefix) {
 		this.name = name;
 		this.plugin = plugin;
 		this.prefix = prefix;
@@ -27,7 +27,6 @@ public class Channel {
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}

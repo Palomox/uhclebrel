@@ -11,9 +11,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/pp/Desktop/mc/Eclipse/Spigot Dev/HoPoke Essentials/SmartInvs-1.2.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/pp/Desktop/mc/Eclipse/Spigot Dev/TestServer/Server.jar"/>
-	<classpathentry kind="lib" path="C:/Users/pp/Desktop/mc/Eclipse/Spigot Dev/TestServer/plugins/PlaceholderAPI-2.10.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

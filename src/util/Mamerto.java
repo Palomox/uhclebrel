@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import chat.Channel;
+import chat.NChannel;
 import main.Main;
 
-public class HoPokePlayer {
+public class Mamerto {
 	/*private Main plugin;
 	public HoPokePlayer(Main plugin) {
 		this.plugin = plugin;
@@ -17,22 +17,22 @@ public class HoPokePlayer {
 	private boolean vanished;
 	private LocalDate firstjoin;
 	private String UUID;
-	private Channel escribiendo;
-	private ArrayList<Channel> leyendo;
+	private NChannel escribiendo;
+	private ArrayList<NChannel> leyendo;
 	private double dinero;
 	
 	
-	public HoPokePlayer(String UUID, LocalDate firstjoin) {
+	public Mamerto(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
 		this.firstjoin = firstjoin;
 		this.escribiendo = null;
-		this.leyendo = new ArrayList<Channel>();
+		this.leyendo = new ArrayList<NChannel>();
 		this.dinero = 0;
 	}
 	
-	public boolean estaLeyendo(Channel c) {
+	public boolean estaLeyendo(NChannel c) {
 		for (int i=0; i<leyendo.size(); i++) {
-			Channel tmp = leyendo.get(i);
+			NChannel tmp = leyendo.get(i);
 			if(tmp.equals(c)) {
 				return true;
 			}
@@ -63,30 +63,30 @@ public class HoPokePlayer {
 		return this.firstjoin;
 	}
 	
-	public ArrayList<Channel> getLeyendo() {
+	public ArrayList<NChannel> getLeyendo() {
 		return leyendo;
 	}
-	public void setWritingChannel(Channel channel) {
+	public void setWritingChannel(NChannel channel) {
 		this.escribiendo = channel;
 	}
-	public Channel getWritingChannel() {
+	public NChannel getWritingChannel() {
 		return this.escribiendo;
 	}
-	public void addReadingChannel(Channel channel) {
+	public void addReadingChannel(NChannel channel) {
 		if(!(this.estaLeyendo(channel))) {
 			this.leyendo.add(channel);
 		}
 	}
-	public void removeReadingChannel(Channel channel) {
+	public void removeReadingChannel(NChannel channel) {
 		for(int i =0; i<this.leyendo.size(); i++) {
 			if(this.leyendo.get(i).equals(channel)) {
 				this.leyendo.remove(i);
 			}
 		}
 	}
-	public static HoPokePlayer getHPPlayer(Player jugador, Main plugin) {
+	public static Mamerto getHPPlayer(Player jugador, Main plugin) {
 		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
-			HoPokePlayer tmp = plugin.getHoPokePlayers().get(i);
+			Mamerto tmp = plugin.getHoPokePlayers().get(i);
 			Player tmpp = tmp.getPlayer();
 			if(tmpp.equals(jugador)) {
 				return tmp;

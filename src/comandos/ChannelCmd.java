@@ -7,9 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import chat.Channel;
+import chat.NChannel;
 import main.Main;
-import util.HoPokePlayer;
+import util.Mamerto;
 
 public class ChannelCmd implements CommandExecutor{
 	private Main plugin;
@@ -23,12 +23,12 @@ public class ChannelCmd implements CommandExecutor{
 		}else {
 			Player ejecutor = (Player) sender;
 			if(ejecutor.hasPermission("hopoke.command.channel")||ejecutor.isOp()) {
-				HoPokePlayer jugador = HoPokePlayer.getHPPlayer(ejecutor, plugin);
+				Mamerto jugador = Mamerto.getHPPlayer(ejecutor, plugin);
 				if(args.length <1) {
 					ejecutor.sendMessage(ChatColor.DARK_RED+"No has especificado el canal al que unirte");
 					
 				}else {
-					Channel deseado = null;
+					NChannel deseado = null;
 					if(!(args.length <1)) {
 						String canal = args[1];
 						deseado =plugin.getChannelByName(canal);

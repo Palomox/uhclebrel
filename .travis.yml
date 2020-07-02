@@ -1,4 +1,4 @@
 language: java
 install: skip
-script: mvn build
+script: mvn clean verify
 jdk: openjdk8

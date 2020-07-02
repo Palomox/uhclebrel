@@ -1,0 +1,4 @@
+language: java
+install: skip
+script: mvn build
+jdk: openjdk8

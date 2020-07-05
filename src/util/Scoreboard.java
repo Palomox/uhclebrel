@@ -1,5 +1,7 @@
 package util;
 
+
+import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -8,9 +10,18 @@ import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 
 public class Scoreboard {
 	
-	public static void updateScoreboard(Player vistima) {
+	public static void updateScoreboard(Player vistima, String nombre) {
 		BPlayerBoard board = Netherboard.instance().getBoard(vistima);
-		board.setName(ChatColor.translateAlternateColorCodes('&', "&4&lHoPoke"));
-		
+		board.setName(ChatColor.translateAlternateColorCodes('&', nombre));
+	}
+	public static void updateScoreboard(Player vistima, String valor, int linea) {
+		BPlayerBoard board = Netherboard.instance().getBoard(vistima);
+		board.set(valor, linea);
+	}
+	public static void updateScoreboard(Player vistima, HashMap<Integer, String> valores) {
+		BPlayerBoard board = Netherboard.instance().getBoard(vistima);
+		for(int linea : valores.keySet()) {
+			board.set(valores.get(linea), linea);
+		}
 	}
 }

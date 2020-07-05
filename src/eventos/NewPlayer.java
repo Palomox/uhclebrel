@@ -1,12 +1,6 @@
 package eventos;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,13 +62,33 @@ public class NewPlayer implements Listener {
 		/*
 		 * Creacion de la Scoreboard
 		 */
+		switch(Main.instance.juego.getEstado()) {
+		case ESPERANDO:
 		BPlayerBoard board = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");
 		board.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
-		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.lines").getKeys(false)) {
-			String texto = plugin.getConfig().getString("scoreboard.lines." + linea);
+		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.lobby.lines").getKeys(false)) {
+			String texto = plugin.getConfig().getString("scoreboard.lobby.lines." + linea);
 			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
 			int line = Integer.valueOf(linea);
 			board.set(texto, line);
 		}
+			break;
+		case JUGANDO:
+			break;
+		case FINALIZADO:
+		BPlayerBoard boardf = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");
+		boardf.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
+		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.final.lines").getKeys(false)) {
+			String texto = plugin.getConfig().getString("scoreboard.final.lines." + linea);
+			texto = texto.replace("%ganador%", Main.instance.getJuego().getGanador().getNombre());
+			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+			int line = Integer.valueOf(linea);
+			boardf.set(texto, line);
+		}
+		break;
+		default:
+			break;
+		}
+		
 	}
 }

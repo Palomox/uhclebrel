@@ -58,8 +58,8 @@ public class HoCoreCMD implements CommandExecutor {
 				}
 				break;
 			case "start":
-				for(Equipo tmp : Main.instance.juego.getEquipos()) {
-					for(Mamerto mam : tmp.getMiembros()) {
+				for(Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
+					for(Mamerto mam : tmp.getMiembros().keySet()) {
 						Main.instance.juego.addMammert(mam);
 					}
 				}

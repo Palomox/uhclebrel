@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import chat.NChannel;
 import main.Main;
+import uhc.Equipo;
 
 public class Mamerto {
 	/*private Main plugin;
@@ -20,6 +21,7 @@ public class Mamerto {
 	private NChannel escribiendo;
 	private ArrayList<NChannel> leyendo;
 	private double dinero;
+	private Equipo team;
 	
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
@@ -30,6 +32,14 @@ public class Mamerto {
 		this.dinero = 0;
 	}
 	
+	public Equipo getTeam() {
+		return team;
+	}
+
+	public void setTeam(Equipo team) {
+		this.team = team;
+	}
+
 	public boolean estaLeyendo(NChannel c) {
 		for (int i=0; i<leyendo.size(); i++) {
 			NChannel tmp = leyendo.get(i);

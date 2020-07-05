@@ -10,6 +10,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import main.Main;
+import uhc.Equipo;
+import uhc.EstadoChangeEvent;
+import uhc.EstadosJuego;
 import util.Mamerto;
 
 public class Muerte implements Listener{
@@ -27,7 +30,18 @@ public class Muerte implements Listener{
 			tmp.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', "&4¡"+muerto.getName()+" ha sido eliminado!"), null, 10, 20, 5);
 		}
 		Main.instance.juego.matar(mamerto);
-		muerto.setFireTicks(0);
-		muerto.spigot().respawn();
-	}
+		ArrayList<Equipo> vivos = new ArrayList<Equipo>();
+		for(Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
+			boolean stat = Main.instance.juego.getEquipos().get(tmp);
+			if (stat) {
+				vivos.add(tmp);
+			}
+		}
+		if(vivos.size() == 1) {
+			//Tenemos un ganador bbs
+			Main.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
+			Main.instance.getJuego().setGanador(vivos.get(0));
+			Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
+		}
+		}
 }

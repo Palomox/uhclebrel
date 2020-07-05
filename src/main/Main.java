@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +20,7 @@ import comandos.HoCoreCMD;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
+import eventos.CambiaEstado;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
@@ -38,6 +42,7 @@ public class Main extends JavaPlugin{
 	private ArrayList<NChannel> canales = new ArrayList<NChannel>();
 	public static Main instance;
 	public Juego juego;
+	public Event finalizar;
 	
 		public void onEnable() {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
@@ -128,6 +133,7 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new QuitarListaAdmins(this), this);
 		pm.registerEvents(new MensajeEnviado(this), this);
 		pm.registerEvents(new Muerte(), this);
+		pm.registerEvents(new CambiaEstado(), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

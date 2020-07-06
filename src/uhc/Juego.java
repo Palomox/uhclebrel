@@ -17,11 +17,21 @@ public class Juego {
 	private ArrayList<Mamerto> muertos = new ArrayList<Mamerto>();
 	private EstadosJuego estado;
 	private Equipo ganador;
+	private Episodio episodio;
 
 	public Juego() {
-
+		estado = EstadosJuego.ESPERANDO;
+		ganador = null;
+		
 	}
-
+	
+	public Episodio getEpisodio() {
+		return this.episodio;
+	}
+	
+	public void setEpisodio(Episodio aponer) {
+		this.episodio = aponer;
+	}
 	public Equipo getGanador() {
 		return this.ganador;
 	}

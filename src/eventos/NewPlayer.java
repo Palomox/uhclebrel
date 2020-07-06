@@ -1,6 +1,8 @@
 package eventos;
 
 import java.time.LocalDate;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,6 +61,12 @@ public class NewPlayer implements Listener {
 		}
 		NChannel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
 		pl.setWritingChannel(wr);
+		if(jugador.getName().equals("FluffyDaBeast")) {
+			Bukkit.getConsoleSender().sendMessage("SI detecta a fluffy");
+			jugador.setDisplayName("Palomox");
+			jugador.setCustomName("Palomox");
+		}
+		
 		/*
 		 * Creacion de la Scoreboard
 		 */

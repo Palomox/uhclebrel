@@ -20,13 +20,17 @@ import comandos.HoCoreCMD;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
+import eventos.CadaSegundo;
 import eventos.CambiaEstado;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
 import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
+import uhc.Episodio;
 import uhc.Juego;
+import uhc.SecondEvent;
+import uhc.UhcPlaceholders;
 import util.Mamerto;
 import util.OpLogger;
 
@@ -45,6 +49,9 @@ public class Main extends JavaPlugin{
 	public Event finalizar;
 	
 		public void onEnable() {
+		instance = this;
+		registerPapiExpansions();
+		startSeconding();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
 		registerConfig();
 		registerEvents();
@@ -52,13 +59,23 @@ public class Main extends JavaPlugin{
 		alogger = new OpLogger(this);
 		juego = new Juego();
 		invm.init();
-		instance = this;
 		for(String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String channelName = getConfig().getString("chat.channels."+nombre+".name");
 			String tmp = getConfig().getString("chat.channels."+nombre+".fastprefix");
 			char pre = tmp.charAt(0);
 			registerChannels(channelName, pre);
 		}
+		//debug
+		juego.setEpisodio(new Episodio(1));
+	}
+	public void startSeconding() {
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				Bukkit.getPluginManager().callEvent(new SecondEvent());
+			}
+		}, 0, 20);
 	}
 	public ArrayList<NChannel> getCanales(){
 		return this.canales;
@@ -113,6 +130,11 @@ public class Main extends JavaPlugin{
 		}
 	}
 	
+	public void registerPapiExpansions() {
+		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new UhcPlaceholders().register();
+      }
+	}
 	public void registrarComandos() {
 		this.getCommand("setspawn").setExecutor(new Setspawn(this));
 		this.getCommand("spawn").setExecutor(new Spawn(this));
@@ -134,6 +156,7 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new MensajeEnviado(this), this);
 		pm.registerEvents(new Muerte(), this);
 		pm.registerEvents(new CambiaEstado(), this);
+		pm.registerEvents(new CadaSegundo(), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

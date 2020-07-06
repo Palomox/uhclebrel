@@ -1,11 +1,16 @@
 package eventos;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import fr.minuskube.netherboard.Netherboard;
+import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
+import me.clip.placeholderapi.PlaceholderAPI;
 import uhc.EstadoChangeEvent;
 import util.Mamerto;
+import util.Scoreboard;
 
 public class CambiaEstado implements Listener{
 	
@@ -14,13 +19,33 @@ public class CambiaEstado implements Listener{
 	}
 	@EventHandler
 	public void onJuegoFinalizado(EstadoChangeEvent e) {
+		Main plugin = Main.instance;
 		switch(e.getNuevoestado()) {
 		case FINALIZADO:
 			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
 				Main.instance.juego.setSpectator(tmp);
+				for (String linea : plugin.getConfig()
+						.getConfigurationSection("scoreboard.final.lines")
+						.getKeys(false)) {
+					String texto = plugin.getConfig().getString("scoreboard.final.lines." + linea);
+					texto = PlaceholderAPI.setPlaceholders(tmp.getPlayer(), texto);
+					int line = Integer.valueOf(linea);
+					Scoreboard.updateScoreboard(tmp.getPlayer(), texto, line);
+				}
 			}
 			break;
 		case JUGANDO:
+			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
+				Main.instance.juego.setSpectator(tmp);
+				for (String linea : plugin.getConfig()
+						.getConfigurationSection("scoreboard.durante.lines")
+						.getKeys(false)) {
+					String texto = plugin.getConfig().getString("scoreboard.durante.lines." + linea);
+					texto = PlaceholderAPI.setPlaceholders(tmp.getPlayer(), texto);
+					int line = Integer.valueOf(linea);
+					Scoreboard.updateScoreboard(tmp.getPlayer(), texto, line);
+				}
+			}
 			break;
 		default:
 			break;

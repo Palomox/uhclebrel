@@ -1,5 +1,5 @@
 main: main.Main
-version: 0.2.5
+version: 0.5.0
 api-version: 1.13
 name: UHCLebrel
 depend: []

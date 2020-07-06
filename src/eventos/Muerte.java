@@ -37,10 +37,10 @@ public class Muerte implements Listener{
 				vivos.add(tmp);
 			}
 		}
-		if(vivos.size() == 1) {
+		if(vivos.size()<=1) {
 			//Tenemos un ganador bbs
 			Main.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
-			Main.instance.getJuego().setGanador(vivos.get(0));
+			Main.instance.getJuego().setGanador(Main.instance.getHoPokePlayers().get(0).getTeam());
 			Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
 		}
 		}

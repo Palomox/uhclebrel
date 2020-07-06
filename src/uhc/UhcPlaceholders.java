@@ -1,9 +1,12 @@
 package uhc;
 
+import java.util.StringJoiner;
+
 import org.bukkit.entity.Player;
 
 import main.Main;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import util.Mamerto;
 
 public class UhcPlaceholders extends PlaceholderExpansion{
 
@@ -40,7 +43,23 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 */
 		case "episodio":
 			return String.valueOf(Main.instance.getJuego().getEpisodio().getId());
+		/*
+		 * %uhc_ganador%
+		 */
+		case "ganador":
+			return Main.instance.getJuego().getGanador().getNombre();
+		/*
+		 * %uhc_ganadormiembros%
+		 */
+		case "ganadormiembros":
+			StringJoiner sj = new StringJoiner(", ");
+			for(Mamerto tmp : Main.instance.getJuego().getGanador().getMiembros().keySet()) {
+				sj.add(tmp.getPlayer().getName());
+			}
+			return sj.toString();
+		
 		}
+		
 		return null;
 	}
 }

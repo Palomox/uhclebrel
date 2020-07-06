@@ -65,6 +65,8 @@ public class Juego {
 		Main.instance.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
 			public void run() {
 				aspect.getPlayer().spigot().respawn();
+				aspect.getPlayer().setGameMode(GameMode.ADVENTURE);
+				aspect.getPlayer().getInventory().clear();
 				aspect.getPlayer().setFireTicks(0);
 				aspect.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
 				aspect.getPlayer().setInvulnerable(true);

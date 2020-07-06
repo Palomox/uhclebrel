@@ -12,7 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import main.Main;
+import uhc.Episodio;
 import uhc.Equipo;
+import uhc.EstadosJuego;
 import uhc.Juego;
 import util.Mamerto;
 
@@ -54,6 +56,8 @@ public class HoCoreCMD implements CommandExecutor {
 					String personaname = args[2];
 					Equipo team = Equipo.getEquipoById(teamid);
 					team.addMamerto(Main.instance.getHPByName(personaname));
+					Player ejec = (Player) sender;
+					Main.instance.getHPByName(ejec.getName()).setTeam(team);
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha añadido a "+personaname+" al equipo '"+team.getNombre()+"'!"));
 				}
 				break;
@@ -63,6 +67,8 @@ public class HoCoreCMD implements CommandExecutor {
 						Main.instance.juego.addMammert(mam);
 					}
 				}
+				Main.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
+				Main.instance.getJuego().setEpisodio(new Episodio(1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
 				break;
 			case "reset":

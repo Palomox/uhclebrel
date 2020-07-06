@@ -88,10 +88,9 @@ public class NewPlayer implements Listener {
 		boardf.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
 		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.final.lines").getKeys(false)) {
 			String texto = plugin.getConfig().getString("scoreboard.final.lines." + linea);
-			texto = texto.replace("%ganador%", Main.instance.getJuego().getGanador().getNombre());
 			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
 			int line = Integer.valueOf(linea);
-			boardf.set(texto, line);
+			boardf.set(ChatColor.translateAlternateColorCodes('&', texto), line);
 		}
 		break;
 		default:

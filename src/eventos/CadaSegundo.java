@@ -1,6 +1,7 @@
 package eventos;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -25,7 +26,7 @@ public class CadaSegundo implements Listener {
 			for(Equipo tmp : Main.instance.getJuego().getEquipos().keySet()) {
 				for(Mamerto mam : tmp.getMiembros().keySet()) {
 					Scoreboard.updateScoreboard(mam.getPlayer(),
-					String.format("&e%02d:%02d", (s % 3600) / 60, (s % 60)),
+					ChatColor.translateAlternateColorCodes('&', String.format("&e%02d:%02d", (s % 3600) / 60, (s % 60))),
 					2);
 				}
 			}

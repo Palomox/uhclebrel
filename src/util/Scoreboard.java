@@ -24,4 +24,8 @@ public class Scoreboard {
 			board.set(valores.get(linea), linea);
 		}
 	}
+	public static void clear(Player vistima) {
+		BPlayerBoard board = Netherboard.instance().getBoard(vistima);
+		board.clear();
+	}
 }

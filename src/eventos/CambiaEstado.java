@@ -24,6 +24,7 @@ public class CambiaEstado implements Listener{
 		case FINALIZADO:
 			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
 				Main.instance.juego.setSpectator(tmp);
+				Scoreboard.clear(tmp.getPlayer());
 				for (String linea : plugin.getConfig()
 						.getConfigurationSection("scoreboard.final.lines")
 						.getKeys(false)) {
@@ -36,7 +37,7 @@ public class CambiaEstado implements Listener{
 			break;
 		case JUGANDO:
 			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
-				Main.instance.juego.setSpectator(tmp);
+				Scoreboard.clear(tmp.getPlayer());
 				for (String linea : plugin.getConfig()
 						.getConfigurationSection("scoreboard.durante.lines")
 						.getKeys(false)) {

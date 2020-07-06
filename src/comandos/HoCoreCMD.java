@@ -11,9 +11,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import eventos.CambiaEstado;
 import main.Main;
 import uhc.Episodio;
 import uhc.Equipo;
+import uhc.EstadoChangeEvent;
 import uhc.EstadosJuego;
 import uhc.Juego;
 import util.Mamerto;
@@ -69,10 +71,12 @@ public class HoCoreCMD implements CommandExecutor {
 				}
 				Main.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
 				Main.instance.getJuego().setEpisodio(new Episodio(1));
+				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.JUGANDO));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
 				break;
 			case "reset":
 				Main.instance.juego = new Juego();
+				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.ESPERANDO));
 				break;
 			case "finish":
 				break;

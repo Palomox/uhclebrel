@@ -6,20 +6,17 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import chat.NChannel;
+import chat.IChannel;
 import main.Main;
 import uhc.Equipo;
 
 public class Mamerto {
-	/*private Main plugin;
-	public HoPokePlayer(Main plugin) {
-		this.plugin = plugin;
-	}*/
+	
 	private boolean vanished;
 	private LocalDate firstjoin;
 	private String UUID;
-	private NChannel escribiendo;
-	private ArrayList<NChannel> leyendo;
+	private IChannel escribiendo;
+	private ArrayList<IChannel> leyendo;
 	private double dinero;
 	private Equipo team;
 	
@@ -28,7 +25,7 @@ public class Mamerto {
 		this.UUID = UUID;
 		this.firstjoin = firstjoin;
 		this.escribiendo = null;
-		this.leyendo = new ArrayList<NChannel>();
+		this.leyendo = new ArrayList<IChannel>();
 		this.dinero = 0;
 	}
 	
@@ -40,9 +37,9 @@ public class Mamerto {
 		this.team = team;
 	}
 
-	public boolean estaLeyendo(NChannel c) {
+	public boolean estaLeyendo(IChannel c) {
 		for (int i=0; i<leyendo.size(); i++) {
-			NChannel tmp = leyendo.get(i);
+			IChannel tmp = leyendo.get(i);
 			if(tmp.equals(c)) {
 				return true;
 			}
@@ -73,21 +70,21 @@ public class Mamerto {
 		return this.firstjoin;
 	}
 	
-	public ArrayList<NChannel> getLeyendo() {
+	public ArrayList<IChannel> getLeyendo() {
 		return leyendo;
 	}
-	public void setWritingChannel(NChannel channel) {
+	public void setWritingChannel(IChannel channel) {
 		this.escribiendo = channel;
 	}
-	public NChannel getWritingChannel() {
+	public IChannel getWritingChannel() {
 		return this.escribiendo;
 	}
-	public void addReadingChannel(NChannel channel) {
+	public void addReadingChannel(IChannel channel) {
 		if(!(this.estaLeyendo(channel))) {
 			this.leyendo.add(channel);
 		}
 	}
-	public void removeReadingChannel(NChannel channel) {
+	public void removeReadingChannel(IChannel channel) {
 		for(int i =0; i<this.leyendo.size(); i++) {
 			if(this.leyendo.get(i).equals(channel)) {
 				this.leyendo.remove(i);

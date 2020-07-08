@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import chat.IChannel;
 import chat.NChannel;
 import main.Main;
 
@@ -37,7 +38,7 @@ public class OpLogger {
 	}
 	
 	public void logCmd(String info, Player issuer) {
-		NChannel staff = plugin.getChannelByName("Staff");
+		IChannel staff = plugin.getChannelByName("Staff");
 		staff.sendRawMessage(ChatColor.translateAlternateColorCodes('&', "&8[&3S&8 | &7&o"+issuer.getName()+": "+info+"&r&8]"));
 		oplog.info(issuer.getName()+": "+info);
 	}

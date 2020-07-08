@@ -3,6 +3,8 @@ package uhc;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.bukkit.Location;
+
 import chat.IChannel;
 import chat.TeamChannel;
 import main.Main;
@@ -13,16 +15,26 @@ public class Equipo {
 	private String nombre;
 	private int id;
 	private IChannel channel;
+	private Location spawn;
 	public Equipo(String nombre, int id) {
 		this.nombre = nombre;
-		channel = new TeamChannel();
+		channel = new TeamChannel(this, '^');
 		this.id = id;
+	}
+	public void setSpawn(Location spawn) {
+		this.spawn = spawn;
+	}
+	public Location getSpawn() {
+		return this.spawn;
 	}
 	public void addMamerto(Mamerto add) {
 		this.miembros.put(add, true);
 	}
 	public String getNombre() {
 		return nombre;
+	}
+	public IChannel getChannel() {
+		return this.channel;
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;

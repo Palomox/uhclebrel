@@ -1,5 +1,7 @@
 package eventos;
 
+import java.time.Duration;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -31,9 +33,9 @@ public class CadaSegundo implements Listener {
 				}
 			}
 			
-			if (Main.instance.getJuego().getEpisodio().getDuracion().isZero()) {
-				Bukkit.getPluginManager()
-						.callEvent(new EpisodioChangeEvent(Main.instance.getJuego().getEpisodio().getId() + 1));
+			if (Main.instance.getJuego().getEpisodio().getDuracion().equals(Duration.ZERO)) {
+				Bukkit.getConsoleSender().sendMessage("Antes de dispararse el evento.");
+				Bukkit.getPluginManager().callEvent(new EpisodioChangeEvent(Main.instance.getJuego().getEpisodio().getId() + 1));
 			}
 		}
 	}

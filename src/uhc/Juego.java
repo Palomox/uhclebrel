@@ -28,7 +28,9 @@ public class Juego {
 	public Episodio getEpisodio() {
 		return this.episodio;
 	}
-	
+	public ArrayList<Mamerto> getMuertos(){
+		return this.muertos;
+	}
 	public void setEpisodio(Episodio aponer) {
 		this.episodio = aponer;
 	}
@@ -60,11 +62,12 @@ public class Juego {
 		this.equipos.remove(team);
 	}
 	public void setSpectator(Mamerto aspect) {
-		aspect.getPlayer().setAllowFlight(true);
-		aspect.getPlayer().setFlying(true);
 		Main.instance.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
 			public void run() {
 				aspect.getPlayer().spigot().respawn();
+				aspect.getPlayer().setAllowFlight(true);
+				aspect.getPlayer().setFlying(true);
+				aspect.getPlayer().setCanPickupItems(false);
 				aspect.getPlayer().setGameMode(GameMode.ADVENTURE);
 				aspect.getPlayer().getInventory().clear();
 				aspect.getPlayer().setFireTicks(0);

@@ -57,6 +57,15 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 				sj.add(tmp.getPlayer().getName());
 			}
 			return sj.toString();
+		/*
+		 * %uhc_teamname%
+		 */
+		case "teamname":
+			if(Main.instance.getHPByName(player.getName()).getTeam() !=null) {
+				return Main.instance.getHPByName(player.getName()).getTeam().getNombre();
+			}else {
+				return null;
+			}
 		
 		}
 		

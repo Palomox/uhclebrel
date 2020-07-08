@@ -15,33 +15,37 @@ import uhc.EstadoChangeEvent;
 import uhc.EstadosJuego;
 import util.Mamerto;
 
-public class Muerte implements Listener{
+public class Muerte implements Listener {
 	public Muerte() {
-		
+
 	}
-	
+
 	@EventHandler
 	public void alMurison(PlayerDeathEvent e) {
-		Player muerto = e.getEntity();
-		Mamerto mamerto = Main.instance.getHPByName(muerto.getName());
-		ArrayList<Mamerto> jugadores = Main.instance.getHoPokePlayers();
-		Bukkit.getConsoleSender().sendMessage("murision disparada");
-		for(Mamerto tmp : jugadores) {
-			tmp.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', "&4¡"+muerto.getName()+" ha sido eliminado!"), null, 10, 20, 5);
-		}
-		Main.instance.juego.matar(mamerto);
-		ArrayList<Equipo> vivos = new ArrayList<Equipo>();
-		for(Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
-			boolean stat = Main.instance.juego.getEquipos().get(tmp);
-			if (stat) {
-				vivos.add(tmp);
+		if (Main.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
+			Player muerto = e.getEntity();
+			Mamerto mamerto = Main.instance.getHPByName(muerto.getName());
+			ArrayList<Mamerto> jugadores = Main.instance.getHoPokePlayers();
+			Bukkit.getConsoleSender().sendMessage("murision disparada");
+			for (Mamerto tmp : jugadores) {
+				tmp.getPlayer().sendTitle(
+						ChatColor.translateAlternateColorCodes('&', "&4¡" + muerto.getName() + " ha sido eliminado!"),
+						null, 10, 20, 5);
+			}
+			Main.instance.juego.matar(mamerto);
+			ArrayList<Equipo> vivos = new ArrayList<Equipo>();
+			for (Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
+				boolean stat = Main.instance.juego.getEquipos().get(tmp);
+				if (stat) {
+					vivos.add(tmp);
+				}
+			}
+			if (vivos.size() <= 1) {
+				// Tenemos un ganador bbs
+				Main.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
+				Main.instance.getJuego().setGanador(vivos.get(0));
+				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
 			}
 		}
-		if(vivos.size()<=1) {
-			//Tenemos un ganador bbs
-			Main.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
-			Main.instance.getJuego().setGanador(Main.instance.getHoPokePlayers().get(0).getTeam());
-			Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
-		}
-		}
+	}
 }

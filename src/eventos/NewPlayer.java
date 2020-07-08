@@ -2,19 +2,19 @@ package eventos;
 
 import java.time.LocalDate;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import chat.NChannel;
+import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 import util.Mamerto;
+import util.Scoreboard;
 
 public class NewPlayer implements Listener {
 	private Main plugin;
@@ -39,7 +39,7 @@ public class NewPlayer implements Listener {
 		Mamerto pl = Mamerto.getHPPlayer(jugador, plugin);
 		for (String disc : plugin.getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String perm = plugin.getConfig().getString("chat.channels." + disc + ".autojoinperm");
-			NChannel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels." + disc + ".name"));
+			IChannel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels." + disc + ".name"));
 			if (perm.equalsIgnoreCase("none")) {
 				pl.addReadingChannel(tmp);
 				if (tmp.addLector(pl.getPlayer())) {
@@ -59,14 +59,8 @@ public class NewPlayer implements Listener {
 				}
 			}
 		}
-		NChannel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
+		IChannel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
 		pl.setWritingChannel(wr);
-		if(jugador.getName().equals("FluffyDaBeast")) {
-			Bukkit.getConsoleSender().sendMessage("SI detecta a fluffy");
-			jugador.setDisplayName("Palomox");
-			jugador.setCustomName("Palomox");
-		}
-		
 		/*
 		 * Creacion de la Scoreboard
 		 */
@@ -82,6 +76,15 @@ public class NewPlayer implements Listener {
 		}
 			break;
 		case JUGANDO:
+			Netherboard.instance().createBoard(pl.getPlayer(), "Main");
+			for (String linea : plugin.getConfig()
+					.getConfigurationSection("scoreboard.durante.lines")
+					.getKeys(false)) {
+				String texto = plugin.getConfig().getString("scoreboard.durante.lines." + linea);
+				texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+				int line = Integer.valueOf(linea);
+				Scoreboard.updateScoreboard(pl.getPlayer(), texto, line);
+			}
 			break;
 		case FINALIZADO:
 		BPlayerBoard boardf = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");

@@ -14,7 +14,7 @@ public class EpisodioChangeEvent extends Event{
 		return handlers;
 	}
 	
-	public static HandlerList gatHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	public int getNuevoEpisodio() {

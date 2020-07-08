@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import chat.NChannel;
+import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
@@ -24,8 +24,8 @@ public class QuitarListaAdmins implements Listener{
 		}
 		Mamerto hpplayer = Mamerto.getHPPlayer(jugador, plugin);
 		for(int i=0; i<hpplayer.getLeyendo().size(); i++) {
-			NChannel tmp = hpplayer.getLeyendo().get(i);
-			tmp.getLectores().remove(hpplayer.getPlayer());
+			IChannel tmp = hpplayer.getLeyendo().get(i);
+			tmp.getLectores().remove(hpplayer);
 		}
 		plugin.removeHPPlayer(hpplayer);
 		

@@ -5,14 +5,16 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import chat.IChannel;
 import chat.NChannel;
 import comandos.ChannelCmd;
 import comandos.ChatCmd;
@@ -21,13 +23,16 @@ import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
 import eventos.CadaSegundo;
+import eventos.CambiaEpisodio;
 import eventos.CambiaEstado;
+import eventos.EspectadorAtaca;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
 import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
 import uhc.Episodio;
+import uhc.Equipo;
 import uhc.Juego;
 import uhc.SecondEvent;
 import uhc.UhcPlaceholders;
@@ -43,7 +48,7 @@ public class Main extends JavaPlugin{
 	private ArrayList<Mamerto> players = new ArrayList<Mamerto>();
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
-	private ArrayList<NChannel> canales = new ArrayList<NChannel>();
+	private ArrayList<IChannel> canales = new ArrayList<IChannel>();
 	public static Main instance;
 	public Juego juego;
 	public Event finalizar;
@@ -65,8 +70,6 @@ public class Main extends JavaPlugin{
 			char pre = tmp.charAt(0);
 			registerChannels(channelName, pre);
 		}
-		//debug
-		juego.setEpisodio(new Episodio(1));
 	}
 	public void startSeconding() {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -77,20 +80,20 @@ public class Main extends JavaPlugin{
 			}
 		}, 0, 20);
 	}
-	public ArrayList<NChannel> getCanales(){
+	public ArrayList<IChannel> getCanales(){
 		return this.canales;
 	}
 	public Juego getJuego() {
 		return this.juego;
 	}
 	public void registerChannels(String nombre, char pr) {
-		NChannel tmp = new NChannel(this, nombre, pr);
+		IChannel tmp = new NChannel(this, nombre, pr);
 		this.canales.add(tmp);
 	}
 	public OpLogger getALogger() {
 		return this.alogger;
 	}
-	public NChannel getChannelByName(String name) {
+	public IChannel getChannelByName(String name) {
 		for(int i=0; i<this.canales.size(); i++) {
 			String tmp = this.canales.get(i).getName();
 			if(tmp.equalsIgnoreCase(name)) {
@@ -135,6 +138,23 @@ public class Main extends JavaPlugin{
             new UhcPlaceholders().register();
       }
 	}
+	public void loadTeamsFromConfig() {
+		FileConfiguration cfg = this.getConfig();
+		if(!cfg.contains("juego.equipos")) {
+			return;
+		}
+		for(String teamname : cfg.getConfigurationSection("juego.equipos").getKeys(false)) {
+			Location spawn;
+			double x = cfg.getDouble("juego.equipos."+teamname+".spawn.x");
+			double y = cfg.getDouble("juego.equipos."+teamname+".spawn.y");
+			double z = cfg.getDouble("juego.equipos."+teamname+".spawn.z");
+			World world = Bukkit.getServer().getWorld(cfg.getString("juego.equipos."+teamname+".spawn.world"));
+			spawn = new Location(world, x, y, z);
+			Equipo tmp = new Equipo(teamname, this.juego.getEquipos().size()+1);
+			tmp.setSpawn(spawn);
+			this.getJuego().getEquipos().put(tmp, true);
+		}
+	}
 	public void registrarComandos() {
 		this.getCommand("setspawn").setExecutor(new Setspawn(this));
 		this.getCommand("spawn").setExecutor(new Spawn(this));
@@ -157,6 +177,8 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new Muerte(), this);
 		pm.registerEvents(new CambiaEstado(), this);
 		pm.registerEvents(new CadaSegundo(), this);
+		pm.registerEvents(new CambiaEpisodio(), this);
+		pm.registerEvents(new EspectadorAtaca(), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import chat.NChannel;
+import chat.IChannel;
 import main.Main;
 import util.Mamerto;
 
@@ -28,7 +28,7 @@ public class ChannelCmd implements CommandExecutor{
 					ejecutor.sendMessage(ChatColor.DARK_RED+"No has especificado el canal al que unirte");
 					
 				}else {
-					NChannel deseado = null;
+					IChannel deseado = null;
 					if(!(args.length <1)) {
 						String canal = args[1];
 						deseado =plugin.getChannelByName(canal);

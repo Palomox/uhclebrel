@@ -1,11 +1,8 @@
 package eventos;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import fr.minuskube.netherboard.Netherboard;
-import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 import uhc.EstadoChangeEvent;

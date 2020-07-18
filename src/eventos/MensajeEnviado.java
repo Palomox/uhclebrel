@@ -32,10 +32,11 @@ public class MensajeEnviado implements Listener {
 			amandar.sendFormattedMsg(mensajeText, chateador);
 		}else {
 			if (amandar instanceof NChannel) {
-				if (jugador.getPlayer()
-						.hasPermission(plugin.getConfig().getString("chat.channels." + amandar.getName() + ".perm"))) {
+				if (jugador.getPlayer().hasPermission(plugin.getConfig().getString("chat.channels." + amandar.getName() + ".perm"))) {
 					mensajeText = e.getMessage().substring(1);
-				} else {
+				} else if(plugin.getConfig().getString("chat.channels." + amandar.getName() + ".perm").equals("none")){
+					mensajeText = e.getMessage().substring(1);
+				}else {
 					mensajeText = e.getMessage();
 					amandar = jugador.getWritingChannel();
 				}

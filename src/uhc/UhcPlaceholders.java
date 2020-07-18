@@ -66,6 +66,12 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 			}else {
 				return null;
 			}
+		case "rarename":
+			if(Main.instance.getJuego().getEstado() == EstadosJuego.JUGANDO) {
+				return Main.instance.getHPByName(player.getName()).getDisplayname();
+			}else {
+				return player.getName();
+			}
 		
 		}
 		

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +50,20 @@ public class Muerte implements Listener {
 				Main.instance.getJuego().setGanador(vivos.get(0));
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
 			}
+			
+			/*
+			 * Poner cabeza
+			 */
+			Location cabeza = muerto.getLocation();
+			cabeza.setY(cabeza.getY()+2);
+			cabeza.getBlock().setType(Material.PLAYER_HEAD);
+			BlockState estadocabeza = cabeza.getBlock().getState();
+			Skull cabezask = (Skull) estadocabeza;
+			cabezask.setOwningPlayer(muerto.getPlayer());
+			cabezask.update();
+			Location valla = cabeza.clone();
+			valla.setY(cabeza.getY()-1);
+			valla.getBlock().setType(Material.NETHER_BRICK_FENCE);
 		}
 	}
 }

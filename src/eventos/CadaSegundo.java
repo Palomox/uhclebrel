@@ -27,9 +27,11 @@ public class CadaSegundo implements Listener {
 			long s = Main.instance.getJuego().getEpisodio().getDuracion().getSeconds();
 			for(Equipo tmp : Main.instance.getJuego().getEquipos().keySet()) {
 				for(Mamerto mam : tmp.getMiembros().keySet()) {
+					if(mam.getPlayer().isOnline()){
 					Scoreboard.updateScoreboard(mam.getPlayer(),
 					ChatColor.translateAlternateColorCodes('&', String.format("&e%02d:%02d", (s % 3600) / 60, (s % 60))),
 					2);
+					}
 				}
 			}
 			

@@ -8,10 +8,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 import main.Main;
@@ -23,9 +30,9 @@ import uhc.EstadosJuego;
 import uhc.Juego;
 import util.Mamerto;
 
-public class HoCoreCMD implements CommandExecutor {
+public class UhcCMD implements CommandExecutor {
 	private Main plugin;
-	public HoCoreCMD(Main plugin) {
+	public UhcCMD(Main plugin) {
 		this.plugin = plugin;
 	}
 
@@ -64,7 +71,7 @@ public class HoCoreCMD implements CommandExecutor {
 					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.world", team.getSpawn().getWorld().getName());
 					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getX());
 					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.y", team.getSpawn().getY());
-					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getZ());
+					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.z", team.getSpawn().getZ());
 					Main.instance.saveConfig();
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha colocado el spawn del equipo '"+team.getNombre()+"'!"));
 				}
@@ -92,8 +99,9 @@ public class HoCoreCMD implements CommandExecutor {
 					int teamid = Integer.valueOf(args[1]);
 					String personaname = args[2];
 					Equipo team = Equipo.getEquipoById(teamid);
-					team.addMamerto(Main.instance.getHPByName(personaname));
-					Player ejec = (Player) sender;
+					Mamerto mammert = Main.instance.getHPByName(personaname);
+					team.addMamerto(mammert);
+					Player ejec = mammert.getPlayer();
 					Main.instance.getHPByName(ejec.getName()).setTeam(team);
 					Main.instance.getHPByName(ejec.getName()).setWritingChannel(team.getChannel());
 					Main.instance.getHPByName(ejec.getName()).addReadingChannel(team.getChannel());
@@ -116,6 +124,7 @@ public class HoCoreCMD implements CommandExecutor {
 						}
 						mamerto.getWorld().setGameRule(GameRule.NATURAL_REGENERATION, false);
 						mam.getPlayer().teleport(tmp.getSpawn());
+						
 					}
 				}
 				Main.instance.getJuego().setEstado(EstadosJuego.JUGANDO);

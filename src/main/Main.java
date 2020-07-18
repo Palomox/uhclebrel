@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,20 +23,22 @@ import chat.IChannel;
 import chat.NChannel;
 import comandos.ChannelCmd;
 import comandos.ChatCmd;
-import comandos.HoCoreCMD;
+import comandos.UhcCMD;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
 import eventos.CadaSegundo;
 import eventos.CambiaEpisodio;
 import eventos.CambiaEstado;
+import eventos.ComerDAppleEvent;
 import eventos.EspectadorAtaca;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
 import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
-import uhc.Episodio;
+import skinsrestorer.bukkit.SkinsRestorer;
+import skinsrestorer.shared.utils.SkinsRestorerAPI;
 import uhc.Equipo;
 import uhc.Juego;
 import uhc.SecondEvent;
@@ -51,13 +58,12 @@ public class Main extends JavaPlugin{
 	private ArrayList<IChannel> canales = new ArrayList<IChannel>();
 	public static Main instance;
 	public Juego juego;
-	public Event finalizar;
-	
+	private SkinsRestorer skrest;
+	public SkinsRestorerAPI sapi;	
 		public void onEnable() {
 		instance = this;
 		registerPapiExpansions();
 		startSeconding();
-		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[HoPoke] El Plugin ha sido Activado Correctamente");
 		registerConfig();
 		registerEvents();
 		registrarComandos();
@@ -70,7 +76,52 @@ public class Main extends JavaPlugin{
 			char pre = tmp.charAt(0);
 			registerChannels(channelName, pre);
 		}
+		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
+		sapi = skrest.getSkinsRestorerBukkitAPI();
+		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
+	public void loadRecipes() {
+		/*
+		 * Diamond Apple God
+		 */
+		NamespacedKey key = new NamespacedKey(Main.instance, "diamond_apple_cabeza");
+		ItemStack gapple = new ItemStack(Material.GOLDEN_APPLE);
+		ItemMeta meta = gapple.getItemMeta();
+		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3&lManzana de Diamante"));
+		ArrayList<String> lores = new ArrayList<String>();
+		lores.add(ChatColor.translateAlternateColorCodes('&', "&3Manzana de diamante"));
+		lores.add(ChatColor.translateAlternateColorCodes('&', "&4El item mas &lOP &r&4que has visto en tu vida."));
+		meta.setLore(lores);
+		meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+		meta.setCustomModelData(246);
+		System.out.println(meta.getCustomModelData());
+		gapple.setItemMeta(meta);
+		ShapedRecipe recipe = new ShapedRecipe(key, gapple);
+		recipe.shape("OOO", "OCO", "OOO");
+		recipe.setIngredient('O', Material.DIAMOND);
+		recipe.setIngredient('C', Material.PLAYER_HEAD);
+		Bukkit.addRecipe(recipe);
+		/*
+		 * Diamond Apple Normal
+		 */
+		NamespacedKey key2 = new NamespacedKey(Main.instance, "diamond_apple_cabeza");
+		ItemStack dapple = new ItemStack(Material.GOLDEN_APPLE);
+		ItemMeta metag = gapple.getItemMeta();
+		metag.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Manzana de Diamante"));
+		ArrayList<String> lores2 = new ArrayList<String>();
+		lores2.add(ChatColor.translateAlternateColorCodes('&', "&3Manzana de diamante"));
+		lores2.add(ChatColor.translateAlternateColorCodes('&', "&4El item mas &lOP &r&4que has visto en tu vida (Versión Lite)"));
+		metag.setLore(lores);
+		metag.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+		metag.setCustomModelData(247);
+		System.out.println(metag.getCustomModelData());
+		dapple.setItemMeta(metag);
+		ShapedRecipe recipe2 = new ShapedRecipe(key2, dapple);
+		recipe2.shape("OOO", "OCO", "OOO");
+		recipe2.setIngredient('O', Material.DIAMOND);
+		recipe2.setIngredient('C', Material.GOLDEN_APPLE);
+		Bukkit.addRecipe(recipe2);
+		}
 	public void startSeconding() {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			
@@ -121,8 +172,7 @@ public class Main extends JavaPlugin{
 		return null;
 	}
 	public void onDisable() {
-		//saveDb();
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CTW]El Plugin ha sido Desactivado Correctamente");
+	Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Desactivado Correctamente");
 	}
 	public void removeAdmin(Player acomparar) {
 		ArrayList<Player> admins = this.admins;
@@ -136,7 +186,7 @@ public class Main extends JavaPlugin{
 	public void registerPapiExpansions() {
 		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new UhcPlaceholders().register();
-      }
+		}
 	}
 	public void loadTeamsFromConfig() {
 		FileConfiguration cfg = this.getConfig();
@@ -161,7 +211,7 @@ public class Main extends JavaPlugin{
 		this.getCommand("c").setExecutor(new ChatCmd(this));
 		this.getCommand("sudo").setExecutor(new SudoCmd(this));
 		this.getCommand("channel").setExecutor(new ChannelCmd(this));
-		this.getCommand("uhc").setExecutor(new HoCoreCMD(this));
+		this.getCommand("uhc").setExecutor(new UhcCMD(this));
 		}
 	public PluginManager getPm() {
 		return this.getServer().getPluginManager();
@@ -179,6 +229,7 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new CadaSegundo(), this);
 		pm.registerEvents(new CambiaEpisodio(), this);
 		pm.registerEvents(new EspectadorAtaca(), this);
+		pm.registerEvents(new ComerDAppleEvent(), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

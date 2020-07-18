@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 
 import main.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.ChatColor;
 import uhc.EstadoChangeEvent;
 import util.Mamerto;
 import util.Scoreboard;
@@ -43,6 +44,12 @@ public class CambiaEstado implements Listener{
 					int line = Integer.valueOf(linea);
 					Scoreboard.updateScoreboard(tmp.getPlayer(), texto, line);
 				}
+			}
+			for(Mamerto temp : Main.instance.juego.getParticipantes()) {
+				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));
+				temp.getPlayer().setDisplayName(temp.getDisplayname());
+				temp.getPlayer().setPlayerListName(temp.getDisplayname());
+				
 			}
 			break;
 		default:

@@ -7,7 +7,7 @@ public class Episodio {
 	private Duration duracion;
 	public Episodio(int id) {
 		this.id = id;
-		duracion = Duration.ofMinutes(1);
+		duracion = Duration.ofMinutes(20);
 	}
 	
 	public int getId() {

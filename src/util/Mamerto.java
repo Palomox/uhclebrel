@@ -19,6 +19,7 @@ public class Mamerto {
 	private ArrayList<IChannel> leyendo;
 	private double dinero;
 	private Equipo team;
+	private String displayname;
 	
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
@@ -29,6 +30,14 @@ public class Mamerto {
 		this.dinero = 0;
 	}
 	
+	public String getDisplayname() {
+		return displayname;
+	}
+
+	public void setDisplayname(String displayname) {
+		this.displayname = displayname;
+	}
+
 	public Equipo getTeam() {
 		return team;
 	}

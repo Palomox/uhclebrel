@@ -53,6 +53,10 @@ public class Juego {
 	public HashMap<Equipo, Boolean> getEquipos() {
 		return equipos;
 	}
+	
+	public ArrayList<Mamerto> getParticipantes() {
+		return participantes;
+	}
 
 	public void addTeam(Equipo team) {
 		this.equipos.put(team, true);

@@ -18,15 +18,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 
 import chat.IChannel;
 import chat.NChannel;
 import comandos.ChannelCmd;
 import comandos.ChatCmd;
-import comandos.UhcCMD;
 import comandos.Setspawn;
 import comandos.Spawn;
 import comandos.SudoCmd;
+import comandos.UhcCMD;
 import eventos.CadaSegundo;
 import eventos.CambiaEpisodio;
 import eventos.CambiaEstado;
@@ -56,6 +57,7 @@ public class Main extends JavaPlugin{
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
 	private ArrayList<IChannel> canales = new ArrayList<IChannel>();
+	public Team todos;
 	public static Main instance;
 	public Juego juego;
 	private SkinsRestorer skrest;
@@ -93,7 +95,7 @@ public class Main extends JavaPlugin{
 		lores.add(ChatColor.translateAlternateColorCodes('&', "&3Manzana de diamante"));
 		lores.add(ChatColor.translateAlternateColorCodes('&', "&4El item mas &lOP &r&4que has visto en tu vida."));
 		meta.setLore(lores);
-		meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+		meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
 		meta.setCustomModelData(246);
 		System.out.println(meta.getCustomModelData());
 		gapple.setItemMeta(meta);
@@ -106,21 +108,20 @@ public class Main extends JavaPlugin{
 		 * Diamond Apple Normal
 		 */
 		NamespacedKey key2 = new NamespacedKey(Main.instance, "diamond_apple_normal");
-		ItemStack dapple = new ItemStack(Material.APPLE);
-		ItemMeta metag = gapple.getItemMeta();
+		ItemStack dapple = new ItemStack(Material.GOLDEN_APPLE);
+		ItemMeta metag = dapple.getItemMeta();
 		metag.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Manzana de Diamante"));
 		ArrayList<String> lores2 = new ArrayList<String>();
 		lores2.add(ChatColor.translateAlternateColorCodes('&', "&3Manzana de diamante"));
 		lores2.add(ChatColor.translateAlternateColorCodes('&', "&4El item mas &lOP &r&4que has visto en tu vida (Versión Lite)"));
 		metag.setLore(lores);
-		metag.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
 		metag.setCustomModelData(247);
 		System.out.println(metag.getCustomModelData());
 		dapple.setItemMeta(metag);
 		ShapedRecipe recipe2 = new ShapedRecipe(key2, dapple);
 		recipe2.shape("OOO", "OCO", "OOO");
 		recipe2.setIngredient('O', Material.DIAMOND);
-		recipe2.setIngredient('C', Material.GOLDEN_APPLE);
+		recipe2.setIngredient('C', Material.APPLE);
 		Bukkit.addRecipe(recipe2);
 		}
 	public void startSeconding() {

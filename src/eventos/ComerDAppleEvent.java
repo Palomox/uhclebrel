@@ -29,6 +29,7 @@ public class ComerDAppleEvent implements Listener{
 			//Doy los efectos 
 			ArrayList<PotionEffect> efectos = new ArrayList<PotionEffect>();
 			efectos.add(new PotionEffect(PotionEffectType.REGENERATION, 100,4 ));
+			efectos.add(new PotionEffect(PotionEffectType.SATURATION, 4, 1));
 			player.addPotionEffects(efectos);
 			player.setAbsorptionAmount(10);
 			e.setCancelled(true);
@@ -42,6 +43,7 @@ public class ComerDAppleEvent implements Listener{
 			efectos2.add(new PotionEffect(PotionEffectType.REGENERATION, 600,4 ));
 			efectos2.add(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 8400, 2));
 			efectos2.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 8400, 2));
+			efectos2.add(new PotionEffect(PotionEffectType.SATURATION, 4, 1));
 			player.addPotionEffects(efectos2);
 			player.setAbsorptionAmount(20);
 			e.setCancelled(true);

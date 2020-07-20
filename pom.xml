@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.palomox</groupId>
 	<artifactId>uhclebrel</artifactId>
-	<version>T2-1.16.1-0.5.0</version>
+	<version>T2-1.16.1-0.8.5</version>
 	<name>UHCLebrel</name>
 	<description>UHC Lebrel Plugin</description>
 	<repositories>

@@ -78,6 +78,7 @@ public class Main extends JavaPlugin{
 		}
 		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
 		sapi = skrest.getSkinsRestorerBukkitAPI();
+		loadRecipes();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 	public void loadRecipes() {
@@ -104,8 +105,8 @@ public class Main extends JavaPlugin{
 		/*
 		 * Diamond Apple Normal
 		 */
-		NamespacedKey key2 = new NamespacedKey(Main.instance, "diamond_apple_cabeza");
-		ItemStack dapple = new ItemStack(Material.GOLDEN_APPLE);
+		NamespacedKey key2 = new NamespacedKey(Main.instance, "diamond_apple_normal");
+		ItemStack dapple = new ItemStack(Material.APPLE);
 		ItemMeta metag = gapple.getItemMeta();
 		metag.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3Manzana de Diamante"));
 		ArrayList<String> lores2 = new ArrayList<String>();

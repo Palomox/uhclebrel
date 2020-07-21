@@ -8,6 +8,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.RenderType;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 import main.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -64,8 +66,8 @@ public class CambiaEstado implements Listener{
 			todos = all.registerNewTeam("todos");
 			todos.allowFriendlyFire();
 			todos.setCanSeeFriendlyInvisibles(false);
-			todos.setPrefix("&k");
-			todos.setOption(OPTION., status);
+			todos.setColor(org.bukkit.ChatColor.MAGIC);
+			todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
 			
 			for(Mamerto temp : Main.instance.juego.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));

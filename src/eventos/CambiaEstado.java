@@ -64,7 +64,8 @@ public class CambiaEstado implements Listener{
 			todos = all.registerNewTeam("todos");
 			todos.allowFriendlyFire();
 			todos.setCanSeeFriendlyInvisibles(false);
-			todos.setPrefix(ChatColor.MAGIC+"");
+			todos.setPrefix("&k");
+			todos.setOption(OPTION., status);
 			
 			for(Mamerto temp : Main.instance.juego.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));

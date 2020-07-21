@@ -39,6 +39,7 @@ import eventos.NewPlayer;
 import eventos.QuitarListaAdmins;
 import fr.minuskube.inv.InventoryManager;
 import skinsrestorer.bukkit.SkinsRestorer;
+import skinsrestorer.bukkit.SkinsRestorerBukkitAPI;
 import skinsrestorer.shared.utils.SkinsRestorerAPI;
 import uhc.Equipo;
 import uhc.Juego;
@@ -61,7 +62,7 @@ public class Main extends JavaPlugin{
 	public static Main instance;
 	public Juego juego;
 	private SkinsRestorer skrest;
-	public SkinsRestorerAPI sapi;	
+	public SkinsRestorerBukkitAPI sapi;	
 		public void onEnable() {
 		instance = this;
 		registerPapiExpansions();

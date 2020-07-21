@@ -41,6 +41,7 @@ public class CambiaEpisodio implements Listener{
 			case 3:
 				World main = Bukkit.getServer().getWorld("uhc");
 				main.setPVP(true);
+				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6[ANUNCIO] &5Se ha acabado el pacto de caballeros, &4&lPVP ACTIVADO A PARTIR DE ESTE MOMENTO."));
 				break;
 			default:
 				break;
@@ -56,8 +57,12 @@ public class CambiaEpisodio implements Listener{
 		Random random = new Random();
 		for(Mamerto vict : Main.instance.juego.getParticipantes()) {
 			int tmp = random.nextInt(nombres.size());
+			while(vict.getPlayer().getName().equals(nombres.get(tmp))) {
+				tmp = random.nextInt(nombres.size());
+			}
 			try {
 				Main.instance.sapi.setSkin(vict.getPlayer().getName(), nombres.get(tmp));
+				Main.instance.sapi.applySkin(vict.getPlayer());
 			} catch (SkinRequestException e1) {
 				e1.printStackTrace();
 			}

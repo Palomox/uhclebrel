@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +20,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
 
 import chat.IChannel;
@@ -38,11 +40,10 @@ import eventos.EspectadorAtaca;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
-import eventos.QuitarListaAdmins;
+import eventos.DesconectarMamerto;
 import fr.minuskube.inv.InventoryManager;
 import skinsrestorer.bukkit.SkinsRestorer;
 import skinsrestorer.bukkit.SkinsRestorerBukkitAPI;
-import skinsrestorer.shared.utils.SkinsRestorerAPI;
 import uhc.Equipo;
 import uhc.Juego;
 import uhc.SecondEvent;
@@ -64,7 +65,9 @@ public class Main extends JavaPlugin{
 	public static Main instance;
 	public Juego juego;
 	private SkinsRestorer skrest;
-	public SkinsRestorerBukkitAPI sapi;	
+	public SkinsRestorerBukkitAPI sapi;
+	public Timer matar = new Timer();
+
 		public void onEnable() {
 		instance = this;
 		registerPapiExpansions();
@@ -134,8 +137,12 @@ public class Main extends JavaPlugin{
 		drecipe.setIngredient('P', Material.GOLD_NUGGET);
 		ItemStack poti = new ItemStack(Material.POTION, 1);
 		PotionMeta metapoti = (PotionMeta) poti.getItemMeta();
+		PotionType fuerza = PotionType.STRENGTH;
+		PotionData data = new PotionData(fuerza);
+		metapoti.setBasePotionData(data);
 		poti.setItemMeta(metapoti);
 		drecipe.setIngredient('F', poti);
+		Bukkit.addRecipe(drecipe);
 		}
 	public void startSeconding() {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -237,7 +244,7 @@ public class Main extends JavaPlugin{
 	public void registerEvents() {
 		PluginManager pm = this.getPm();
 		pm.registerEvents(new NewPlayer(this), this);
-		pm.registerEvents(new QuitarListaAdmins(this), this);
+		pm.registerEvents(new DesconectarMamerto(this), this);
 		pm.registerEvents(new MensajeEnviado(this), this);
 		pm.registerEvents(new Muerte(), this);
 		pm.registerEvents(new CambiaEstado(), this);

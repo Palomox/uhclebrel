@@ -20,6 +20,7 @@ public class Mamerto {
 	private double dinero;
 	private Equipo team;
 	private String displayname;
+	private boolean desconectado;
 	
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
@@ -28,10 +29,20 @@ public class Mamerto {
 		this.escribiendo = null;
 		this.leyendo = new ArrayList<IChannel>();
 		this.dinero = 0;
+		this.desconectado = false;
 	}
 	
 	public String getDisplayname() {
 		return displayname;
+	}
+	
+
+	public boolean isDesconectado() {
+		return desconectado;
+	}
+
+	public void setDesconectado(boolean desconectado) {
+		this.desconectado = desconectado;
 	}
 
 	public void setDisplayname(String displayname) {

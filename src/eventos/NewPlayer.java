@@ -30,8 +30,6 @@ public class NewPlayer implements Listener {
 		if (jugador.isOp() || jugador.hasPermission("hopoke.admin")) {
 			plugin.getAdmins().add(jugador);
 		}
-		// Comprueba si es nuevo o no.
-		// Jugador es nuevo
 		LocalDate fj = LocalDate.now();
 		Mamerto hpp = new Mamerto(jugador.getUniqueId().toString(), fj);
 		plugin.getHoPokePlayers().add(hpp);
@@ -98,6 +96,12 @@ public class NewPlayer implements Listener {
 		break;
 		default:
 			break;
+		}
+		/*
+		 * Reconectar
+		 */
+		if(hpp.isDesconectado()) {
+			hpp.setDesconectado(false);
 		}
 		
 	}

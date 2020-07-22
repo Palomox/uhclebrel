@@ -21,7 +21,7 @@ public class Mamerto {
 	private Equipo team;
 	private String displayname;
 	private boolean desconectado;
-	
+	private boolean descalificado;
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
@@ -30,8 +30,17 @@ public class Mamerto {
 		this.leyendo = new ArrayList<IChannel>();
 		this.dinero = 0;
 		this.desconectado = false;
+		this.descalificado = false;
 	}
 	
+	public boolean isDescalificado() {
+		return descalificado;
+	}
+
+	public void setDescalificado(boolean descalificado) {
+		this.descalificado = descalificado;
+	}
+
 	public String getDisplayname() {
 		return displayname;
 	}

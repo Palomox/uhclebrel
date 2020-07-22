@@ -30,7 +30,6 @@ public class Muerte implements Listener {
 			Player muerto = e.getEntity();
 			Mamerto mamerto = Main.instance.getHPByName(muerto.getName());
 			ArrayList<Mamerto> jugadores = Main.instance.getHoPokePlayers();
-			Bukkit.getConsoleSender().sendMessage("murision disparada");
 			for (Mamerto tmp : jugadores) {
 				tmp.getPlayer().sendTitle(
 						ChatColor.translateAlternateColorCodes('&', "&4¡" + muerto.getName() + " ha sido eliminado!"),
@@ -54,6 +53,7 @@ public class Muerte implements Listener {
 			/*
 			 * Poner cabeza
 			 */
+			if(!mamerto.isDescalificado()) {
 			Location cabeza = muerto.getLocation();
 			cabeza.setY(cabeza.getY()+2);
 			cabeza.getBlock().setType(Material.PLAYER_HEAD);
@@ -64,6 +64,7 @@ public class Muerte implements Listener {
 			Location valla = cabeza.clone();
 			valla.setY(cabeza.getY()-1);
 			valla.getBlock().setType(Material.NETHER_BRICK_FENCE);
+			}
 		}
 	}
 }

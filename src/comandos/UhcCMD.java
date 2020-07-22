@@ -41,6 +41,10 @@ public class UhcCMD implements CommandExecutor {
 			Bukkit.getConsoleSender().sendMessage("No se puede ejecutar este comando desde la consola!");
 			return false;
 		} else {
+			Player ejecutor = (Player) sender;
+			if(!(ejecutor.isOp() || ejecutor.getName() == "Blazekh")) {
+				return true;
+			}
 			switch(args[0]) {
 			case "reload":
 				if(!(sender.hasPermission("hopoke.command.reload"))) {
@@ -66,7 +70,6 @@ public class UhcCMD implements CommandExecutor {
 				if(!(args.length <=1)) {
 					int teamid = Integer.valueOf(args[1]);
 					Equipo team = Equipo.getEquipoById(teamid);
-					Player ejecutor = (Player) sender;
 					team.setSpawn(ejecutor.getLocation());
 					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.world", team.getSpawn().getWorld().getName());
 					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getX());
@@ -137,7 +140,13 @@ public class UhcCMD implements CommandExecutor {
 				Main.instance.juego = new Juego(); 
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.ESPERANDO));
 				break;
-			case "finish":
+			case "descalificar":
+				if(args.length >1) {
+					String playerName = args[1];
+					Mamerto adescalificar = Main.instance.getHPByName(playerName);
+					adescalificar.setDescalificado(true);
+					adescalificar.getPlayer().setHealth(0);
+				}
 				break;
 			default:
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Ese argumento no existe."));

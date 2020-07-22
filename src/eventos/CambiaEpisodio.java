@@ -56,9 +56,9 @@ public class CambiaEpisodio implements Listener{
 		}
 		Random random = new Random();
 		for(Mamerto vict : Main.instance.juego.getParticipantes()) {
-			int tmp = random.nextInt(nombres.size());
+			int tmp = random.nextInt(nombres.size()+1);
 			while(vict.getPlayer().getName().equals(nombres.get(tmp))) {
-				tmp = random.nextInt(nombres.size());
+				tmp = random.nextInt(nombres.size()+1);
 			}
 			try {
 				Main.instance.sapi.setSkin(vict.getPlayer().getName(), nombres.get(tmp));

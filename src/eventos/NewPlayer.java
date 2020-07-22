@@ -30,26 +30,29 @@ public class NewPlayer implements Listener {
 		if (jugador.isOp() || jugador.hasPermission("hopoke.admin")) {
 			plugin.getAdmins().add(jugador);
 		}
-		LocalDate fj = LocalDate.now();
-		Mamerto hpp = new Mamerto(jugador.getUniqueId().toString(), fj);
-		plugin.getHoPokePlayers().add(hpp);
+		Mamerto hpp;
+		if(Mamerto.getHPPlayer(jugador, plugin) ==null) {
+			LocalDate fj = LocalDate.now();
+			hpp = new Mamerto(jugador.getUniqueId().toString(), fj);
+			plugin.getHoPokePlayers().add(hpp);
+		}	
 		// Canal por defecto
-		Mamerto pl = Mamerto.getHPPlayer(jugador, plugin);
+		hpp = Mamerto.getHPPlayer(jugador, plugin);
 		for (String disc : plugin.getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String perm = plugin.getConfig().getString("chat.channels." + disc + ".autojoinperm");
 			IChannel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels." + disc + ".name"));
 			if (perm.equalsIgnoreCase("none")) {
-				pl.addReadingChannel(tmp);
-				if (tmp.addLector(pl.getPlayer())) {
+				hpp.addReadingChannel(tmp);
+				if (tmp.addLector(hpp.getPlayer())) {
 					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora también lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
 							ChatColor.DARK_RED + "No puedes leer " + tmp.getName() + " porque ya lo estás leyendo!");
 				}
 			}
-			if (pl.getPlayer().hasPermission(perm)) {
-				pl.addReadingChannel(tmp);
-				if (tmp.addLector(pl.getPlayer())) {
+			if (hpp.getPlayer().hasPermission(perm)) {
+				hpp.addReadingChannel(tmp);
+				if (tmp.addLector(hpp.getPlayer())) {
 					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora también lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
@@ -58,38 +61,38 @@ public class NewPlayer implements Listener {
 			}
 		}
 		IChannel wr = plugin.getChannelByName(plugin.getConfig().getString("chat.defaultwritingchannel"));
-		pl.setWritingChannel(wr);
+		hpp.setWritingChannel(wr);
 		/*
 		 * Creacion de la Scoreboard
 		 */
 		switch(Main.instance.juego.getEstado()) {
 		case ESPERANDO:
-		BPlayerBoard board = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");
+		BPlayerBoard board = Netherboard.instance().createBoard(hpp.getPlayer(), "Main Scoreboard");
 		board.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
 		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.lobby.lines").getKeys(false)) {
 			String texto = plugin.getConfig().getString("scoreboard.lobby.lines." + linea);
-			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+			texto = PlaceholderAPI.setPlaceholders(hpp.getPlayer(), texto);
 			int line = Integer.valueOf(linea);
 			board.set(texto, line);
 		}
 			break;
 		case JUGANDO:
-			Netherboard.instance().createBoard(pl.getPlayer(), "Main");
+			Netherboard.instance().createBoard(hpp.getPlayer(), "Main");
 			for (String linea : plugin.getConfig()
 					.getConfigurationSection("scoreboard.durante.lines")
 					.getKeys(false)) {
 				String texto = plugin.getConfig().getString("scoreboard.durante.lines." + linea);
-				texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+				texto = PlaceholderAPI.setPlaceholders(hpp.getPlayer(), texto);
 				int line = Integer.valueOf(linea);
-				Scoreboard.updateScoreboard(pl.getPlayer(), texto, line);
+				Scoreboard.updateScoreboard(hpp.getPlayer(), texto, line);
 			}
 			break;
 		case FINALIZADO:
-		BPlayerBoard boardf = Netherboard.instance().createBoard(pl.getPlayer(), "Main Scoreboard");
+		BPlayerBoard boardf = Netherboard.instance().createBoard(hpp.getPlayer(), "Main Scoreboard");
 		boardf.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
 		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.final.lines").getKeys(false)) {
 			String texto = plugin.getConfig().getString("scoreboard.final.lines." + linea);
-			texto = PlaceholderAPI.setPlaceholders(pl.getPlayer(), texto);
+			texto = PlaceholderAPI.setPlaceholders(hpp.getPlayer(), texto);
 			int line = Integer.valueOf(linea);
 			boardf.set(ChatColor.translateAlternateColorCodes('&', texto), line);
 		}

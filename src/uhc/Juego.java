@@ -77,8 +77,14 @@ public class Juego {
 				aspect.getPlayer().setFireTicks(0);
 				aspect.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
 				aspect.getPlayer().setInvulnerable(true);
+				Main.instance.todos.removeEntry(aspect.getPlayer().getName());
+				aspect.getPlayer().setDisplayName(aspect.getPlayer().getName());
+				aspect.setDisplayname(aspect.getPlayer().getDisplayName());
+				aspect.getPlayer().setPlayerListName(aspect.getPlayer().getDisplayName());
+				aspect.setEspectador(true);
+				
 			}
-		}, 40);
+		}, 2);
 	}
 	public void matar(Mamerto desafortunado) {
 		for (Mamerto tmp : participantes) {

@@ -22,6 +22,7 @@ public class Mamerto {
 	private String displayname;
 	private boolean desconectado;
 	private boolean descalificado;
+	private boolean espectador;
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
@@ -31,8 +32,17 @@ public class Mamerto {
 		this.dinero = 0;
 		this.desconectado = false;
 		this.descalificado = false;
+		this.espectador = false;
 	}
 	
+	public boolean isEspectador() {
+		return espectador;
+	}
+
+	public void setEspectador(boolean espectador) {
+		this.espectador = espectador;
+	}
+
 	public boolean isDescalificado() {
 		return descalificado;
 	}

@@ -120,7 +120,7 @@ public class Main extends JavaPlugin{
 		ArrayList<String> lores2 = new ArrayList<String>();
 		lores2.add(ChatColor.translateAlternateColorCodes('&', "&3Manzana de diamante"));
 		lores2.add(ChatColor.translateAlternateColorCodes('&', "&4El item mas &lOP &r&4que has visto en tu vida (Versión Lite)"));
-		metag.setLore(lores);
+		metag.setLore(lores2);
 		metag.setCustomModelData(247);
 		System.out.println(metag.getCustomModelData());
 		dapple.setItemMeta(metag);

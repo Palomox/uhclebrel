@@ -66,12 +66,15 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 			if(Main.instance.getHPByName(player.getName()).getTeam() !=null) {
 				switch(Main.instance.juego.getEstado()) {
 				case JUGANDO:
+					if(Main.instance.getHPByName(player.getName()).isEspectador()) {
+						return Main.instance.getHPByName(player.getName()).getTeam().getNombre();
+					}
 					return ChatColor.MAGIC+Main.instance.getHPByName(player.getName()).getTeam().getNombre();
 				default:
 					return Main.instance.getHPByName(player.getName()).getTeam().getNombre();
 				}
 			}else {
-				return "Sin equipo 1";
+				return "Sin equipo, 1";
 			}
 		case "rarename":
 			if(Main.instance.getJuego().getEstado() == EstadosJuego.JUGANDO) {

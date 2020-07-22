@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import main.Main;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.md_5.bungee.api.ChatColor;
 import util.Mamerto;
 
 public class UhcPlaceholders extends PlaceholderExpansion{
@@ -61,18 +62,23 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 * %uhc_teamname%
 		 */
 		case "teamname":
+			
 			if(Main.instance.getHPByName(player.getName()).getTeam() !=null) {
-				return Main.instance.getHPByName(player.getName()).getTeam().getNombre();
+				switch(Main.instance.juego.getEstado()) {
+				case JUGANDO:
+					return ChatColor.MAGIC+Main.instance.getHPByName(player.getName()).getTeam().getNombre();
+				default:
+					return Main.instance.getHPByName(player.getName()).getTeam().getNombre();
+				}
 			}else {
-				return null;
+				return "Sin equipo 1";
 			}
 		case "rarename":
 			if(Main.instance.getJuego().getEstado() == EstadosJuego.JUGANDO) {
 				return Main.instance.getHPByName(player.getName()).getDisplayname();
 			}else {
 				return player.getName();
-			}
-		
+			}	
 		}
 		
 		return null;

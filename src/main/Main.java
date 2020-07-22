@@ -15,9 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 import chat.IChannel;
@@ -124,6 +126,16 @@ public class Main extends JavaPlugin{
 		recipe2.setIngredient('O', Material.DIAMOND);
 		recipe2.setIngredient('C', Material.APPLE);
 		Bukkit.addRecipe(recipe2);
+		/*
+		 * Dragon Breath
+		 */
+		ShapedRecipe drecipe = new ShapedRecipe(new NamespacedKey(this, "dragon_breath_uhc"), new ItemStack(Material.DRAGON_BREATH));
+		drecipe.shape("PPP", "PFP", "PPP");
+		drecipe.setIngredient('P', Material.GOLD_NUGGET);
+		ItemStack poti = new ItemStack(Material.POTION, 1);
+		PotionMeta metapoti = (PotionMeta) poti.getItemMeta();
+		poti.setItemMeta(metapoti);
+		drecipe.setIngredient('F', poti);
 		}
 	public void startSeconding() {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {

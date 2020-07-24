@@ -39,8 +39,12 @@ public class CambiaEpisodio implements Listener{
 				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6[ANUNCIO] &5Ha comenzado la parte 10, todo el mundo ha de ir a 0, 0."));
 				break;
 			case 3:
-				World main = Bukkit.getServer().getWorld("uhc");
-				main.setPVP(true);
+				World ovw = Bukkit.getWorld("uhc");
+				World net = Bukkit.getWorld("uhc_nether");
+				World end = Bukkit.getWorld("uhc_the_end");
+				ovw.setPVP(false);
+				net.setPVP(false);
+				end.setPVP(false);
 				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6[ANUNCIO] &5Se ha acabado el pacto de caballeros, &4&lPVP ACTIVADO A PARTIR DE ESTE MOMENTO."));
 				break;
 			default:

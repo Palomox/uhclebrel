@@ -35,8 +35,10 @@ import comandos.UhcCMD;
 import eventos.CadaSegundo;
 import eventos.CambiaEpisodio;
 import eventos.CambiaEstado;
+import eventos.CambiarNombreAdvancements;
 import eventos.ComerDAppleEvent;
 import eventos.EspectadorAtaca;
+import eventos.EspectadorInteractua;
 import eventos.MensajeEnviado;
 import eventos.Muerte;
 import eventos.NewPlayer;
@@ -252,6 +254,8 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new CambiaEpisodio(), this);
 		pm.registerEvents(new EspectadorAtaca(), this);
 		pm.registerEvents(new ComerDAppleEvent(), this);
+		pm.registerEvents(new CambiarNombreAdvancements(), this);
+		pm.registerEvents(new EspectadorInteractua(), this);
 	}
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");

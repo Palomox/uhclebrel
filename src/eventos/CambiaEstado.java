@@ -1,6 +1,8 @@
 package eventos;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -76,6 +78,18 @@ public class CambiaEstado implements Listener{
 				todos.addEntry(temp.getPlayer().getName());
 				temp.getPlayer().setScoreboard(all);
 			}
+			World ovw = Bukkit.getWorld("uhc");
+			World net = Bukkit.getWorld("uhc_nether");
+			World end = Bukkit.getWorld("uhc_the_end");
+			ovw.setPVP(false);
+			net.setPVP(false);
+			end.setPVP(false);
+			ovw.getWorldBorder().setSize(1500);
+			net.getWorldBorder().setSize(750);
+			ovw.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+			net.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+			end.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+
 			break;
 		default:
 			break;

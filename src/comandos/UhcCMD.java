@@ -125,11 +125,10 @@ public class UhcCMD implements CommandExecutor {
 						for(PotionEffect tmpp : mamerto.getActivePotionEffects()) {
 							mamerto.removePotionEffect(tmpp.getType());
 						}
-						mamerto.getWorld().setGameRule(GameRule.NATURAL_REGENERATION, false);
 						mam.getPlayer().teleport(tmp.getSpawn());
-						
 					}
 				}
+				
 				Main.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
 				Main.instance.getJuego().setEpisodio(new Episodio(1));
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.JUGANDO));
@@ -146,6 +145,11 @@ public class UhcCMD implements CommandExecutor {
 					Mamerto adescalificar = Main.instance.getHPByName(playerName);
 					adescalificar.setDescalificado(true);
 					adescalificar.getPlayer().setHealth(0);
+				}
+				break;
+			case "pararserver":
+				if(Main.instance.juego.getEstado() == EstadosJuego.FINALIZADO) {
+					Bukkit.getServer().shutdown();
 				}
 				break;
 			default:

@@ -25,10 +25,10 @@ public class CambiarNombreAdvancements implements Listener{
 		TranslatableComponent mensaje = new TranslatableComponent("chat.type.advancement.task");
 		TextComponent nombre = new TextComponent(e.getPlayer().getName());
 		HoverEvent h = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new TranslatableComponent("advancements."+adv.getKey().getKey().replace('/', '.')+".description").getTranslate()));
-		mensaje.addWith(nombre);
+		nombre.setColor(ChatColor.MAGIC);
+		mensaje.addWith(nombre.toLegacyText());
 		TranslatableComponent nom = new TranslatableComponent("advancements."+adv.getKey().getKey().replace('/', '.')+".title");
 		nom.setHoverEvent(h);
-		nom.setColor(ChatColor.MAGIC);
 		mensaje.addWith(nom);
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.sendMessage(mensaje);

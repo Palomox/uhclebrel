@@ -69,8 +69,6 @@ public class Juego {
 		Main.instance.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
 			public void run() {
 				aspect.getPlayer().spigot().respawn();
-				aspect.getPlayer().setAllowFlight(true);
-				aspect.getPlayer().setFlying(true);
 				aspect.getPlayer().setCanPickupItems(false);
 				aspect.getPlayer().setGameMode(GameMode.ADVENTURE);
 				aspect.getPlayer().getInventory().clear();
@@ -81,10 +79,10 @@ public class Juego {
 				aspect.setDisplayname(aspect.getPlayer().getDisplayName());
 				aspect.getPlayer().setPlayerListName(aspect.getPlayer().getDisplayName());
 				aspect.setEspectador(true);
+				aspect.getPlayer().setAllowFlight(true);
+				aspect.getPlayer().setFlying(true);
 			}
 		}, 10);
-		Main.instance.todos.removeEntry(aspect.getPlayer().getName());
-
 	}
 	public void matar(Mamerto desafortunado) {
 		for (Mamerto tmp : participantes) {

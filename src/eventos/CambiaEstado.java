@@ -58,7 +58,7 @@ public class CambiaEstado implements Listener{
 			}
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
-			Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.RED+""+ChatColor.BOLD+" ♥", RenderType.INTEGER);
+			Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.RED+""+ChatColor.BOLD+"❤", RenderType.INTEGER);
 			Objective ctab = all.registerNewObjective("corazonestab", 
 					"health",
 					" ", 
@@ -84,12 +84,12 @@ public class CambiaEstado implements Listener{
 			ovw.setPVP(false);
 			net.setPVP(false);
 			end.setPVP(false);
-			ovw.getWorldBorder().setSize(1500);
-			net.getWorldBorder().setSize(750);
+			ovw.getWorldBorder().setSize(3000);
+			net.getWorldBorder().setSize(1500);
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "time set day");
 			ovw.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
 			net.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
 			end.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-
 			break;
 		default:
 			break;

@@ -25,8 +25,8 @@ public class CambiarNombreAdvancements implements Listener{
 		nombre.setColor(ChatColor.MAGIC);
 		mensaje.addWith(nombre);
 		TranslatableComponent nom = new TranslatableComponent("advancements."+adv.getKey().getKey().replace('/', '.')+".title");
-		nombre.setHoverEvent(h);
-		mensaje.addWith(nom.toLegacyText());
+		nom.setHoverEvent(h);
+		mensaje.addWith(nombre.toLegacyText());
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.sendMessage(mensaje);
 		}

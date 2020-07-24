@@ -84,7 +84,7 @@ public class Juego {
 				aspect.setEspectador(true);
 				
 			}
-		}, 2);
+		}, 10);
 	}
 	public void matar(Mamerto desafortunado) {
 		for (Mamerto tmp : participantes) {

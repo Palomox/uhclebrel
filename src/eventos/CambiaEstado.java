@@ -58,7 +58,7 @@ public class CambiaEstado implements Listener{
 			}
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
-			Objective cnom = all.registerNewObjective("corazonesbajo", "health", "/20", RenderType.INTEGER);
+			Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.RED+""+ChatColor.BOLD+" ♥", RenderType.INTEGER);
 			Objective ctab = all.registerNewObjective("corazonestab", 
 					"health",
 					" ", 

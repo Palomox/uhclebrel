@@ -28,6 +28,9 @@ public class TeamChannel implements IChannel{
 		String format = ChatColor.translateAlternateColorCodes('&', "&6[COMPAÑERO] &r%player_name%&8: &r");
 		String mensaje = PlaceholderAPI.setPlaceholders(sender, format)+ rawmsg;
 		for(Mamerto tmp : this.team.getMiembros().keySet()) {
+			if(tmp.isDesconectado()) {
+				continue;
+			}
 			tmp.getPlayer().sendMessage(mensaje);
 		}
 	}

@@ -8,7 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class CambiarNombreAdvancements implements Listener{
 	public CambiarNombreAdvancements() {
@@ -17,8 +20,13 @@ public class CambiarNombreAdvancements implements Listener{
 	public void onAdvancement(PlayerAdvancementDoneEvent e) {
 		Advancement adv = e.getAdvancement();
 		TranslatableComponent mensaje = new TranslatableComponent("chat.type.advancement.task");
-		mensaje.addWith(ChatColor.translateAlternateColorCodes('&', "&r"+e.getPlayer().getName()+"&r"));
-		mensaje.addWith("["+adv.getKey().getKey().replace('_', ' ')+"]");
+		TextComponent nombre = new TextComponent(e.getPlayer().getName());
+		HoverEvent h = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new TranslatableComponent("advancements."+adv.getKey().getKey().replace('/', '.')+".description").getTranslate()));
+		nombre.setColor(ChatColor.MAGIC);
+		mensaje.addWith(nombre);
+		TranslatableComponent nom = new TranslatableComponent("advancements."+adv.getKey().getKey().replace('/', '.')+".title");
+		nombre.setHoverEvent(h);
+		mensaje.addWith(nom.toLegacyText());
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.sendMessage(mensaje);
 		}

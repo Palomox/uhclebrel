@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
@@ -26,7 +27,7 @@ public class DesconectarMamerto implements Listener{
 			plugin.removeAdmin(jugador);
 		}
 		Mamerto hpplayer = Mamerto.getHPPlayer(jugador, plugin);
-		TimerTask borrar = new TimerTask() {		
+		BukkitRunnable borrar = new BukkitRunnable() {		
 			@Override
 			public void run() {
 				if(hpplayer.isDesconectado()) {
@@ -38,7 +39,7 @@ public class DesconectarMamerto implements Listener{
 				}
 			}
 		};
-		Main.instance.matar.schedule(borrar, 300000);
+		borrar.runTaskLater(Main.instance, 6000);
 		hpplayer.setDesconectado(true);
 		/*
 		 * Quitar la Scoreboard del jugador

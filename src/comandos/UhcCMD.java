@@ -14,6 +14,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -21,7 +22,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
-import main.Main;
+import main.UHCLebrel;
 import uhc.Episodio;
 import uhc.EpisodioChangeEvent;
 import uhc.Equipo;
@@ -31,8 +32,8 @@ import uhc.Juego;
 import util.Mamerto;
 
 public class UhcCMD implements CommandExecutor {
-	private Main plugin;
-	public UhcCMD(Main plugin) {
+	private UHCLebrel plugin;
+	public UhcCMD(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 
@@ -62,7 +63,7 @@ public class UhcCMD implements CommandExecutor {
 					for(String tmp : argus) {
 						j.add(tmp);
 					}
-				Main.instance.juego.addTeam(new Equipo(j.toString(), Main.instance.juego.getEquipos().size()+1));
+				UHCLebrel.instance.juego.addTeam(new Equipo(j.toString(), UHCLebrel.instance.juego.getEquipos().size()+1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha creado el equipo '"+j.toString()+"'!"));
 				}
 				break;
@@ -71,22 +72,22 @@ public class UhcCMD implements CommandExecutor {
 					int teamid = Integer.valueOf(args[1]);
 					Equipo team = Equipo.getEquipoById(teamid);
 					team.setSpawn(ejecutor.getLocation());
-					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.world", team.getSpawn().getWorld().getName());
-					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getX());
-					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.y", team.getSpawn().getY());
-					Main.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.z", team.getSpawn().getZ());
-					Main.instance.saveConfig();
+					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.world", team.getSpawn().getWorld().getName());
+					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getX());
+					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.y", team.getSpawn().getY());
+					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.z", team.getSpawn().getZ());
+					UHCLebrel.instance.saveConfig();
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha colocado el spawn del equipo '"+team.getNombre()+"'!"));
 				}
 				break;
 			case "loadteams":
-				Main.instance.loadTeamsFromConfig();
+				UHCLebrel.instance.loadTeamsFromConfig();
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se han cargado los equipos desde la configuración correctamente!"));
 				break;
 			case "teamlist":
 				ArrayList<String> mensajesal = new ArrayList<String>();
 				mensajesal.add(ChatColor.translateAlternateColorCodes('&', "&8--------&6Lista de equipos&8-----------"));
-				for(Equipo tmp : Main.instance.getJuego().getEquipos().keySet()) {
+				for(Equipo tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
 					int id = tmp.getId();
 					String nombre = tmp.getNombre();
 					String bonito = ChatColor.translateAlternateColorCodes('&', "&6"+id+"&8---------------------&2"+nombre);
@@ -102,19 +103,19 @@ public class UhcCMD implements CommandExecutor {
 					int teamid = Integer.valueOf(args[1]);
 					String personaname = args[2];
 					Equipo team = Equipo.getEquipoById(teamid);
-					Mamerto mammert = Main.instance.getHPByName(personaname);
+					Mamerto mammert = UHCLebrel.instance.getHPByName(personaname);
 					team.addMamerto(mammert);
 					Player ejec = mammert.getPlayer();
-					Main.instance.getHPByName(ejec.getName()).setTeam(team);
-					Main.instance.getHPByName(ejec.getName()).setWritingChannel(team.getChannel());
-					Main.instance.getHPByName(ejec.getName()).addReadingChannel(team.getChannel());
+					UHCLebrel.instance.getHPByName(ejec.getName()).setTeam(team);
+					UHCLebrel.instance.getHPByName(ejec.getName()).setWritingChannel(team.getChannel());
+					UHCLebrel.instance.getHPByName(ejec.getName()).addReadingChannel(team.getChannel());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha añadido a "+personaname+" al equipo '"+team.getNombre()+"'!"));
 				}
 				break;
 			case "start":
-				for(Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
+				for(Equipo tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
 					for(Mamerto mam : tmp.getMiembros().keySet()) {
-						Main.instance.juego.addMammert(mam);
+						UHCLebrel.instance.juego.addMammert(mam);
 						Player mamerto = mam.getPlayer();
 						mamerto.setGameMode(GameMode.SURVIVAL);
 						mamerto.setFlying(false);
@@ -129,26 +130,26 @@ public class UhcCMD implements CommandExecutor {
 					}
 				}
 				
-				Main.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
-				Main.instance.getJuego().setEpisodio(new Episodio(1));
+				UHCLebrel.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
+				UHCLebrel.instance.getJuego().setEpisodio(new Episodio(1));
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.JUGANDO));
 				Bukkit.getPluginManager().callEvent(new EpisodioChangeEvent(1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
 				break;
 			case "reset":
-				Main.instance.juego = new Juego(); 
+				UHCLebrel.instance.juego = new Juego(); 
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.ESPERANDO));
 				break;
 			case "descalificar":
 				if(args.length >1) {
 					String playerName = args[1];
-					Mamerto adescalificar = Main.instance.getHPByName(playerName);
+					Mamerto adescalificar = UHCLebrel.instance.getHPByName(playerName);
 					adescalificar.setDescalificado(true);
 					adescalificar.getPlayer().setHealth(0);
 				}
 				break;
 			case "pararserver":
-				if(Main.instance.juego.getEstado() == EstadosJuego.FINALIZADO) {
+				if(UHCLebrel.instance.juego.getEstado() == EstadosJuego.FINALIZADO) {
 					Bukkit.getServer().shutdown();
 				}
 				break;

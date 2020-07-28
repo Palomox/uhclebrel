@@ -9,12 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import main.Main;
+import main.UHCLebrel;
 
 public class Setspawn implements CommandExecutor{
-	private Main plugin;
+	private UHCLebrel plugin;
 
-	public Setspawn(Main plugin) {
+	public Setspawn(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	

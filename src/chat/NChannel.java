@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import main.Main;
+import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 
 public class NChannel implements IChannel{
-	private Main plugin;
+	private UHCLebrel plugin;
 	private ArrayList<Player> lectores;
 	private String name;
 	private char prefix;
 	
-	public NChannel(Main plugin, String name, char prefix) {
+	public NChannel(UHCLebrel plugin, String name, char prefix) {
 		this.name = name;
 		this.plugin = plugin;
 		this.prefix = prefix;
@@ -44,7 +44,7 @@ public class NChannel implements IChannel{
 	public void sendFormattedMsg(String rawmsg, Player sender) {
 		String formato = plugin.getConfig().getString("chat.channels."+this.name+".format");
 		for(Player tmp : this.lectores) {
-			if(Main.instance.getHPByName(tmp.getName()).isDesconectado()) {
+			if(UHCLebrel.instance.getHPByName(tmp.getName()).isDesconectado()) {
 				continue;
 			}
 			formato = PlaceholderAPI.setPlaceholders(sender, formato);
@@ -60,6 +60,9 @@ public class NChannel implements IChannel{
 		}
 		this.lectores.add(lector);
 		return true;
+	}
+	public String getFormat() {
+		return UHCLebrel.instance.getConfig().getString("chat.channels."+this.name+".format").replace("%player_name%", "%s").concat("%s");
 	}
 	
 	

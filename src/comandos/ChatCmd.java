@@ -13,11 +13,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import main.Main;
+import main.UHCLebrel;
 
 public class ChatCmd implements CommandExecutor{
-	private Main plugin;
-	public ChatCmd(Main plugin) {
+	private UHCLebrel plugin;
+	public ChatCmd(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {

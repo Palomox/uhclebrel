@@ -10,11 +10,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import main.Main;
+import main.UHCLebrel;
 
 public class SudoCmd implements CommandExecutor{
-	private Main plugin;
-	public SudoCmd(Main plugin) {
+	private UHCLebrel plugin;
+	public SudoCmd(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {

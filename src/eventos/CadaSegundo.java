@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import main.Main;
+import main.UHCLebrel;
 import uhc.EpisodioChangeEvent;
 import uhc.Equipo;
 import uhc.EstadosJuego;
@@ -22,10 +22,10 @@ public class CadaSegundo implements Listener {
 
 	@EventHandler
 	public void onSecond(SecondEvent e) {
-		if (Main.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
-			Main.instance.getJuego().getEpisodio().menosUnSec();
-			long s = Main.instance.getJuego().getEpisodio().getDuracion().getSeconds();
-			for(Equipo tmp : Main.instance.getJuego().getEquipos().keySet()) {
+		if (UHCLebrel.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
+			UHCLebrel.instance.getJuego().getEpisodio().menosUnSec();
+			long s = UHCLebrel.instance.getJuego().getEpisodio().getDuracion().getSeconds();
+			for(Equipo tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
 				for(Mamerto mam : tmp.getMiembros().keySet()) {
 					if(!mam.isDesconectado()){
 					Scoreboard.updateScoreboard(mam.getPlayer(),
@@ -35,9 +35,9 @@ public class CadaSegundo implements Listener {
 				}
 			}
 			
-			if (Main.instance.getJuego().getEpisodio().getDuracion().equals(Duration.ZERO)) {
+			if (UHCLebrel.instance.getJuego().getEpisodio().getDuracion().equals(Duration.ZERO)) {
 				Bukkit.getConsoleSender().sendMessage("Antes de dispararse el evento.");
-				Bukkit.getPluginManager().callEvent(new EpisodioChangeEvent(Main.instance.getJuego().getEpisodio().getId() + 1));
+				Bukkit.getPluginManager().callEvent(new EpisodioChangeEvent(UHCLebrel.instance.getJuego().getEpisodio().getId() + 1));
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package eventos;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,14 +9,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import chat.IChannel;
 import chat.NChannel;
 import chat.TeamChannel;
-import main.Main;
-import me.clip.placeholderapi.PlaceholderAPI;
+import main.UHCLebrel;
 import util.Mamerto;
 
 public class MensajeEnviado implements Listener {
-	private Main plugin;
+	private UHCLebrel plugin;
 
-	public MensajeEnviado(Main plugin) {
+	public MensajeEnviado(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 
@@ -25,11 +25,10 @@ public class MensajeEnviado implements Listener {
 		Mamerto jugador = Mamerto.getHPPlayer(chateador, plugin);
 		IChannel amandar = getAmandar(e.getMessage());
 		String mensaje = e.getMessage();
-		String mensajeText; 
+		String mensajeText = null; 
 		if(amandar == null) {
 			amandar = jugador.getWritingChannel();
 			mensajeText = e.getMessage();
-			amandar.sendFormattedMsg(mensajeText, chateador);
 		}else {
 			if (amandar instanceof NChannel) {
 				if (jugador.getPlayer().hasPermission(plugin.getConfig().getString("chat.channels." + amandar.getName() + ".perm"))) {
@@ -40,16 +39,14 @@ public class MensajeEnviado implements Listener {
 					mensajeText = e.getMessage();
 					amandar = jugador.getWritingChannel();
 				}
-				amandar.sendFormattedMsg(mensajeText, chateador);
 			} else if (amandar instanceof TeamChannel) {
 				mensajeText = mensaje.substring(1);
-				amandar.sendFormattedMsg(mensajeText, chateador);
 			}
 		}
+		e.setMessage(ChatColor.translateAlternateColorCodes('&', mensajeText));
+		e.setFormat(ChatColor.translateAlternateColorCodes('&', amandar.getFormat()));
 		
-	e.setCancelled(true);
 	}
-
 	private IChannel getAmandar(String mensaje) {
 		String first = String.valueOf(mensaje.charAt(0));
 		for(IChannel tmp : plugin.getCanales()) {

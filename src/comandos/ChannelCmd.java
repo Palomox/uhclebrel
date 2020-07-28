@@ -8,12 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import chat.IChannel;
-import main.Main;
+import main.UHCLebrel;
 import util.Mamerto;
 
 public class ChannelCmd implements CommandExecutor{
-	private Main plugin;
-	public ChannelCmd(Main plugin) {
+	private UHCLebrel plugin;
+	public ChannelCmd(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {

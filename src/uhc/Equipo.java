@@ -7,7 +7,7 @@ import org.bukkit.Location;
 
 import chat.IChannel;
 import chat.TeamChannel;
-import main.Main;
+import main.UHCLebrel;
 import util.Mamerto;
 
 public class Equipo {
@@ -47,7 +47,7 @@ public class Equipo {
 		return this.id;
 	}
 	public static Equipo getEquipoById(int id) {
-		Main plugin = Main.instance;
+		UHCLebrel plugin = UHCLebrel.instance;
 		for(Equipo tmp : plugin.juego.getEquipos().keySet()) {
 			int ac = tmp.getId();
 			if(ac == id) {

@@ -13,26 +13,27 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
-import main.Main;
+import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import uhc.EstadoChangeEvent;
+import uhc.EstadosJuego;
 import util.Mamerto;
 import util.Scoreboard;
 
 public class CambiaEstado implements Listener{
 	private Team todos;
 	public CambiaEstado() {
-		Main.instance.todos = todos;
+		UHCLebrel.instance.todos = todos;
 	}
 	@EventHandler
 	public void onJuegoFinalizado(EstadoChangeEvent e) {
-		Main plugin = Main.instance;
+		UHCLebrel plugin = UHCLebrel.instance;
 		switch(e.getNuevoestado()) {
 		case FINALIZADO:
 			todos.unregister();
-			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
-				Main.instance.juego.setSpectator(tmp);
+			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
+				UHCLebrel.instance.juego.setSpectator(tmp);
 				Scoreboard.clear(tmp.getPlayer());
 				for (String linea : plugin.getConfig()
 						.getConfigurationSection("scoreboard.final.lines")
@@ -45,7 +46,7 @@ public class CambiaEstado implements Listener{
 			}
 			break;
 		case JUGANDO:
-			for(Mamerto tmp : Main.instance.getHoPokePlayers()) {
+			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				Scoreboard.clear(tmp.getPlayer());
 				for (String linea : plugin.getConfig()
 						.getConfigurationSection("scoreboard.durante.lines")
@@ -71,7 +72,7 @@ public class CambiaEstado implements Listener{
 			todos.setColor(org.bukkit.ChatColor.MAGIC);
 			todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
 			
-			for(Mamerto temp : Main.instance.juego.getParticipantes()) {
+			for(Mamerto temp : UHCLebrel.instance.juego.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());

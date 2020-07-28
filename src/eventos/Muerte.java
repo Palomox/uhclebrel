@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import main.Main;
+import main.UHCLebrel;
 import uhc.Equipo;
 import uhc.EstadoChangeEvent;
 import uhc.EstadosJuego;
@@ -26,27 +26,27 @@ public class Muerte implements Listener {
 
 	@EventHandler
 	public void alMurison(PlayerDeathEvent e) {
-		if (Main.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
+		if (UHCLebrel.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
 			Player muerto = e.getEntity();
-			Mamerto mamerto = Main.instance.getHPByName(muerto.getName());
-			ArrayList<Mamerto> jugadores = Main.instance.getHoPokePlayers();
+			Mamerto mamerto = UHCLebrel.instance.getHPByName(muerto.getName());
+			ArrayList<Mamerto> jugadores = UHCLebrel.instance.getHoPokePlayers();
 			for (Mamerto tmp : jugadores) {
 				tmp.getPlayer().sendTitle(
 						ChatColor.translateAlternateColorCodes('&', "&4¡" + muerto.getName() + " ha sido eliminado!"),
 						null, 10, 20, 5);
 			}
-			Main.instance.juego.matar(mamerto);
+			UHCLebrel.instance.juego.matar(mamerto);
 			ArrayList<Equipo> vivos = new ArrayList<Equipo>();
-			for (Equipo tmp : Main.instance.juego.getEquipos().keySet()) {
-				boolean stat = Main.instance.juego.getEquipos().get(tmp);
+			for (Equipo tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
+				boolean stat = UHCLebrel.instance.juego.getEquipos().get(tmp);
 				if (stat) {
 					vivos.add(tmp);
 				}
 			}
 			if (vivos.size() <= 1) {
 				// Tenemos un ganador bbs
-				Main.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
-				Main.instance.getJuego().setGanador(vivos.get(0));
+				UHCLebrel.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
+				UHCLebrel.instance.getJuego().setGanador(vivos.get(0));
 				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
 			}
 			

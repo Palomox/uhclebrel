@@ -1,8 +1,8 @@
-main: main.Main
+main: main.UHCLebrel
 version: 1.0.0
-api-version: 1.13
+api-version: 1.16
 name: UHCLebrel
-description: Plugin disenada para la temporada 2 de UHC Lebrel
+description: Plugin designed for easily hosting UHC competitions.
 authors: [Palomox]
 depend: [Netherboard, PlaceholderAPI]
 commands:

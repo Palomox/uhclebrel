@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import main.Main;
+import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import skinsrestorer.shared.exception.SkinRequestException;
 import uhc.Episodio;
@@ -24,9 +24,9 @@ public class CambiaEpisodio implements Listener{
 	}
 	@EventHandler
 	public void onCambioEpisodio(EpisodioChangeEvent e) {
-		Main.instance.getJuego().setEpisodio(new Episodio(e.getNuevoEpisodio()));
+		UHCLebrel.instance.getJuego().setEpisodio(new Episodio(e.getNuevoEpisodio()));
 		Bukkit.getConsoleSender().sendMessage("Se dispara cambioEpisodio");
-		for(Mamerto mam : Main.instance.getHoPokePlayers()) {
+		for(Mamerto mam : UHCLebrel.instance.getHoPokePlayers()) {
 			Scoreboard.updateScoreboard(mam.getPlayer(), ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
 			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', "&6Comienza la parte "+e.getNuevoEpisodio()), null, 5, 20, 10);
 		}
@@ -55,18 +55,18 @@ public class CambiaEpisodio implements Listener{
 		 * Resetear Skins.
 		 */
 		ArrayList<String> nombres = new ArrayList<String>();
-		for(Mamerto jugador : Main.instance.juego.getParticipantes()) {
+		for(Mamerto jugador : UHCLebrel.instance.juego.getParticipantes()) {
 			nombres.add(jugador.getPlayer().getName());
 		}
 		Random random = new Random();
-		for(Mamerto vict : Main.instance.juego.getParticipantes()) {
+		for(Mamerto vict : UHCLebrel.instance.juego.getParticipantes()) {
 			int tmp = random.nextInt(nombres.size()-1);
 			while(vict.getPlayer().getName().equals(nombres.get(tmp))) {
 				tmp = random.nextInt(nombres.size()-1);
 			}
 			try {
-				Main.instance.sapi.setSkin(vict.getPlayer().getName(), nombres.get(tmp));
-				Main.instance.sapi.applySkin(vict.getPlayer());
+				UHCLebrel.instance.sapi.setSkin(vict.getPlayer().getName(), nombres.get(tmp));
+				UHCLebrel.instance.sapi.applySkin(vict.getPlayer());
 			} catch (SkinRequestException e1) {
 				e1.printStackTrace();
 			}

@@ -8,7 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import main.Main;
+import main.UHCLebrel;
 import util.Mamerto;
 
 public class Juego {
@@ -66,7 +66,7 @@ public class Juego {
 		this.equipos.remove(team);
 	}
 	public void setSpectator(Mamerto aspect) {
-		Main.instance.getServer().getScheduler().scheduleSyncDelayedTask(Main.instance, new Runnable() {
+		UHCLebrel.instance.getServer().getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, new Runnable() {
 			public void run() {
 				aspect.getPlayer().spigot().respawn();
 				aspect.getPlayer().setCanPickupItems(false);
@@ -93,7 +93,7 @@ public class Juego {
 				desafortunado.getTeam().getMiembros().put(desafortunado, false);
 				if (!(desafortunado.getTeam().compasVivos())) {
 					equipos.put(desafortunado.getTeam(), false);
-					for (Mamerto all : Main.instance.getHoPokePlayers()) {
+					for (Mamerto all : UHCLebrel.instance.getHoPokePlayers()) {
 						all.getPlayer().sendTitle(
 								ChatColor.translateAlternateColorCodes('&', "&4&l¡El equipo "
 										+ desafortunado.getTeam().getNombre() + " ha sido eliminado!"),

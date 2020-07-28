@@ -1,8 +1,6 @@
 package chat;
 
 import java.util.ArrayList;
-import java.util.Collection;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -24,6 +22,7 @@ public class TeamChannel implements IChannel{
 			tmp.getPlayer().sendMessage(mensaje);
 		}
 	}
+	@Deprecated
 	public void sendFormattedMsg(String rawmsg, Player sender) {
 		String format = ChatColor.translateAlternateColorCodes('&', "&6[COMPAÑERO] &r%player_name%&8: &r");
 		String mensaje = PlaceholderAPI.setPlaceholders(sender, format)+ rawmsg;
@@ -52,5 +51,10 @@ public class TeamChannel implements IChannel{
 	@Override
 	public char getPrefix() {
 		return prefix;
+	}
+
+	@Override
+	public String getFormat() {
+		return "&6[COMPAÑERO] &r%s&8: &r%s";
 	}
 }

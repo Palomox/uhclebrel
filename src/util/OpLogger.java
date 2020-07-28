@@ -9,15 +9,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import chat.IChannel;
-import chat.NChannel;
-import main.Main;
+import main.UHCLebrel;
 
 public class OpLogger {
-	private Main plugin;
+	private UHCLebrel plugin;
 	
 	Logger oplog = Logger.getLogger("StaffLog");
 	FileHandler fh;
-	public OpLogger(Main plugin) {
+	public OpLogger(UHCLebrel plugin) {
 		this.plugin = plugin;
 		try {
 			fh = new FileHandler(plugin.getDataFolder().getAbsolutePath()+"/stafflog.log");

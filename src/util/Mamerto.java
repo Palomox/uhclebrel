@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import chat.IChannel;
-import main.Main;
+import main.UHCLebrel;
 import uhc.Equipo;
 
 public class Mamerto {
@@ -130,7 +130,7 @@ public class Mamerto {
 			}
 		}
 	}
-	public static Mamerto getHPPlayer(Player jugador, Main plugin) {
+	public static Mamerto getHPPlayer(Player jugador, UHCLebrel plugin) {
 		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
 			Mamerto tmp = plugin.getHoPokePlayers().get(i);
 			Player tmpp = tmp.getPlayer();

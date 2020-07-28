@@ -10,12 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import main.Main;
+import main.UHCLebrel;
 
 public class Spawn implements CommandExecutor{
-	private Main plugin;
+	private UHCLebrel plugin;
 
-	public Spawn(Main plugin) {
+	public Spawn(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {

@@ -11,15 +11,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
-import main.Main;
+import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import util.Mamerto;
 import util.Scoreboard;
 
 public class NewPlayer implements Listener {
-	private Main plugin;
+	private UHCLebrel plugin;
 
-	public NewPlayer(Main plugin) {
+	public NewPlayer(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 
@@ -65,7 +65,7 @@ public class NewPlayer implements Listener {
 		/*
 		 * Creacion de la Scoreboard
 		 */
-		switch(Main.instance.juego.getEstado()) {
+		switch(UHCLebrel.instance.juego.getEstado()) {
 		case ESPERANDO:
 		BPlayerBoard board = Netherboard.instance().createBoard(hpp.getPlayer(), "Main Scoreboard");
 		board.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));

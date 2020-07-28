@@ -9,12 +9,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
 import fr.minuskube.netherboard.bukkit.BPlayerBoard;
-import main.Main;
+import main.UHCLebrel;
 import util.Mamerto;
 
 public class DesconectarMamerto implements Listener{
-	private Main plugin;
-	public DesconectarMamerto(Main plugin) {
+	private UHCLebrel plugin;
+	public DesconectarMamerto(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	@EventHandler
@@ -32,11 +32,11 @@ public class DesconectarMamerto implements Listener{
 					tmp.getLectores().remove(hpplayer.getPlayer());
 				}
 				hpplayer.getTeam().getMiembros().put(hpplayer, false);
-				Main.instance.removeHPPlayer(hpplayer);
+				UHCLebrel.instance.removeHPPlayer(hpplayer);
 				}
 			}
 		};
-		borrar.runTaskLater(Main.instance, 6000);
+		borrar.runTaskLater(UHCLebrel.instance, 6000);
 		hpplayer.setDesconectado(true);
 		/*
 		 * Quitar la Scoreboard del jugador

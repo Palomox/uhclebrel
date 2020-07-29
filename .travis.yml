@@ -14,6 +14,8 @@ before_install:
   - cd paper
   - ./paper p
   - mvn clean install
+  - cd ..
+  - cd uhclebrel
   
 script: mvn clean install
 cache:

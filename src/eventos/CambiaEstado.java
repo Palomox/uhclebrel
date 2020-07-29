@@ -1,5 +1,7 @@
 package eventos;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -17,7 +19,6 @@ import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
 import uhc.EstadoChangeEvent;
-import uhc.EstadosJuego;
 import util.Mamerto;
 import util.Scoreboard;
 
@@ -35,49 +36,24 @@ public class CambiaEstado implements Listener{
 			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				UHCLebrel.instance.juego.setSpectator(tmp);
 				Scoreboard.clear(tmp.getPlayer());
-				for (String linea : plugin.getConfig()
-						.getConfigurationSection("scoreboard.final.lines")
-						.getKeys(false)) {
-					String texto = plugin.getConfig().getString("scoreboard.final.lines." + linea);
-					texto = PlaceholderAPI.setPlaceholders(tmp.getPlayer(), texto);
-					int line = Integer.valueOf(linea);
-					Scoreboard.updateScoreboard(tmp.getPlayer(), texto, line);
+				List<String> lineas = (List<String>) plugin.getConfig().getList("scoreboard.final.lines");
+				for (int i=lineas.size(); i>0;i--) {
+					Scoreboard.updateScoreboard(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), lineas.get(i-1)), i);
 				}
 			}
 			break;
 		case JUGANDO:
 			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				Scoreboard.clear(tmp.getPlayer());
-				for (String linea : plugin.getConfig()
-						.getConfigurationSection("scoreboard.durante.lines")
-						.getKeys(false)) {
-					String texto = plugin.getConfig().getString("scoreboard.durante.lines." + linea);
-					texto = PlaceholderAPI.setPlaceholders(tmp.getPlayer(), texto);
-					int line = Integer.valueOf(linea);
-					Scoreboard.updateScoreboard(tmp.getPlayer(), texto, line);
+				List<String> lineas = (List<String>) plugin.getConfig().getList("scoreboard.durante.lines");
+				for (int i=lineas.size(); i>0;i--) {
+					Scoreboard.updateScoreboard(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), lineas.get(i-1))), i);
 				}
-			}
-			ScoreboardManager manager = Bukkit.getScoreboardManager();
-			org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
-			Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.RED+""+ChatColor.BOLD+"❤", RenderType.INTEGER);
-			Objective ctab = all.registerNewObjective("corazonestab", 
-					"health",
-					" ", 
-					RenderType.HEARTS);
-			cnom.setDisplaySlot(DisplaySlot.BELOW_NAME);
-			ctab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-			todos = all.registerNewTeam("todos");
-			todos.allowFriendlyFire();
-			todos.setCanSeeFriendlyInvisibles(false);
-			todos.setColor(org.bukkit.ChatColor.MAGIC);
-			todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
-			
+				}
 			for(Mamerto temp : UHCLebrel.instance.juego.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());
-				todos.addEntry(temp.getPlayer().getName());
-				temp.getPlayer().setScoreboard(all);
 			}
 			World ovw = Bukkit.getWorld("uhc");
 			World net = Bukkit.getWorld("uhc_nether");

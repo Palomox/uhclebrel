@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 
 import org.bukkit.Bukkit;
@@ -13,7 +14,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.RenderType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 import chat.IChannel;
 import chat.NChannel;
@@ -59,6 +67,8 @@ public class UHCLebrel extends JavaPlugin {
 	private SkinsRestorer skrest;
 	public SkinsRestorerBukkitAPI sapi;
 	public Timer matar = new Timer();
+	public Scoreboard all;
+	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>();
 
 	public void onEnable() {
 		instance = this;
@@ -78,6 +88,7 @@ public class UHCLebrel extends JavaPlugin {
 		}
 		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
 		sapi = skrest.getSkinsRestorerBukkitAPI();
+		startScoreboardTeams();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 
@@ -96,7 +107,24 @@ public class UHCLebrel extends JavaPlugin {
 	public ArrayList<IChannel> getCanales() {
 		return this.canales;
 	}
-
+	public void startScoreboardTeams() {
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
+		this.all = all;
+		Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.translateAlternateColorCodes('&', "❤"), RenderType.INTEGER);
+		
+		Objective ctab = all.registerNewObjective("corazonestab", 
+				"health",
+				" ", 
+				RenderType.HEARTS);
+		cnom.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		ctab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		todos = all.registerNewTeam("todos");
+		todos.allowFriendlyFire();
+		todos.setCanSeeFriendlyInvisibles(false);
+		todos.setColor(org.bukkit.ChatColor.MAGIC);
+		todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
+	}
 	public Juego getJuego() {
 		return this.juego;
 	}

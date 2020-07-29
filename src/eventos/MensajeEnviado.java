@@ -10,6 +10,7 @@ import chat.IChannel;
 import chat.NChannel;
 import chat.TeamChannel;
 import main.UHCLebrel;
+import me.clip.placeholderapi.PlaceholderAPI;
 import util.Mamerto;
 
 public class MensajeEnviado implements Listener {
@@ -44,7 +45,9 @@ public class MensajeEnviado implements Listener {
 			}
 		}
 		e.setMessage(ChatColor.translateAlternateColorCodes('&', mensajeText));
-		e.setFormat(ChatColor.translateAlternateColorCodes('&', amandar.getFormat()));
+		e.setFormat(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(e.getPlayer(), amandar.getFormat()).replace(e.getPlayer().getName(), "%s")));
+		e.getRecipients().clear();
+		e.getRecipients().addAll(amandar.getLectores());
 		
 	}
 	private IChannel getAmandar(String mensaje) {

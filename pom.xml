@@ -52,6 +52,12 @@
 			<groupId>fr.minuskube.inv</groupId>
 			<artifactId>smart-invs</artifactId>
 			<version>1.2.7</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>spigot-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>

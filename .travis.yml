@@ -23,10 +23,6 @@ cache:
     - '$HOME/.m2/repository'
     - 'work/Minecraft'
 deploy:
-  provider: pages
+  provider: script
+  script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn deploy"
   skip_cleanup: true
-  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep_history: true
-  target_branch: gh-pages
-  on:
-    branch: master

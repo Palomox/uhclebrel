@@ -4,7 +4,7 @@
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <servers>
     <server>
-      <id>hopoke-public-repo</id>
+      <id>palomox-public-maven</id>
       <username>${FTP_USER}</username>
       <password>${FTP_PASSWORD}</password>
     </server>

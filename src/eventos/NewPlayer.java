@@ -69,22 +69,12 @@ public class NewPlayer implements Listener {
 		 */
 		switch(UHCLebrel.instance.juego.getEstado()) {
 		case ESPERANDO:
-		/*BPlayerBoard board = Netherboard.instance().createBoard(hpp.getPlayer(), "Main Scoreboard");
-		board.setName(ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
-		for (String linea : plugin.getConfig().getConfigurationSection("scoreboard.lobby.lines").getKeys(false)) {
-			String texto = plugin.getConfig().getString("scoreboard.lobby.lines." + linea);
-			texto = PlaceholderAPI.setPlaceholders(hpp.getPlayer(), texto);
-			int line = Integer.valueOf(linea);
-			board.set(texto, line);
-		}*/
 		Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
 		List<String> sb = (List<String>) UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
 		Bukkit.getConsoleSender().sendMessage("lista: "+sb.toString());
-		for(int i=sb.size(); i>1; i--) {
-			Scoreboard.updateScoreboard(event.getPlayer(), sb.get(i-1), i);
-			
+		for(int i=0; i<sb.size(); i++) {
+			Scoreboard.updateScoreboard(event.getPlayer(), sb.get(i), sb.size()-i);
 		}
-		
 			break;
 		case JUGANDO:
 			Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));

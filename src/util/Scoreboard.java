@@ -35,7 +35,9 @@ public class Scoreboard {
 		}
 		sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
 		List<Object> lineas = Arrays.asList(sidebar.getScoreboard().getEntries().toArray());
-		sidebar.getScoreboard().resetScores((String) lineas.get(linea));
+		if(lineas.size() >= linea) {
+			sidebar.getScoreboard().resetScores((String) lineas.get(linea-1));
+		}
 		sidebar.getScore(ChatColor.translateAlternateColorCodes('&', valor)).setScore(linea);
 	}
 	public static void updateScoreboard(Player vistima, HashMap<Integer, String> valores) {

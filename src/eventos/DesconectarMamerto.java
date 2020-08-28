@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
 
 import chat.IChannel;
 import fr.minuskube.netherboard.Netherboard;
@@ -41,8 +42,7 @@ public class DesconectarMamerto implements Listener{
 		/*
 		 * Quitar la Scoreboard del jugador
 		 */
-		BPlayerBoard board = Netherboard.instance().getBoard(jugador);
-		board.delete();
+		hpplayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
 		
 	}
 }

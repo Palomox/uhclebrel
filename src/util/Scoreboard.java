@@ -1,9 +1,9 @@
 package util;
 
 
-import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,11 +34,12 @@ public class Scoreboard {
 			sidebar = vistima.getScoreboard().getObjective("sidebar");
 		}
 		sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
-		List<Object> lineas = Arrays.asList(sidebar.getScoreboard().getEntries().toArray());
-		if(lineas.size() >= linea) {
-			sidebar.getScoreboard().resetScores((String) lineas.get(linea-1));
+		//El dia que arregle esto de una vez sera glorioso, no en serio tengo que arreglarlo ya venga que yo puedo 
+		Object[] lineas = sidebar.getScoreboard().getEntries().toArray();
+		if(lineas.length >= linea) {
+			sidebar.getScoreboard().resetScores(""+lineas[linea-1]);
 		}
-		sidebar.getScore(ChatColor.translateAlternateColorCodes('&', valor)).setScore(linea);
+		sidebar.getScore(valor).setScore(linea);
 	}
 	public static void updateScoreboard(Player vistima, HashMap<Integer, String> valores) {
 		org.bukkit.scoreboard.Scoreboard board = vistima.getScoreboard();

@@ -68,7 +68,8 @@ public class UHCLebrel extends JavaPlugin {
 	public SkinsRestorerBukkitAPI sapi;
 	public Timer matar = new Timer();
 	public Scoreboard all;
-	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>();
+	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>(); 
+	
 
 	public void onEnable() {
 		instance = this;

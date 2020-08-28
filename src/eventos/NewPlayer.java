@@ -72,8 +72,8 @@ public class NewPlayer implements Listener {
 		Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
 		List<String> sb = (List<String>) UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
 		Bukkit.getConsoleSender().sendMessage("lista: "+sb.toString());
-		for(int i=0; i<sb.size(); i++) {
-			Scoreboard.updateScoreboard(event.getPlayer(), sb.get(i), sb.size()-i);
+		for(String linea : sb) {
+			Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(event.getPlayer(), linea)), sb.indexOf(linea));
 		}
 			break;
 		case JUGANDO:

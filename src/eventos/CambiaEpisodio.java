@@ -6,7 +6,6 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -27,7 +26,7 @@ public class CambiaEpisodio implements Listener{
 		UHCLebrel.instance.getJuego().setEpisodio(new Episodio(e.getNuevoEpisodio()));
 		Bukkit.getConsoleSender().sendMessage("Se dispara cambioEpisodio");
 		for(Mamerto mam : UHCLebrel.instance.getHoPokePlayers()) {
-			Scoreboard.updateScoreboard(mam.getPlayer(), ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
+			Scoreboard.updateScoreboard(mam, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
 			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', "&6Comienza la parte "+e.getNuevoEpisodio()), null, 5, 20, 10);
 		}
 		

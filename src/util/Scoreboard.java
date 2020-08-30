@@ -54,23 +54,23 @@ public class Scoreboard {
 			String prefix = text.substring(0, 16);
 			String infix = null;
 			String suffix = null;
-			if (text.length() > 16) {
+			String splitted = null;
+			splitted = text.substring(16);
+			splitted = ChatColor.getLastColors(prefix)+splitted;
 				if (text.length() >= 32) {
-					infix = text.substring(16, 32);
-				} else {
-					infix = text.substring(16, text.length());
+					infix = splitted.substring(0, 16);
+				}else {
+					infix = splitted;
 				}
-				infix = ChatColor.getLastColors(prefix)+infix;
 				if (text.length() > 32) {
+					splitted = splitted.substring(16);
+					splitted = ChatColor.getLastColors(infix)+splitted;
 					if (text.length() <= 48) {
-						suffix = text.substring(32, 48);
-						
+						suffix = splitted;
 					} else {
-						suffix = text.substring(32, text.length());
+						suffix = splitted.substring(0, 16);
 					}
-					suffix = ChatColor.getLastColors(infix)+suffix;
 				}
-			}
 			line.setPrefix(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', prefix));
 			if (suffix != null) {
 				line.setSuffix(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', suffix));

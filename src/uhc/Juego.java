@@ -95,7 +95,7 @@ public class Juego {
 					equipos.put(desafortunado.getTeam(), false);
 					for (Mamerto all : UHCLebrel.instance.getHoPokePlayers()) {
 						all.getPlayer().sendTitle(
-								ChatColor.translateAlternateColorCodes('&', "&4&l¡El equipo "
+								ChatColor.translateAlternateColorCodes('&', "&4&lÂ¡El equipo "
 										+ desafortunado.getTeam().getNombre() + " ha sido eliminado!"),
 								null, 10, 20, 10);
 					}

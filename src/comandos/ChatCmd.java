@@ -22,7 +22,7 @@ public class ChatCmd implements CommandExecutor{
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {
 		if(!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"¡No puedes ejecutar este comando desde la consola!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"Â¡No puedes ejecutar este comando desde la consola!");
 			return false;
 		}else {
 			Player ejecutor = (Player) sender;

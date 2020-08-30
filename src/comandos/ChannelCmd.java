@@ -11,21 +11,23 @@ import chat.IChannel;
 import main.UHCLebrel;
 import util.Mamerto;
 
-public class ChannelCmd implements CommandExecutor{
+public class ChannelCmd implements CommandExecutor {
 	private UHCLebrel plugin;
+
 	public ChannelCmd(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
+
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {
 		if(!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"¡No puedes ejecutar este comando desde la consola!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"Â¡No puedes ejecutar este comando desde la consola!");
 			return false;
 		}else {
 			Player ejecutor = (Player) sender;
 			if(ejecutor.hasPermission("hopoke.command.channel")||ejecutor.isOp()) {
 				Mamerto jugador = Mamerto.getHPPlayer(ejecutor, plugin);
 				if(args.length <1) {
-					ejecutor.sendMessage(ChatColor.DARK_RED+"No has especificado el canal al que unirte");
+					ejecutor.sendMessage(ChatColor.DARK_RED+"Â¡No has especificado el canal al que unirte");
 					
 				}else {
 					IChannel deseado = null;
@@ -45,7 +47,7 @@ public class ChannelCmd implements CommandExecutor{
 						case "read":
 						jugador.addReadingChannel(deseado);
 						if(deseado.addLector(ejecutor)) {
-							jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora también lees "+deseado.getName());
+							jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN+"Ahora tambiÃ©n lees "+deseado.getName());
 						}else {
 							jugador.getPlayer().sendMessage(ChatColor.DARK_RED+"No puedes leer "+deseado.getName()+" porque ya lo estas leyendo!");
 						}
@@ -73,5 +75,4 @@ public class ChannelCmd implements CommandExecutor{
 			}
 			return true;
 		}
-		}
-}
+}}

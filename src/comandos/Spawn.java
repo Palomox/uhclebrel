@@ -20,7 +20,7 @@ public class Spawn implements CommandExecutor{
 	}
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {
 		if(!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"¡No puedes ejecutar este comando desde la consola!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"Â¡No puedes ejecutar este comando desde la consola!");
 			return false;
 		}else {
 			Player ejecutor = (Player) sender;
@@ -34,10 +34,10 @@ public class Spawn implements CommandExecutor{
 				World world = plugin.getServer().getWorld(config.getString("spawn.world"));
 				Location lspawn = new Location(world, x, y, z, yaw, pitch);
 				ejecutor.teleport(lspawn);
-				ejecutor.sendMessage(ChatColor.DARK_GREEN+"¡Se te ha teletransportado al spawn exitosamente!");
+				ejecutor.sendMessage(ChatColor.DARK_GREEN+"Â¡Se te ha teletransportado al spawn exitosamente!");
 				return true;
 			}else {
-				ejecutor.sendMessage(ChatColor.DARK_RED+"¡No tienes permisos para ejecutar este comando!");
+				ejecutor.sendMessage(ChatColor.DARK_RED+"Â¡No tienes permisos para ejecutar este comando!");
 				return true;
 			}
 		}

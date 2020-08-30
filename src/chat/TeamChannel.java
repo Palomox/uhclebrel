@@ -24,7 +24,7 @@ public class TeamChannel implements IChannel{
 	}
 	@Deprecated
 	public void sendFormattedMsg(String rawmsg, Player sender) {
-		String format = ChatColor.translateAlternateColorCodes('&', "&6[COMPAÑERO] &r%player_name%&8: &r");
+		String format = ChatColor.translateAlternateColorCodes('&', "&6[COMPAÃ‘ERO] &r%player_name%&8: &r");
 		String mensaje = PlaceholderAPI.setPlaceholders(sender, format)+ rawmsg;
 		for(Mamerto tmp : this.team.getMiembros().keySet()) {
 			if(tmp.isDesconectado()) {
@@ -55,6 +55,6 @@ public class TeamChannel implements IChannel{
 
 	@Override
 	public String getFormat() {
-		return "&6[COMPAÑERO] &r%s&8: &r%s";
+		return "&6[COMPAÃ‘ERO] &r%s&8: &r%s";
 	}
 }

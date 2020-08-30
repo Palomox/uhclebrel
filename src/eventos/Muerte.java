@@ -32,7 +32,7 @@ public class Muerte implements Listener {
 			ArrayList<Mamerto> jugadores = UHCLebrel.instance.getHoPokePlayers();
 			for (Mamerto tmp : jugadores) {
 				tmp.getPlayer().sendTitle(
-						ChatColor.translateAlternateColorCodes('&', "&4ก" + muerto.getName() + " ha sido eliminado!"),
+						ChatColor.translateAlternateColorCodes('&', "&4ยก" + muerto.getName() + " ha sido eliminado!"),
 						null, 10, 20, 5);
 			}
 			UHCLebrel.instance.juego.matar(mamerto);

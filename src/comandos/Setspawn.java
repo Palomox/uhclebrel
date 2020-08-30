@@ -9,6 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+
 import main.UHCLebrel;
 
 public class Setspawn implements CommandExecutor{
@@ -17,10 +20,9 @@ public class Setspawn implements CommandExecutor{
 	public Setspawn(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
-	
 	public boolean onCommand(CommandSender sender, Command comando, String label, String[] args) {
 		if(!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"¡No puedes ejecutar este comando desde la consola!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED+"Â¡No puedes ejecutar este comando desde la consola!");
 			return false;
 		}else {
 			Player ejecutor = (Player) sender;
@@ -34,10 +36,10 @@ public class Setspawn implements CommandExecutor{
 				config.set("spawn.pitch", lspawn.getPitch());
 				config.set("spawn.world", lspawn.getWorld().getName());
 				plugin.saveConfig();
-				ejecutor.sendMessage(ChatColor.GREEN+"¡Se ha colocado el Spawn exitosamente!");
+				ejecutor.sendMessage(ChatColor.GREEN+"Â¡Se ha colocado el Spawn exitosamente!");
 				return true;
 			}else {
-				ejecutor.sendMessage(ChatColor.DARK_RED+"¡No tienes suficientes permisos para ejecutar este comando!");
+				ejecutor.sendMessage(ChatColor.DARK_RED+"Â¡No tienes suficientes permisos para ejecutar este comando!");
 				return true;
 			}
 		}

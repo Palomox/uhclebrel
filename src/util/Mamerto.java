@@ -2,9 +2,12 @@ package util;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import com.destroystokyo.paper.profile.ProfileProperty;
 
 import chat.IChannel;
 import main.UHCLebrel;
@@ -23,6 +26,8 @@ public class Mamerto {
 	private boolean desconectado;
 	private boolean descalificado;
 	private boolean espectador;
+	private HashMap<Integer, String> scoreboard;
+	ProfileProperty p;
 	
 	public Mamerto(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
@@ -33,6 +38,7 @@ public class Mamerto {
 		this.desconectado = false;
 		this.descalificado = false;
 		this.espectador = false;
+		this.scoreboard = new HashMap<Integer, String>();
 	}
 	
 	public boolean isEspectador() {
@@ -139,6 +145,10 @@ public class Mamerto {
 			}
 			}
 		return null;
+	}
+
+	public HashMap<Integer, String> getScoreboard() {
+		return scoreboard;
 	}
 	
 }

@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import chat.IChannel;
-import fr.minuskube.netherboard.Netherboard;
-import fr.minuskube.netherboard.bukkit.BPlayerBoard;
 import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import util.Mamerto;
@@ -28,34 +26,35 @@ public class NewPlayer implements Listener {
 	@EventHandler
 	public void alUnirServidor(PlayerJoinEvent event) {
 		Player jugador = event.getPlayer();
-		// Comprueba si es admin, asi le aÒade al arraylist de admins.
+		// Comprueba si es admin, asi le a√±ade al arraylist de admins.
 		if (jugador.isOp() || jugador.hasPermission("hopoke.admin")) {
 			plugin.getAdmins().add(jugador);
 		}
-		Mamerto hpp;
-		if(Mamerto.getHPPlayer(jugador, plugin) ==null) {
+		final Mamerto hpp;
+		if (Mamerto.getHPPlayer(jugador, plugin) == null) {
 			LocalDate fj = LocalDate.now();
 			hpp = new Mamerto(jugador.getUniqueId().toString(), fj);
 			plugin.getHoPokePlayers().add(hpp);
-		}	
+		} else {
+			hpp = Mamerto.getHPPlayer(jugador, plugin);
+		}
 		// Canal por defecto
-		hpp = Mamerto.getHPPlayer(jugador, plugin);
 		for (String disc : plugin.getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String perm = plugin.getConfig().getString("chat.channels." + disc + ".autojoinperm");
 			IChannel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels." + disc + ".name"));
 			if (perm.equalsIgnoreCase("none")) {
 				hpp.addReadingChannel(tmp);
 				if (tmp.addLector(hpp.getPlayer())) {
-					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora tambiÈn lees " + tmp.getName());
+					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora tambi√©n lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
-							ChatColor.DARK_RED + "No puedes leer " + tmp.getName() + " porque ya lo est·s leyendo!");
+							ChatColor.DARK_RED + "No puedes leer " + tmp.getName() + " porque ya lo est√°s leyendo!");
 				}
 			}
 			if (hpp.getPlayer().hasPermission(perm)) {
 				hpp.addReadingChannel(tmp);
 				if (tmp.addLector(hpp.getPlayer())) {
-					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora tambiÈn lees " + tmp.getName());
+					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora tambi√©n lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
 							ChatColor.DARK_RED + "No puedes leer " + tmp.getName() + " porque ya lo estas leyendo!");
@@ -67,41 +66,71 @@ public class NewPlayer implements Listener {
 		/*
 		 * Creacion de la Scoreboard
 		 */
-		switch(UHCLebrel.instance.juego.getEstado()) {
+		switch (UHCLebrel.instance.juego.getEstado()) {
 		case ESPERANDO:
-		Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
-		List<String> sb = (List<String>) UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
-		Bukkit.getConsoleSender().sendMessage("lista: "+sb.toString());
-		for(int i=0; i<sb.size(); i++) {
-			Scoreboard.updateScoreboard(event.getPlayer(), sb.get(i), sb.size()-i);
-		}
+			Runnable sr = new Runnable() {
+
+				@Override
+				public void run() {
+					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
+					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
+					for (int i = 0; i < sb.size(); i++) {
+						String linea = sb.get(i).toString();
+						Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
+								PlaceholderAPI.setPlaceholders(event.getPlayer(), linea)), sb.size() - i);
+					}
+				}
+			};
+			Bukkit.getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, sr, 40);
+
 			break;
 		case JUGANDO:
-			Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
-			List<String> sb1 = (List<String>) UHCLebrel.instance.getConfig().getList("scoreboard.durante.lines");
-			for(int i=sb1.size(); i>0; i--) {
-				Scoreboard.updateScoreboard(event.getPlayer(), sb1.get(i-1), i);
-			}
+			Runnable srp = new Runnable() {
+
+				@Override
+				public void run() {
+					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
+					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.durante.lines");
+					for (int i = 0; i < sb.size(); i++) {
+						String linea = sb.get(i).toString();
+						Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
+								PlaceholderAPI.setPlaceholders(event.getPlayer(), linea)), sb.size() - i);
+					}
+				}
+			};
+			Bukkit.getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, srp, 40);
 			break;
 		case FINALIZADO:
-			Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&', "&6&lUHC Lebrel T.2"));
-			List<String> sb2 = (List<String>) UHCLebrel.instance.getConfig().getList("scoreboard.final.lines");
-			for(int i=sb2.size(); i>0; i--) {
-				Scoreboard.updateScoreboard(event.getPlayer(), sb2.get(i-1), i);
-			}
-		break;
+			Runnable srf = new Runnable() {
+
+				@Override
+				public void run() {
+					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
+					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.final.lines");
+					for (int i = 0; i < sb.size(); i++) {
+						String linea = sb.get(i).toString();
+						Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
+								PlaceholderAPI.setPlaceholders(event.getPlayer(), linea)), sb.size() - i);
+					}
+				}
+			};
+			Bukkit.getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, srf, 40);
+			break;
 		default:
 			break;
 		}
-		
+
 		UHCLebrel.instance.todos.addEntry(event.getPlayer().getName());
 		event.getPlayer().setScoreboard(UHCLebrel.instance.all);
 		/*
 		 * Reconectar
 		 */
-		if(hpp.isDesconectado()) {
+		if (hpp.isDesconectado()) {
 			hpp.setDesconectado(false);
 		}
-		
+
 	}
 }

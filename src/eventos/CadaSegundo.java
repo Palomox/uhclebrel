@@ -16,7 +16,7 @@ import util.Mamerto;
 import util.Scoreboard;
 
 public class CadaSegundo implements Listener {
-
+	int linea = 2;
 	public CadaSegundo() {
 	}
 
@@ -28,9 +28,9 @@ public class CadaSegundo implements Listener {
 			for(Equipo tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
 				for(Mamerto mam : tmp.getMiembros().keySet()) {
 					if(!mam.isDesconectado()){
-					Scoreboard.updateScoreboard(mam.getPlayer(),
+					Scoreboard.updateScoreboard(mam,
 					ChatColor.translateAlternateColorCodes('&', String.format("&e%02d:%02d", (s % 3600) / 60, (s % 60))),
-					2);
+					linea);
 					}
 				}
 			}

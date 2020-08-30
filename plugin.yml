@@ -4,7 +4,7 @@ api-version: 1.16
 name: UHCLebrel
 description: Plugin designed for easily hosting UHC competitions.
 authors: [Palomox]
-depend: [Netherboard, PlaceholderAPI]
+depend: [PlaceholderAPI]
 commands:
    setspawn:
       description: Pone el Spawn

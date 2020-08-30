@@ -7,13 +7,7 @@ import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.RenderType;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.scoreboard.Team.Option;
-import org.bukkit.scoreboard.Team.OptionStatus;
 
 import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -22,36 +16,40 @@ import uhc.EstadoChangeEvent;
 import util.Mamerto;
 import util.Scoreboard;
 
-public class CambiaEstado implements Listener{
+public class CambiaEstado implements Listener {
 	private Team todos;
+
 	public CambiaEstado() {
 		UHCLebrel.instance.todos = todos;
 	}
+
 	@EventHandler
 	public void onJuegoFinalizado(EstadoChangeEvent e) {
 		UHCLebrel plugin = UHCLebrel.instance;
-		switch(e.getNuevoestado()) {
+		switch (e.getNuevoestado()) {
 		case FINALIZADO:
 			todos.unregister();
-			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
+			for (Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				UHCLebrel.instance.juego.setSpectator(tmp);
-				Scoreboard.clear(tmp.getPlayer());
-				List<String> lineas = (List<String>) plugin.getConfig().getList("scoreboard.final.lines");
-				for (int i=lineas.size(); i>0;i--) {
-					Scoreboard.updateScoreboard(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), lineas.get(i-1)), i);
+				Scoreboard.clear(tmp);
+				List<?> lineas = plugin.getConfig().getList("scoreboard.final.lines");
+				for (int i=0; i<lineas.size(); i++) {
+					Scoreboard.updateScoreboard(tmp,
+							PlaceholderAPI.setPlaceholders(tmp.getPlayer(), lineas.get(i).toString()), lineas.size()-i);
 				}
 			}
 			break;
 		case JUGANDO:
-			for(Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
-				Scoreboard.clear(tmp.getPlayer());
-				List<String> lineas = (List<String>) plugin.getConfig().getList("scoreboard.durante.lines");
-				for (int i=lineas.size(); i>0;i--) {
-					Scoreboard.updateScoreboard(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), PlaceholderAPI.setPlaceholders(tmp.getPlayer(), lineas.get(i-1))), i);
+			for (Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
+				List<?> lineas = plugin.getConfig().getList("scoreboard.durante.lines");
+				Scoreboard.clear(tmp);
+				for (int i = 0; i < lineas.size(); i++) {
+					String linea = lineas.get(i).toString();
+					Scoreboard.updateScoreboard(tmp, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(tmp.getPlayer(), linea)), lineas.size()-i);
 				}
-				}
-			for(Mamerto temp : UHCLebrel.instance.juego.getParticipantes()) {
-				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k"+temp.getPlayer().getName()));
+			}
+			for (Mamerto temp : UHCLebrel.instance.juego.getParticipantes()) {
+				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k" + temp.getPlayer().getName()));
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());
 			}

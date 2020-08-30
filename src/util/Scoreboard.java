@@ -25,7 +25,6 @@ public class Scoreboard {
 		sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
 		sidebar.setDisplayName(ChatColor.translateAlternateColorCodes('&', nombre));
 	}
-	
 	/**
 	 * The maximum amount of character per lines is 48
 	 * @param user the Mamerto whose scoreboard has to be affected

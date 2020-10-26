@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,6 +53,7 @@ import util.Mamerto;
 import util.OpLogger;
 
 public class UHCLebrel extends JavaPlugin {
+	private final int statsId = 9205;
 	public String rutaConfig;
 	PluginDescriptionFile plugindesc = getDescription();
 	public String version = plugindesc.getVersion();
@@ -90,6 +92,8 @@ public class UHCLebrel extends JavaPlugin {
 		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
 		sapi = skrest.getSkinsRestorerBukkitAPI();
 		startScoreboardTeams();
+		Metrics metrics = new Metrics(this, statsId);
+		
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 

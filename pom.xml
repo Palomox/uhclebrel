@@ -21,6 +21,10 @@
 			<url>https://repo.codemc.org/repository/maven-snapshots/</url>
 		</repository>
 		<repository>
+			<id>CodeMC</id>
+			<url>https://repo.codemc.org/repository/maven-public</url>
+		</repository>
+		<repository>
 			<id>placeholderapi</id>
 			<url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
 		</repository>
@@ -47,11 +51,15 @@
 			<artifactId>skinsrestorer</artifactId>
 			<version>13.7.5-SNAPSHOT</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>fr.minuskube</groupId>
-			<artifactId>netherboard-bukkit</artifactId>
-			<version>1.2.1</version>
-		</dependency> -->
+		<!-- bStats -->
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit</artifactId>
+			<version>1.7</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- <dependency> <groupId>fr.minuskube</groupId> <artifactId>netherboard-bukkit</artifactId> 
+			<version>1.2.1</version> </dependency> -->
 		<dependency>
 			<groupId>fr.minuskube.inv</groupId>
 			<artifactId>smart-invs</artifactId>
@@ -83,6 +91,30 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<!-- Do not include the <configuration>...</configuration> part if you 
+					are using Sponge! -->
+				<configuration>
+					<relocations>
+						<relocation>
+							<pattern>org.bstats</pattern>
+							<!-- Replace this with your package! -->
+							<shadedPattern>stats</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<extensions>

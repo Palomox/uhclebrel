@@ -13,6 +13,14 @@ import org.bukkit.scoreboard.Team;
 
 public class Scoreboard {
 
+	/**
+	 * Reloads the scoreboard, reloading placeholders and so.
+	 * @param user the user instance to reload scoreboard
+	 */
+	public static void reloadScoreboard(Mamerto user) {
+		Scoreboard.updateScoreboard(user.getPlayer(), user.getScoreboard());
+		
+	}
 	public static void updateScoreboard(Player vistima, String nombre) {
 		org.bukkit.scoreboard.Scoreboard board = vistima.getScoreboard();
 		Objective sidebar = null;
@@ -94,7 +102,7 @@ public class Scoreboard {
 	}
 	
 	/**
-	 * 
+	 * Changes a Player's scoreboard to a new one from a HashMap
 	 * @param vistima the Player whose scoreboard has to be changed
 	 * @param valores the HashMap of lines of the new Scoreboard
 	 */

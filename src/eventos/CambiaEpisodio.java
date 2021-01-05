@@ -15,6 +15,7 @@ import skinsrestorer.shared.exception.SkinRequestException;
 import uhc.Episodio;
 import uhc.EpisodioChangeEvent;
 import util.Mamerto;
+import util.Messages;
 import util.Scoreboard;
 
 public class CambiaEpisodio implements Listener{
@@ -24,10 +25,10 @@ public class CambiaEpisodio implements Listener{
 	@EventHandler
 	public void onCambioEpisodio(EpisodioChangeEvent e) {
 		UHCLebrel.instance.getJuego().setEpisodio(new Episodio(e.getNuevoEpisodio()));
-		Bukkit.getConsoleSender().sendMessage("Se dispara cambioEpisodio");
 		for(Mamerto mam : UHCLebrel.instance.getHoPokePlayers()) {
-			Scoreboard.updateScoreboard(mam, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
-			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', "&6Comienza la parte "+e.getNuevoEpisodio()), null, 5, 20, 10);
+			//Scoreboard.updateScoreboard(mam, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
+			Scoreboard.reloadScoreboard(mam);
+			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), UHCLebrel.instance.messages.newPart))+e.getNuevoEpisodio()), null, 5, 20, 10);
 		}
 		
 		/*

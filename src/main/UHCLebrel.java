@@ -1,6 +1,10 @@
 package main;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
@@ -11,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -50,6 +55,7 @@ import uhc.Juego;
 import uhc.SecondEvent;
 import uhc.UhcPlaceholders;
 import util.Mamerto;
+import util.Messages;
 import util.OpLogger;
 
 public class UHCLebrel extends JavaPlugin {
@@ -70,7 +76,10 @@ public class UHCLebrel extends JavaPlugin {
 	public SkinsRestorerBukkitAPI sapi;
 	public Timer matar = new Timer();
 	public Scoreboard all;
+	public Messages messages; 
 	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>(); 
+	private FileConfiguration messagesCfg;
+	private File messagesCfgFile;
 	
 
 	public void onEnable() {
@@ -93,7 +102,7 @@ public class UHCLebrel extends JavaPlugin {
 		sapi = skrest.getSkinsRestorerBukkitAPI();
 		startScoreboardTeams();
 		Metrics metrics = new Metrics(this, statsId);
-		
+		messages = new Messages(messagesCfg);
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 
@@ -255,6 +264,45 @@ public class UHCLebrel extends JavaPlugin {
 
 	public void addPlayer(Mamerto player) {
 		this.players.add(player);
+	}
+	public FileConfiguration getMessages() {
+		if (messagesCfg == null) {
+			reloadArenas();
+		}
+		return messagesCfg;
+	}
+
+	public void reloadArenas() {
+		if (messagesCfg == null) {
+			messagesCfgFile = new File(getDataFolder(), "messages.yml");
+		}
+		messagesCfg = YamlConfiguration.loadConfiguration(messagesCfgFile);
+		Reader defConfigStream;
+		try {
+			defConfigStream = new InputStreamReader(this.getResource("messages.yml"), "UTF8");
+			if (defConfigStream != null) {
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				messagesCfg.setDefaults(defConfig);
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveArenas() {
+		try {
+			messagesCfg.save(messagesCfgFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void registerArenas() {
+		messagesCfgFile = new File(this.getDataFolder(), "arenas.yml");
+		if (!messagesCfgFile.exists()) {
+			this.getMessages().options().copyDefaults(true);
+			saveArenas();
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
 # UHC Lebrel Plugin
-This is WIP, most information at the wiki at https://github.com/palomox/uhclebrel/wiki
+This is a Spigot plugin used for hosting UHC competitions, in the future it will depend on Paper so it's recommended to use Paper instead. This plugin contains the basic features for hosting an UHC, and its main feature is that addons can easily be coded. Information about configuration of the plugin and how to code an addon is in the wiki at https://github.com/palomox/uhclebrel/wiki
 ## Downloading an artifact
 To download an artifact, you have to go to my CI server (https://ci.palomox.ga) or download a jar from Hangar (paper plugin repository, coming soon)
 ## Compiling from source

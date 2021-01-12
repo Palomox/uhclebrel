@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -6,8 +6,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import main.UHCLebrel;
 
-public class EspectadorInteractua implements Listener{
-	public EspectadorInteractua() {
+public class SpectatorInteractionListener implements Listener{
+	public SpectatorInteractionListener() {
 	}
 	@EventHandler
 	public void onInteract(PlayerInteractEntityEvent e) {

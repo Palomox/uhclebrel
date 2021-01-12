@@ -1,4 +1,4 @@
-package comandos;
+package commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +15,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import main.UHCLebrel;
 
+/**
+ * Class which uses the /c command to fire an AsyncChatEvent.
+ * @author palomox
+ *
+ */
 public class ChatCmd implements CommandExecutor{
 	private UHCLebrel plugin;
 	public ChatCmd(UHCLebrel plugin) {
@@ -36,11 +41,11 @@ public class ChatCmd implements CommandExecutor{
 			jugatas.addAll(Bukkit.getServer().getOnlinePlayers());
 			plugin.getPm().callEvent(new AsyncPlayerChatEvent(false, ejecutor, mensaje, jugatas));
 			return true;
-			
+
 		}
-			
+
 		}
-			
-		
+
+
 
 }

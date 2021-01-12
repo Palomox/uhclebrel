@@ -2,10 +2,10 @@ package uhc;
 
 import java.time.Duration;
 
-public class Episodio {
+public class UHCPart {
 	private int id;
 	private Duration duracion;
-	public Episodio(int id) {
+	public UHCPart(int id) {
 		this.id = id;
 		duracion = Duration.ofMinutes(20);
 	}

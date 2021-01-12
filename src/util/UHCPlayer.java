@@ -11,9 +11,9 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 
 import chat.IChannel;
 import main.UHCLebrel;
-import uhc.Equipo;
+import uhc.UHCTeam;
 
-public class Mamerto {
+public class UHCPlayer {
 	
 	private boolean vanished;
 	private LocalDate firstjoin;
@@ -21,7 +21,7 @@ public class Mamerto {
 	private IChannel escribiendo;
 	private ArrayList<IChannel> leyendo;
 	private double dinero;
-	private Equipo team;
+	private UHCTeam team;
 	private String displayname;
 	private boolean desconectado;
 	private boolean descalificado;
@@ -29,7 +29,7 @@ public class Mamerto {
 	private HashMap<Integer, String> scoreboard;
 	ProfileProperty p;
 	
-	public Mamerto(String UUID, LocalDate firstjoin) {
+	public UHCPlayer(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
 		this.firstjoin = firstjoin;
 		this.escribiendo = null;
@@ -74,11 +74,11 @@ public class Mamerto {
 		this.displayname = displayname;
 	}
 
-	public Equipo getTeam() {
+	public UHCTeam getTeam() {
 		return team;
 	}
 
-	public void setTeam(Equipo team) {
+	public void setTeam(UHCTeam team) {
 		this.team = team;
 	}
 
@@ -136,9 +136,9 @@ public class Mamerto {
 			}
 		}
 	}
-	public static Mamerto getHPPlayer(Player jugador, UHCLebrel plugin) {
+	public static UHCPlayer getHPPlayer(Player jugador, UHCLebrel plugin) {
 		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
-			Mamerto tmp = plugin.getHoPokePlayers().get(i);
+			UHCPlayer tmp = plugin.getHoPokePlayers().get(i);
 			Player tmpp = tmp.getPlayer();
 			if(tmpp.equals(jugador)) {
 				return tmp;

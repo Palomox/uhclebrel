@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import main.UHCLebrel;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.md_5.bungee.api.ChatColor;
-import util.Mamerto;
+import util.UHCPlayer;
 
 public class UhcPlaceholders extends PlaceholderExpansion{
 
@@ -54,7 +54,7 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 */
 		case "ganadormiembros":
 			StringJoiner sj = new StringJoiner(", ");
-			for(Mamerto tmp : UHCLebrel.instance.getJuego().getGanador().getMiembros().keySet()) {
+			for(UHCPlayer tmp : UHCLebrel.instance.getJuego().getGanador().getMiembros().keySet()) {
 				sj.add(tmp.getPlayer().getName());
 			}
 			return sj.toString();
@@ -65,7 +65,7 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 			
 			if(UHCLebrel.instance.getHPByName(player.getName()).getTeam() !=null) {
 				switch(UHCLebrel.instance.juego.getEstado()) {
-				case JUGANDO:
+				case PLAYING:
 					if(UHCLebrel.instance.getHPByName(player.getName()).isEspectador()) {
 						return UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
 					}
@@ -77,7 +77,7 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 				return "Sin equipo, 1";
 			}
 		case "rarename":
-			if(UHCLebrel.instance.getJuego().getEstado() == EstadosJuego.JUGANDO) {
+			if(UHCLebrel.instance.getJuego().getEstado() == GameStatuses.PLAYING) {
 				return UHCLebrel.instance.getHPByName(player.getName()).getDisplayname();
 			}else {
 				return player.getName();

@@ -17,7 +17,7 @@ public class Scoreboard {
 	 * Reloads the scoreboard, reloading placeholders and so.
 	 * @param user the user instance to reload scoreboard
 	 */
-	public static void reloadScoreboard(Mamerto user) {
+	public static void reloadScoreboard(UHCPlayer user) {
 		Scoreboard.updateScoreboard(user.getPlayer(), user.getScoreboard());
 		
 	}
@@ -39,7 +39,7 @@ public class Scoreboard {
 	 * @param text the String to be set in the Scoreboard.
 	 * @param lineNumber the Integer of the line that has to be changed
 	 */
-	public static void updateScoreboard(Mamerto user, String text, int lineNumber) {
+	public static void updateScoreboard(UHCPlayer user, String text, int lineNumber) {
 		Player vistima = user.getPlayer();
 		Objective sidebar = null;
 		if (vistima.getScoreboard().getObjective("sidebar") == null) {
@@ -122,7 +122,7 @@ public class Scoreboard {
 		}
 	}
 
-	public static void clear(Mamerto user) {
+	public static void clear(UHCPlayer user) {
 		Player vistima = user.getPlayer();
 		for(int line : user.getScoreboard().keySet()) {
 			String text = user.getScoreboard().get(line);

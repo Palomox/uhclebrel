@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,20 +12,20 @@ import org.bukkit.event.Listener;
 import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import skinsrestorer.shared.exception.SkinRequestException;
-import uhc.Episodio;
-import uhc.EpisodioChangeEvent;
-import util.Mamerto;
+import uhc.UHCPart;
+import uhc.PartChangeEvent;
+import util.UHCPlayer;
 import util.Messages;
 import util.Scoreboard;
 
-public class CambiaEpisodio implements Listener{
-	public CambiaEpisodio() {
+public class GameChangePartListener implements Listener{
+	public GameChangePartListener() {
 		
 	}
 	@EventHandler
-	public void onCambioEpisodio(EpisodioChangeEvent e) {
-		UHCLebrel.instance.getJuego().setEpisodio(new Episodio(e.getNuevoEpisodio()));
-		for(Mamerto mam : UHCLebrel.instance.getHoPokePlayers()) {
+	public void onCambioEpisodio(PartChangeEvent e) {
+		UHCLebrel.instance.getJuego().setEpisodio(new UHCPart(e.getNuevoEpisodio()));
+		for(UHCPlayer mam : UHCLebrel.instance.getHoPokePlayers()) {
 			//Scoreboard.updateScoreboard(mam, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
 			Scoreboard.reloadScoreboard(mam);
 			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), UHCLebrel.instance.messages.newPart))+e.getNuevoEpisodio()), null, 5, 20, 10);
@@ -55,11 +55,11 @@ public class CambiaEpisodio implements Listener{
 		 * Resetear Skins.
 		 */
 		ArrayList<String> nombres = new ArrayList<String>();
-		for(Mamerto jugador : UHCLebrel.instance.juego.getParticipantes()) {
+		for(UHCPlayer jugador : UHCLebrel.instance.juego.getParticipantes()) {
 			nombres.add(jugador.getPlayer().getName());
 		}
 		Random random = new Random();
-		for(Mamerto vict : UHCLebrel.instance.juego.getParticipantes()) {
+		for(UHCPlayer vict : UHCLebrel.instance.juego.getParticipantes()) {
 			int tmp = random.nextInt(nombres.size()-1);
 			while(vict.getPlayer().getName().equals(nombres.get(tmp))) {
 				tmp = random.nextInt(nombres.size()-1);

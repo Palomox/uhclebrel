@@ -3,10 +3,10 @@ package uhc;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class SecondEvent extends Event{
+public class EachSecondEvent extends Event{
 	private static final HandlerList handlers = new HandlerList();
 	
-	public SecondEvent() {
+	public EachSecondEvent() {
 	}
 		public HandlerList getHandlers() {
 		return handlers;

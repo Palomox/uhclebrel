@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
@@ -13,8 +13,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
-public class CambiarNombreAdvancements implements Listener{
-	public CambiarNombreAdvancements() {
+public class ObfuscateAdvancementName implements Listener{
+	public ObfuscateAdvancementName() {
 	}
 	@EventHandler
 	public void onAdvancement(PlayerAdvancementDoneEvent e) {

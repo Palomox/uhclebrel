@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import java.util.List;
 
@@ -12,24 +12,24 @@ import org.bukkit.scoreboard.Team;
 import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatColor;
-import uhc.EstadoChangeEvent;
-import util.Mamerto;
+import uhc.StatusChangeEvent;
+import util.UHCPlayer;
 import util.Scoreboard;
 
-public class CambiaEstado implements Listener {
+public class GameStateChangeListener implements Listener {
 	private Team todos;
 
-	public CambiaEstado() {
+	public GameStateChangeListener() {
 		UHCLebrel.instance.todos = todos;
 	}
 
 	@EventHandler
-	public void onJuegoFinalizado(EstadoChangeEvent e) {
+	public void onJuegoFinalizado(StatusChangeEvent e) {
 		UHCLebrel plugin = UHCLebrel.instance;
 		switch (e.getNuevoestado()) {
-		case FINALIZADO:
+		case FINISHING:
 			todos.unregister();
-			for (Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
+			for (UHCPlayer tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				UHCLebrel.instance.juego.setSpectator(tmp);
 				Scoreboard.clear(tmp);
 				List<?> lineas = plugin.getConfig().getList("scoreboard.final.lines");
@@ -39,8 +39,8 @@ public class CambiaEstado implements Listener {
 				}
 			}
 			break;
-		case JUGANDO:
-			for (Mamerto tmp : UHCLebrel.instance.getHoPokePlayers()) {
+		case PLAYING:
+			for (UHCPlayer tmp : UHCLebrel.instance.getHoPokePlayers()) {
 				List<?> lineas = plugin.getConfig().getList("scoreboard.durante.lines");
 				Scoreboard.clear(tmp);
 				for (int i = 0; i < lineas.size(); i++) {
@@ -48,7 +48,7 @@ public class CambiaEstado implements Listener {
 					Scoreboard.updateScoreboard(tmp, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(tmp.getPlayer(), linea)), lineas.size()-i);
 				}
 			}
-			for (Mamerto temp : UHCLebrel.instance.juego.getParticipantes()) {
+			for (UHCPlayer temp : UHCLebrel.instance.juego.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k" + temp.getPlayer().getName()));
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());

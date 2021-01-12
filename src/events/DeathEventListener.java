@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import java.util.ArrayList;
 
@@ -14,30 +14,30 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import main.UHCLebrel;
-import uhc.Equipo;
-import uhc.EstadoChangeEvent;
-import uhc.EstadosJuego;
-import util.Mamerto;
+import uhc.UHCTeam;
+import uhc.StatusChangeEvent;
+import uhc.GameStatuses;
+import util.UHCPlayer;
 
-public class Muerte implements Listener {
-	public Muerte() {
+public class DeathEventListener implements Listener {
+	public DeathEventListener() {
 
 	}
 
 	@EventHandler
 	public void alMurison(PlayerDeathEvent e) {
-		if (UHCLebrel.instance.getJuego().getEstado().equals(EstadosJuego.JUGANDO)) {
+		if (UHCLebrel.instance.getJuego().getEstado().equals(GameStatuses.PLAYING)) {
 			Player muerto = e.getEntity();
-			Mamerto mamerto = UHCLebrel.instance.getHPByName(muerto.getName());
-			ArrayList<Mamerto> jugadores = UHCLebrel.instance.getHoPokePlayers();
-			for (Mamerto tmp : jugadores) {
+			UHCPlayer mamerto = UHCLebrel.instance.getHPByName(muerto.getName());
+			ArrayList<UHCPlayer> jugadores = UHCLebrel.instance.getHoPokePlayers();
+			for (UHCPlayer tmp : jugadores) {
 				tmp.getPlayer().sendTitle(
 						ChatColor.translateAlternateColorCodes('&', "&4¡" + muerto.getName() + " ha sido eliminado!"),
 						null, 10, 20, 5);
 			}
 			UHCLebrel.instance.juego.matar(mamerto);
-			ArrayList<Equipo> vivos = new ArrayList<Equipo>();
-			for (Equipo tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
+			ArrayList<UHCTeam> vivos = new ArrayList<UHCTeam>();
+			for (UHCTeam tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
 				boolean stat = UHCLebrel.instance.juego.getEquipos().get(tmp);
 				if (stat) {
 					vivos.add(tmp);
@@ -45,9 +45,9 @@ public class Muerte implements Listener {
 			}
 			if (vivos.size() <= 1) {
 				// Tenemos un ganador bbs
-				UHCLebrel.instance.getJuego().setEstado(EstadosJuego.FINALIZADO);
+				UHCLebrel.instance.getJuego().setEstado(GameStatuses.FINISHING);
 				UHCLebrel.instance.getJuego().setGanador(vivos.get(0));
-				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.FINALIZADO));
+				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.FINISHING));
 			}
 			
 			/*

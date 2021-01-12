@@ -1,4 +1,4 @@
-package comandos;
+package commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,14 +14,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 import main.UHCLebrel;
-import uhc.Episodio;
-import uhc.EpisodioChangeEvent;
-import uhc.Equipo;
-import uhc.EstadoChangeEvent;
-import uhc.EstadosJuego;
-import uhc.Juego;
-import util.Mamerto;
+import uhc.UHCPart;
+import uhc.PartChangeEvent;
+import uhc.UHCTeam;
+import uhc.StatusChangeEvent;
+import uhc.GameStatuses;
+import uhc.GameManager;
+import util.UHCPlayer;
 
+/**
+ * Handler of the main command of this plugin, used to configure it
+ * @author palomox
+ *
+ */
 public class UhcCMD implements CommandExecutor {
 	private UHCLebrel plugin;
 	public UhcCMD(UHCLebrel plugin) {
@@ -54,14 +59,14 @@ public class UhcCMD implements CommandExecutor {
 					for(String tmp : argus) {
 						j.add(tmp);
 					}
-				UHCLebrel.instance.juego.addTeam(new Equipo(j.toString(), UHCLebrel.instance.juego.getEquipos().size()+1));
+				UHCLebrel.instance.juego.addTeam(new UHCTeam(j.toString(), UHCLebrel.instance.juego.getEquipos().size()+1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha creado el equipo '"+j.toString()+"'!"));
 				}
 				break;
 			case "setteamspawn":
 				if(!(args.length <=1)) {
 					int teamid = Integer.valueOf(args[1]);
-					Equipo team = Equipo.getEquipoById(teamid);
+					UHCTeam team = UHCTeam.getEquipoById(teamid);
 					team.setSpawn(ejecutor.getLocation());
 					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.world", team.getSpawn().getWorld().getName());
 					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.x", team.getSpawn().getX());
@@ -78,7 +83,7 @@ public class UhcCMD implements CommandExecutor {
 			case "teamlist":
 				ArrayList<String> mensajesal = new ArrayList<String>();
 				mensajesal.add(ChatColor.translateAlternateColorCodes('&', "&8--------&6Lista de equipos&8-----------"));
-				for(Equipo tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
+				for(UHCTeam tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
 					int id = tmp.getId();
 					String nombre = tmp.getNombre();
 					String bonito = ChatColor.translateAlternateColorCodes('&', "&6"+id+"&8---------------------&2"+nombre);
@@ -93,8 +98,8 @@ public class UhcCMD implements CommandExecutor {
 				if(!(args.length <=1)) {
 					int teamid = Integer.valueOf(args[1]);
 					String personaname = args[2];
-					Equipo team = Equipo.getEquipoById(teamid);
-					Mamerto mammert = UHCLebrel.instance.getHPByName(personaname);
+					UHCTeam team = UHCTeam.getEquipoById(teamid);
+					UHCPlayer mammert = UHCLebrel.instance.getHPByName(personaname);
 					team.addMamerto(mammert);
 					Player ejec = mammert.getPlayer();
 					UHCLebrel.instance.getHPByName(ejec.getName()).setTeam(team);
@@ -104,8 +109,8 @@ public class UhcCMD implements CommandExecutor {
 				}
 				break;
 			case "start":
-				for(Equipo tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
-					for(Mamerto mam : tmp.getMiembros().keySet()) {
+				for(UHCTeam tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
+					for(UHCPlayer mam : tmp.getMiembros().keySet()) {
 						UHCLebrel.instance.juego.addMammert(mam);
 						Player mamerto = mam.getPlayer();
 						mamerto.setGameMode(GameMode.SURVIVAL);
@@ -120,27 +125,27 @@ public class UhcCMD implements CommandExecutor {
 						mam.getPlayer().teleport(tmp.getSpawn());
 					}
 				}
-				
-				UHCLebrel.instance.getJuego().setEstado(EstadosJuego.JUGANDO);
-				UHCLebrel.instance.getJuego().setEpisodio(new Episodio(1));
-				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.JUGANDO));
-				Bukkit.getPluginManager().callEvent(new EpisodioChangeEvent(1));
+
+				UHCLebrel.instance.getJuego().setEstado(GameStatuses.PLAYING);
+				UHCLebrel.instance.getJuego().setEpisodio(new UHCPart(1));
+				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.PLAYING));
+				Bukkit.getPluginManager().callEvent(new PartChangeEvent(1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
 				break;
 			case "reset":
-				UHCLebrel.instance.juego = new Juego(); 
-				Bukkit.getPluginManager().callEvent(new EstadoChangeEvent(EstadosJuego.ESPERANDO));
+				UHCLebrel.instance.juego = new GameManager();
+				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.WAITING));
 				break;
 			case "descalificar":
 				if(args.length >1) {
 					String playerName = args[1];
-					Mamerto adescalificar = UHCLebrel.instance.getHPByName(playerName);
+					UHCPlayer adescalificar = UHCLebrel.instance.getHPByName(playerName);
 					adescalificar.setDescalificado(true);
 					adescalificar.getPlayer().setHealth(0);
 				}
 				break;
 			case "pararserver":
-				if(UHCLebrel.instance.juego.getEstado() == EstadosJuego.FINALIZADO) {
+				if(UHCLebrel.instance.juego.getEstado() == GameStatuses.FINISHING) {
 					Bukkit.getServer().shutdown();
 				}
 				break;
@@ -148,6 +153,6 @@ public class UhcCMD implements CommandExecutor {
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Ese argumento no existe."));
 			}
 			return true;
-		} 
+		}
 	}
 }

@@ -9,63 +9,63 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import main.UHCLebrel;
-import util.Mamerto;
+import util.UHCPlayer;
 
-public class Juego {
-	private HashMap<Equipo, Boolean> equipos = new HashMap<Equipo, Boolean>();
-	private ArrayList<Mamerto> participantes = new ArrayList<Mamerto>();
-	private ArrayList<Mamerto> muertos = new ArrayList<Mamerto>();
-	private EstadosJuego estado;
-	private Equipo ganador;
-	private Episodio episodio;
+public class GameManager {
+	private HashMap<UHCTeam, Boolean> equipos = new HashMap<UHCTeam, Boolean>();
+	private ArrayList<UHCPlayer> participantes = new ArrayList<UHCPlayer>();
+	private ArrayList<UHCPlayer> muertos = new ArrayList<UHCPlayer>();
+	private GameStatuses estado;
+	private UHCTeam ganador;
+	private UHCPart episodio;
 
-	public Juego() {
-		estado = EstadosJuego.ESPERANDO;
+	public GameManager() {
+		estado = GameStatuses.WAITING;
 		ganador = null;
 		
 	}
 	
-	public Episodio getEpisodio() {
+	public UHCPart getEpisodio() {
 		return this.episodio;
 	}
-	public ArrayList<Mamerto> getMuertos(){
+	public ArrayList<UHCPlayer> getMuertos(){
 		return this.muertos;
 	}
-	public void setEpisodio(Episodio aponer) {
+	public void setEpisodio(UHCPart aponer) {
 		this.episodio = aponer;
 	}
-	public Equipo getGanador() {
+	public UHCTeam getGanador() {
 		return this.ganador;
 	}
 
-	public EstadosJuego getEstado() {
+	public GameStatuses getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadosJuego estado) {
+	public void setEstado(GameStatuses estado) {
 		this.estado = estado;
 	}
 
-	public void addMammert(Mamerto tmp) {
+	public void addMammert(UHCPlayer tmp) {
 		participantes.add(tmp);
 	}
 
-	public HashMap<Equipo, Boolean> getEquipos() {
+	public HashMap<UHCTeam, Boolean> getEquipos() {
 		return equipos;
 	}
 	
-	public ArrayList<Mamerto> getParticipantes() {
+	public ArrayList<UHCPlayer> getParticipantes() {
 		return participantes;
 	}
 
-	public void addTeam(Equipo team) {
+	public void addTeam(UHCTeam team) {
 		this.equipos.put(team, true);
 	}
 
-	public void removeTeam(Equipo team) {
+	public void removeTeam(UHCTeam team) {
 		this.equipos.remove(team);
 	}
-	public void setSpectator(Mamerto aspect) {
+	public void setSpectator(UHCPlayer aspect) {
 		UHCLebrel.instance.getServer().getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, new Runnable() {
 			public void run() {
 				aspect.getPlayer().spigot().respawn();
@@ -84,8 +84,8 @@ public class Juego {
 			}
 		}, 10);
 	}
-	public void matar(Mamerto desafortunado) {
-		for (Mamerto tmp : participantes) {
+	public void matar(UHCPlayer desafortunado) {
+		for (UHCPlayer tmp : participantes) {
 			if (tmp.equals(desafortunado)) {
 				participantes.remove(tmp);
 				muertos.add(desafortunado);
@@ -93,7 +93,7 @@ public class Juego {
 				desafortunado.getTeam().getMiembros().put(desafortunado, false);
 				if (!(desafortunado.getTeam().compasVivos())) {
 					equipos.put(desafortunado.getTeam(), false);
-					for (Mamerto all : UHCLebrel.instance.getHoPokePlayers()) {
+					for (UHCPlayer all : UHCLebrel.instance.getHoPokePlayers()) {
 						all.getPlayer().sendTitle(
 								ChatColor.translateAlternateColorCodes('&', "&4&l¡El equipo "
 										+ desafortunado.getTeam().getNombre() + " ha sido eliminado!"),
@@ -105,7 +105,7 @@ public class Juego {
 		}
 	}
 
-	public void setGanador(Equipo equipo) {
+	public void setGanador(UHCTeam equipo) {
 		this.ganador = equipo;
 	}
 }

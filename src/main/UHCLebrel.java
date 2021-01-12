@@ -31,32 +31,29 @@ import org.bukkit.scoreboard.Team.OptionStatus;
 
 import chat.IChannel;
 import chat.NChannel;
-import comandos.ChannelCmd;
-import comandos.ChatCmd;
-import comandos.Setspawn;
-import comandos.Spawn;
-import comandos.SudoCmd;
-import comandos.UhcCMD;
-import eventos.CadaSegundo;
-import eventos.CambiaEpisodio;
-import eventos.CambiaEstado;
-import eventos.CambiarNombreAdvancements;
-import eventos.DesconectarMamerto;
-import eventos.EspectadorAtaca;
-import eventos.EspectadorInteractua;
-import eventos.MensajeEnviado;
-import eventos.Muerte;
-import eventos.NewPlayer;
+import commands.ChannelCmd;
+import commands.ChatCmd;
+import commands.UhcCMD;
+import events.DeathEventListener;
+import events.EachSecondListener;
+import events.GameChangePartListener;
+import events.GameStateChangeListener;
+import events.MessageSentListener;
+import events.ObfuscateAdvancementName;
+import events.PlayerDisconnectListener;
+import events.PlayerJoinListener;
+import events.SpectatorAttackListener;
+import events.SpectatorInteractionListener;
 import fr.minuskube.inv.InventoryManager;
 import skinsrestorer.bukkit.SkinsRestorer;
 import skinsrestorer.bukkit.SkinsRestorerBukkitAPI;
-import uhc.Equipo;
-import uhc.Juego;
-import uhc.SecondEvent;
+import uhc.EachSecondEvent;
+import uhc.GameManager;
+import uhc.UHCTeam;
 import uhc.UhcPlaceholders;
-import util.Mamerto;
 import util.Messages;
 import util.OpLogger;
+import util.UHCPlayer;
 
 public class UHCLebrel extends JavaPlugin {
 	private final int statsId = 9205;
@@ -65,22 +62,22 @@ public class UHCLebrel extends JavaPlugin {
 	public String version = plugindesc.getVersion();
 	public String nombre = plugindesc.getName();
 	public InventoryManager invm = new InventoryManager(this);
-	private ArrayList<Mamerto> players = new ArrayList<Mamerto>();
+	private ArrayList<UHCPlayer> players = new ArrayList<UHCPlayer>();
 	private OpLogger alogger;
 	private ArrayList<Player> admins = new ArrayList<Player>();
 	private ArrayList<IChannel> canales = new ArrayList<IChannel>();
 	public Team todos;
 	public static UHCLebrel instance;
-	public Juego juego;
+	public GameManager juego;
 	private SkinsRestorer skrest;
 	public SkinsRestorerBukkitAPI sapi;
 	public Timer matar = new Timer();
 	public Scoreboard all;
-	public Messages messages; 
-	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>(); 
+	public Messages messages;
+	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>();
 	private FileConfiguration messagesCfg;
 	private File messagesCfgFile;
-	
+
 
 	public void onEnable() {
 		instance = this;
@@ -90,7 +87,7 @@ public class UHCLebrel extends JavaPlugin {
 		registerEvents();
 		registrarComandos();
 		alogger = new OpLogger(this);
-		juego = new Juego();
+		juego = new GameManager();
 		invm.init();
 		for (String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String channelName = getConfig().getString("chat.channels." + nombre + ".name");
@@ -106,14 +103,14 @@ public class UHCLebrel extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 
-	
+
 
 	public void startSeconding() {
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 
 			@Override
 			public void run() {
-				Bukkit.getPluginManager().callEvent(new SecondEvent());
+				Bukkit.getPluginManager().callEvent(new EachSecondEvent());
 			}
 		}, 0, 20);
 	}
@@ -126,10 +123,10 @@ public class UHCLebrel extends JavaPlugin {
 		org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
 		this.all = all;
 		Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.translateAlternateColorCodes('&', "❤"), RenderType.INTEGER);
-		
-		Objective ctab = all.registerNewObjective("corazonestab", 
+
+		Objective ctab = all.registerNewObjective("corazonestab",
 				"health",
-				" ", 
+				" ",
 				RenderType.HEARTS);
 		cnom.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		ctab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
@@ -139,7 +136,7 @@ public class UHCLebrel extends JavaPlugin {
 		todos.setColor(org.bukkit.ChatColor.MAGIC);
 		todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
 	}
-	public Juego getJuego() {
+	public GameManager getJuego() {
 		return this.juego;
 	}
 
@@ -163,17 +160,17 @@ public class UHCLebrel extends JavaPlugin {
 		return null;
 	}
 
-	public void removeHPPlayer(Mamerto pl) {
+	public void removeHPPlayer(UHCPlayer pl) {
 		for (int i = 0; i < this.players.size(); i++) {
-			Mamerto tmp = this.players.get(i);
+			UHCPlayer tmp = this.players.get(i);
 			if (tmp == pl) {
 				this.players.remove(i);
 			}
 		}
 	}
 
-	public Mamerto getHPByName(String name) {
-		for (Mamerto p : this.players) {
+	public UHCPlayer getHPByName(String name) {
+		for (UHCPlayer p : this.players) {
 			Player tmp = p.getPlayer();
 			if (tmp.getName().equalsIgnoreCase(name)) {
 				return p;
@@ -214,16 +211,13 @@ public class UHCLebrel extends JavaPlugin {
 			double z = cfg.getDouble("juego.equipos." + teamname + ".spawn.z");
 			World world = Bukkit.getServer().getWorld(cfg.getString("juego.equipos." + teamname + ".spawn.world"));
 			spawn = new Location(world, x, y, z);
-			Equipo tmp = new Equipo(teamname, this.juego.getEquipos().size() + 1);
+			UHCTeam tmp = new UHCTeam(teamname, this.juego.getEquipos().size() + 1);
 			tmp.setSpawn(spawn);
 			this.getJuego().getEquipos().put(tmp, true);
 		}
 	}
 	public void registrarComandos() {
-		this.getCommand("setspawn").setExecutor(new Setspawn(this));
-		this.getCommand("spawn").setExecutor(new Spawn(this));
 		this.getCommand("c").setExecutor(new ChatCmd(this));
-		this.getCommand("sudo").setExecutor(new SudoCmd(this));
 		this.getCommand("channel").setExecutor(new ChannelCmd(this));
 		this.getCommand("uhc").setExecutor(new UhcCMD(this));
 	}
@@ -237,16 +231,16 @@ public class UHCLebrel extends JavaPlugin {
 
 	public void registerEvents() {
 		PluginManager pm = this.getPm();
-		pm.registerEvents(new NewPlayer(this), this);
-		pm.registerEvents(new DesconectarMamerto(this), this);
-		pm.registerEvents(new MensajeEnviado(this), this);
-		pm.registerEvents(new Muerte(), this);
-		pm.registerEvents(new CambiaEstado(), this);
-		pm.registerEvents(new CadaSegundo(), this);
-		pm.registerEvents(new CambiaEpisodio(), this);
-		pm.registerEvents(new EspectadorAtaca(), this);
-		pm.registerEvents(new CambiarNombreAdvancements(), this);
-		pm.registerEvents(new EspectadorInteractua(), this);
+		pm.registerEvents(new PlayerJoinListener(this), this);
+		pm.registerEvents(new PlayerDisconnectListener(this), this);
+		pm.registerEvents(new MessageSentListener(this), this);
+		pm.registerEvents(new DeathEventListener(), this);
+		pm.registerEvents(new GameStateChangeListener(), this);
+		pm.registerEvents(new EachSecondListener(), this);
+		pm.registerEvents(new GameChangePartListener(), this);
+		pm.registerEvents(new SpectatorAttackListener(), this);
+		pm.registerEvents(new ObfuscateAdvancementName(), this);
+		pm.registerEvents(new SpectatorInteractionListener(), this);
 	}
 
 	public void registerConfig() {
@@ -258,11 +252,11 @@ public class UHCLebrel extends JavaPlugin {
 		}
 	}
 
-	public ArrayList<Mamerto> getHoPokePlayers() {
+	public ArrayList<UHCPlayer> getHoPokePlayers() {
 		return this.players;
 	}
 
-	public void addPlayer(Mamerto player) {
+	public void addPlayer(UHCPlayer player) {
 		this.players.add(player);
 	}
 	public FileConfiguration getMessages() {

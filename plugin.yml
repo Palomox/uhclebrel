@@ -2,19 +2,13 @@ main: main.UHCLebrel
 version: 1.0.0
 api-version: 1.16
 name: UHCLebrel
-description: Plugin designed for easily hosting UHC competitions.
+description: All-in-one plugin designed for easily hosting UHC competitions and having server managment basic utils (Chat manager, spectation manager, etc...) .
 authors: [Palomox]
 depend: [PlaceholderAPI]
 commands:
-   setspawn:
-      description: Pone el Spawn
-   spawn:
-      description: Te Teletransporta al spawn.
    c:
-      description: Lanza un evento de chat.
-   sudo:
-      description: Fuerzas a realizar un comando a alguien.
+      description: Fires AsyncPlayerChatEvent
    channel: 
-      description: Te permite dejar o unirte a un canal.
+      description: Lets you change your channels.
    uhc:
-      description: Comando principal del plugin.
+      description: Main plugin command.

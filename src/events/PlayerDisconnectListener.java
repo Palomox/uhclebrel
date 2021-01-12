@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,11 +9,11 @@ import org.bukkit.scoreboard.DisplaySlot;
 
 import chat.IChannel;
 import main.UHCLebrel;
-import util.Mamerto;
+import util.UHCPlayer;
 
-public class DesconectarMamerto implements Listener{
+public class PlayerDisconnectListener implements Listener{
 	private UHCLebrel plugin;
-	public DesconectarMamerto(UHCLebrel plugin) {
+	public PlayerDisconnectListener(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 	@EventHandler
@@ -22,13 +22,13 @@ public class DesconectarMamerto implements Listener{
 		if(jugador.hasPermission("hopoke.admin") || jugador.isOp()) {
 			plugin.removeAdmin(jugador);
 		}
-		Mamerto hpplayer = Mamerto.getHPPlayer(jugador, plugin);
+		UHCPlayer hpplayer = UHCPlayer.getHPPlayer(jugador, plugin);
 		BukkitRunnable borrar = new BukkitRunnable() {		
 			@Override
 			public void run() {
 				if(hpplayer.isDesconectado()) {
 				for(IChannel tmp : hpplayer.getLeyendo()) {
-					tmp.getLectores().remove(hpplayer.getPlayer());
+					tmp.getChannelReaders().remove(hpplayer.getPlayer());
 				}
 				hpplayer.getTeam().getMiembros().put(hpplayer, false);
 				UHCLebrel.instance.removeHPPlayer(hpplayer);

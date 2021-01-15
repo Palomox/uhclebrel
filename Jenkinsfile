@@ -1,3 +1,11 @@
+def hasPaper = sh """
+if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
+then
+echo 'OK'
+exit 0
+fi
+exit 1
+"""
 pipeline {
   agent any
   environment {
@@ -11,11 +19,10 @@ pipeline {
     	}
 
 	}*/
-	def hasMaven = sh 'mvn dependency:get -Dartifact=com.destroystokyo.paper:paper:${MINECRAFT-VERSION}-R0.1-SNAPSHOT -o -DrepoUrl=file://~/.m2/repository';
-  	   when {
-   	      not {
+  	  when {
+   	     not {
 			expression hasPaper.contains('OK')
-      	   }
+      	 }
    	  }
   	   steps {
    	  	sh """

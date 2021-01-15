@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-	MINECRAFT-VERSION='1.16.2'
+	MCV='1.16.2'
   }
   stages {
     stage('Check paper depend') {
@@ -20,7 +20,7 @@ pipeline {
   	   steps {
    	  	sh """
    	  	wget repo.palomox.ga/files/downloadLatest.sh
-   	  	bash downloadLatest.sh ${MINECRAFT-VERSION}
+   	  	bash downloadLatest.sh ${MCV}
    	  	"""
    	  }
 

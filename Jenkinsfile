@@ -1,11 +1,3 @@
-String hasPaper = sh """
-if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
-then
-echo 'OK'
-exit 0
-fi
-exit 1
-"""
 pipeline {
   agent any
   environment {
@@ -21,7 +13,13 @@ pipeline {
 	}*/
 	when {
 		not {
-			expression hasPaper.contains('OK')
+			expression sh """
+				if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
+				then
+				echo 'OK'
+				exit 0
+				fi
+				exit 1""".contains('OK')
       	}
    	}
   	steps {

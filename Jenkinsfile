@@ -1,4 +1,4 @@
-def hasPaper = sh """
+String hasPaper = sh """
 if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
 then
 echo 'OK'

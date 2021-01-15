@@ -19,18 +19,17 @@ pipeline {
     	}
 
 	}*/
-  	  when {
-   	     not {
+	when {
+		not {
 			expression hasPaper.contains('OK')
-      	 }
-   	  }
-  	   steps {
-   	  	sh """
+      	}
+   	}
+  	steps {
+   		sh """
    	  	wget repo.palomox.ga/files/downloadLatest.sh
    	  	bash downloadLatest.sh ${MCV}
    	  	"""
-   	  }
-
+   	}
     }
       stage('Maven build') {
          steps {

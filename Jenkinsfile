@@ -13,7 +13,7 @@ pipeline {
 	}*/
     when { //equals excepted: 'NO', actual: sh 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then echo \'NO\'; exit 0; fi exit 1;' }
   		expression {
-		     if(sh (returnStdout: true, """if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
+		     if(sh (returnStdout: true, script:"""if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
 		     then
 		     echo \'NO\'
 		     exit 0

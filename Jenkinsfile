@@ -11,17 +11,9 @@ pipeline {
     	}
 
 	}*/
-    when { equals excepted: 'NO', actual: sh '''if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
-         then
-         echo \'NO\'
-         exit 0
-         fi
-         exit 1''' }
+    when { equals excepted: 'NO', actual: sh 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then echo \'NO\'; exit 0; fi exit 1;' }
   	steps {
-   		sh """
-   	  	wget repo.palomox.ga/files/downloadLatest.sh
-   	  	bash downloadLatest.sh ${MCV}
-   	  	"""
+   		sh 'wget repo.palomox.ga/files/downloadLatest.sh; bash downloadLatest.sh ${MCV}'
    	}
     }
       stage('Maven build') {

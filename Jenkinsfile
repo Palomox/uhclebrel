@@ -12,11 +12,6 @@ pipeline {
 
 	}*/
 	when {
-	    expression {
-
-    	}
-	}
-	when {
 		not {
 			equals excepted: OK, actual: sh """
 				if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]

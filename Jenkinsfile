@@ -11,17 +11,13 @@ pipeline {
     	}
 
 	}*/
-	when {
-		not {
-			equals excepted: OK, actual: sh """
+	when { not { equals excepted: OK, actual: sh """
 				if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
 				then
 				echo 'OK'
 				exit 0
 				fi
-				exit 1"""
-      	}
-   	}
+				exit 1""" } }
   	steps {
    		sh """
    	  	wget repo.palomox.ga/files/downloadLatest.sh

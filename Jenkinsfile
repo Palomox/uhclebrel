@@ -12,14 +12,19 @@ pipeline {
 
 	}*/
 	when {
+	    expression {
+
+    	}
+	}
+	when {
 		not {
-			expression sh """
+			equals excepted: OK, actual: sh """
 				if [[ -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
 				then
 				echo 'OK'
 				exit 0
 				fi
-				exit 1""".contains('OK')
+				exit 1"""
       	}
    	}
   	steps {

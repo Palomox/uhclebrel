@@ -13,12 +13,11 @@ pipeline {
 	}*/
     when { //equals excepted: 'NO', actual: sh 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then echo \'NO\'; exit 0; fi exit 1;' }
   		expression {
-  			 sh """echo 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]]
-		     then
-		     echo \'NO\'
+  			 sh '''echo "if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then
+		     echo NO
 		     exit 0
 		     fi
-		     exit 1' > check.sh"""
+		     exit 1" > check.sh'''
 		     if(sh (returnStdout: true, script: 'bash check.sh').contains('OK')){
 				return true;
 		     }

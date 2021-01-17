@@ -19,7 +19,7 @@ pipeline {
 		     exit 0
 		     fi
 		     exit 1" > check.sh'''
-		     if(sh (returnStdout: true, script: 'bash check.sh').contains('OK')){
+		     if(sh (returnStdout: true, script: 'bash check.sh').contains('NO')){
 				return true;
 		     }
         }
@@ -30,7 +30,7 @@ pipeline {
     }
       stage('Maven build') {
          steps {
-             sh 'mvn install'
+             sh '/usr/lib/mvn/apache-maven-3.6.3/bin/mvn install'
            }
       }
       stage('Save artifacts') {

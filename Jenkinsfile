@@ -13,8 +13,6 @@ pipeline {
 	}*/
     when { //equals excepted: 'NO', actual: sh 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then echo \'NO\'; exit 0; fi exit 1;' }
   		expression {
-  			 sh 'export JAVA_HOME="/usr/lib/jvm/jdk8u265-b01"'
-  			 sh 'export PATH="/usr/lib/jvm/jdk8u265-b01/bin:$PATH"'
   			 sh '''echo "if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT ]]
   			 then
 		     echo NO
@@ -32,7 +30,7 @@ pipeline {
     }
       stage('Maven build') {
          steps {
-             sh '/usr/lib/mvn/apache-maven-3.6.3/bin/mvn install'
+             sh 'mvn install'
            }
       }
       stage('Save artifacts') {

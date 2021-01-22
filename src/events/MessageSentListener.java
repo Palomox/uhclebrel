@@ -52,7 +52,7 @@ public class MessageSentListener implements Listener {
 	}
 	private IChannel getAmandar(String mensaje) {
 		String first = String.valueOf(mensaje.charAt(0));
-		for(IChannel tmp : plugin.getCanales()) {
+		for(IChannel tmp : plugin.getChannels()) {
 			String prefix = String.valueOf(tmp.getPrefix());
 			if(!(prefix.equals("none"))) {
 			if(prefix.equals(first)) {

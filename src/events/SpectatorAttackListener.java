@@ -16,7 +16,7 @@ public class SpectatorAttackListener implements Listener{
 	public void onAtaque(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Player) {
 			Player atacante = (Player) e.getDamager();
-			for(UHCPlayer mam : UHCLebrel.instance.getJuego().getMuertos()) {
+			for(UHCPlayer mam : UHCLebrel.instance.getGameManager().getMuertos()) {
 				if(atacante.equals(mam.getPlayer())) {
 					e.setCancelled(true);
 				}

@@ -22,10 +22,10 @@ public class EachSecondListener implements Listener {
 
 	@EventHandler
 	public void onSecond(EachSecondEvent e) {
-		if (UHCLebrel.instance.getJuego().getEstado().equals(GameStatuses.PLAYING)) {
-			UHCLebrel.instance.getJuego().getEpisodio().menosUnSec();
-			long s = UHCLebrel.instance.getJuego().getEpisodio().getDuracion().getSeconds();
-			for(UHCTeam tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
+		if (UHCLebrel.instance.getGameManager().getEstado().equals(GameStatuses.PLAYING)) {
+			UHCLebrel.instance.getGameManager().getEpisodio().menosUnSec();
+			long s = UHCLebrel.instance.getGameManager().getEpisodio().getDuracion().getSeconds();
+			for(UHCTeam tmp : UHCLebrel.instance.getGameManager().getEquipos().keySet()) {
 				for(UHCPlayer mam : tmp.getMiembros().keySet()) {
 					if(!mam.isDesconectado()){
 					Scoreboard.updateScoreboard(mam,
@@ -35,9 +35,9 @@ public class EachSecondListener implements Listener {
 				}
 			}
 			
-			if (UHCLebrel.instance.getJuego().getEpisodio().getDuracion().equals(Duration.ZERO)) {
+			if (UHCLebrel.instance.getGameManager().getEpisodio().getDuracion().equals(Duration.ZERO)) {
 				Bukkit.getConsoleSender().sendMessage("Antes de dispararse el evento.");
-				Bukkit.getPluginManager().callEvent(new PartChangeEvent(UHCLebrel.instance.getJuego().getEpisodio().getId() + 1));
+				Bukkit.getPluginManager().callEvent(new PartChangeEvent(UHCLebrel.instance.getGameManager().getEpisodio().getId() + 1));
 			}
 		}
 	}

@@ -19,11 +19,8 @@ public class PlayerDisconnectListener implements Listener{
 	@EventHandler
 	public void mamertoDesconecta(PlayerQuitEvent e) {
 		Player jugador = e.getPlayer();
-		if(jugador.hasPermission("hopoke.admin") || jugador.isOp()) {
-			plugin.removeAdmin(jugador);
-		}
 		UHCPlayer hpplayer = UHCPlayer.getHPPlayer(jugador, plugin);
-		BukkitRunnable borrar = new BukkitRunnable() {		
+		BukkitRunnable borrar = new BukkitRunnable() {
 			@Override
 			public void run() {
 				if(hpplayer.isDesconectado()) {
@@ -41,6 +38,6 @@ public class PlayerDisconnectListener implements Listener{
 		 * Quitar la Scoreboard del jugador
 		 */
 		hpplayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
-		
+
 	}
 }

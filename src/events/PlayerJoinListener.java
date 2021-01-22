@@ -26,15 +26,11 @@ public class PlayerJoinListener implements Listener {
 	@EventHandler
 	public void alUnirServidor(PlayerJoinEvent event) {
 		Player jugador = event.getPlayer();
-		// Comprueba si es admin, asi le añade al arraylist de admins.
-		if (jugador.isOp() || jugador.hasPermission("hopoke.admin")) {
-			plugin.getAdmins().add(jugador);
-		}
 		final UHCPlayer hpp;
 		if (UHCPlayer.getHPPlayer(jugador, plugin) == null) {
 			LocalDate fj = LocalDate.now();
 			hpp = new UHCPlayer(jugador.getUniqueId().toString(), fj);
-			plugin.getHoPokePlayers().add(hpp);
+			plugin.getUHCPlayers().add(hpp);
 		} else {
 			hpp = UHCPlayer.getHPPlayer(jugador, plugin);
 		}
@@ -66,7 +62,7 @@ public class PlayerJoinListener implements Listener {
 		/*
 		 * Creacion de la Scoreboard
 		 */
-		switch (UHCLebrel.instance.juego.getEstado()) {
+		switch (UHCLebrel.instance.gameManager.getEstado()) {
 		case WAITING:
 			Runnable sr = new Runnable() {
 
@@ -123,7 +119,7 @@ public class PlayerJoinListener implements Listener {
 			break;
 		}
 
-		UHCLebrel.instance.todos.addEntry(event.getPlayer().getName());
+		UHCLebrel.instance.everyone.addEntry(event.getPlayer().getName());
 		event.getPlayer().setScoreboard(UHCLebrel.instance.all);
 		/*
 		 * Reconectar

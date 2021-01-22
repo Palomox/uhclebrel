@@ -11,7 +11,7 @@ public class SpectatorInteractionListener implements Listener{
 	}
 	@EventHandler
 	public void onInteract(PlayerInteractEntityEvent e) {
-		if(UHCLebrel.instance.getHPByName(e.getPlayer().getName()).isEspectador()) {
+		if(UHCLebrel.instance.getUHCPlayerByName(e.getPlayer().getName()).isEspectador()) {
 			e.setCancelled(true);
 		}
 	}

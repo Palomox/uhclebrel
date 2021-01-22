@@ -59,7 +59,7 @@ public class UhcCMD implements CommandExecutor {
 					for(String tmp : argus) {
 						j.add(tmp);
 					}
-				UHCLebrel.instance.juego.addTeam(new UHCTeam(j.toString(), UHCLebrel.instance.juego.getEquipos().size()+1));
+				UHCLebrel.instance.gameManager.addTeam(new UHCTeam(j.toString(), UHCLebrel.instance.gameManager.getEquipos().size()+1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha creado el equipo '"+j.toString()+"'!"));
 				}
 				break;
@@ -83,7 +83,7 @@ public class UhcCMD implements CommandExecutor {
 			case "teamlist":
 				ArrayList<String> mensajesal = new ArrayList<String>();
 				mensajesal.add(ChatColor.translateAlternateColorCodes('&', "&8--------&6Lista de equipos&8-----------"));
-				for(UHCTeam tmp : UHCLebrel.instance.getJuego().getEquipos().keySet()) {
+				for(UHCTeam tmp : UHCLebrel.instance.getGameManager().getEquipos().keySet()) {
 					int id = tmp.getId();
 					String nombre = tmp.getNombre();
 					String bonito = ChatColor.translateAlternateColorCodes('&', "&6"+id+"&8---------------------&2"+nombre);
@@ -99,19 +99,19 @@ public class UhcCMD implements CommandExecutor {
 					int teamid = Integer.valueOf(args[1]);
 					String personaname = args[2];
 					UHCTeam team = UHCTeam.getEquipoById(teamid);
-					UHCPlayer mammert = UHCLebrel.instance.getHPByName(personaname);
+					UHCPlayer mammert = UHCLebrel.instance.getUHCPlayerByName(personaname);
 					team.addMamerto(mammert);
 					Player ejec = mammert.getPlayer();
-					UHCLebrel.instance.getHPByName(ejec.getName()).setTeam(team);
-					UHCLebrel.instance.getHPByName(ejec.getName()).setWritingChannel(team.getChannel());
-					UHCLebrel.instance.getHPByName(ejec.getName()).addReadingChannel(team.getChannel());
+					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).setTeam(team);
+					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).setWritingChannel(team.getChannel());
+					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).addReadingChannel(team.getChannel());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2�Se ha a�adido a "+personaname+" al equipo '"+team.getNombre()+"'!"));
 				}
 				break;
 			case "start":
-				for(UHCTeam tmp : UHCLebrel.instance.juego.getEquipos().keySet()) {
+				for(UHCTeam tmp : UHCLebrel.instance.gameManager.getEquipos().keySet()) {
 					for(UHCPlayer mam : tmp.getMiembros().keySet()) {
-						UHCLebrel.instance.juego.addMammert(mam);
+						UHCLebrel.instance.gameManager.addMammert(mam);
 						Player mamerto = mam.getPlayer();
 						mamerto.setGameMode(GameMode.SURVIVAL);
 						mamerto.setFlying(false);
@@ -126,26 +126,26 @@ public class UhcCMD implements CommandExecutor {
 					}
 				}
 
-				UHCLebrel.instance.getJuego().setEstado(GameStatuses.PLAYING);
-				UHCLebrel.instance.getJuego().setEpisodio(new UHCPart(1));
+				UHCLebrel.instance.getGameManager().setEstado(GameStatuses.PLAYING);
+				UHCLebrel.instance.getGameManager().setEpisodio(new UHCPart(1));
 				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.PLAYING));
 				Bukkit.getPluginManager().callEvent(new PartChangeEvent(1));
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
 				break;
 			case "reset":
-				UHCLebrel.instance.juego = new GameManager();
+				UHCLebrel.instance.gameManager = new GameManager();
 				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.WAITING));
 				break;
 			case "descalificar":
 				if(args.length >1) {
 					String playerName = args[1];
-					UHCPlayer adescalificar = UHCLebrel.instance.getHPByName(playerName);
+					UHCPlayer adescalificar = UHCLebrel.instance.getUHCPlayerByName(playerName);
 					adescalificar.setDescalificado(true);
 					adescalificar.getPlayer().setHealth(0);
 				}
 				break;
 			case "pararserver":
-				if(UHCLebrel.instance.juego.getEstado() == GameStatuses.FINISHING) {
+				if(UHCLebrel.instance.gameManager.getEstado() == GameStatuses.FINISHING) {
 					Bukkit.getServer().shutdown();
 				}
 				break;

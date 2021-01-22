@@ -20,7 +20,7 @@ public class GameStateChangeListener implements Listener {
 	private Team todos;
 
 	public GameStateChangeListener() {
-		UHCLebrel.instance.todos = todos;
+		UHCLebrel.instance.everyone = todos;
 	}
 
 	@EventHandler
@@ -29,8 +29,8 @@ public class GameStateChangeListener implements Listener {
 		switch (e.getNuevoestado()) {
 		case FINISHING:
 			todos.unregister();
-			for (UHCPlayer tmp : UHCLebrel.instance.getHoPokePlayers()) {
-				UHCLebrel.instance.juego.setSpectator(tmp);
+			for (UHCPlayer tmp : UHCLebrel.instance.getUHCPlayers()) {
+				UHCLebrel.instance.gameManager.setSpectator(tmp);
 				Scoreboard.clear(tmp);
 				List<?> lineas = plugin.getConfig().getList("scoreboard.final.lines");
 				for (int i=0; i<lineas.size(); i++) {
@@ -40,7 +40,7 @@ public class GameStateChangeListener implements Listener {
 			}
 			break;
 		case PLAYING:
-			for (UHCPlayer tmp : UHCLebrel.instance.getHoPokePlayers()) {
+			for (UHCPlayer tmp : UHCLebrel.instance.getUHCPlayers()) {
 				List<?> lineas = plugin.getConfig().getList("scoreboard.durante.lines");
 				Scoreboard.clear(tmp);
 				for (int i = 0; i < lineas.size(); i++) {
@@ -48,7 +48,7 @@ public class GameStateChangeListener implements Listener {
 					Scoreboard.updateScoreboard(tmp, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(tmp.getPlayer(), linea)), lineas.size()-i);
 				}
 			}
-			for (UHCPlayer temp : UHCLebrel.instance.juego.getParticipantes()) {
+			for (UHCPlayer temp : UHCLebrel.instance.gameManager.getParticipantes()) {
 				temp.setDisplayname(ChatColor.translateAlternateColorCodes('&', "&k" + temp.getPlayer().getName()));
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());

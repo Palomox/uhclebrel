@@ -24,8 +24,8 @@ public class GameChangePartListener implements Listener{
 	}
 	@EventHandler
 	public void onCambioEpisodio(PartChangeEvent e) {
-		UHCLebrel.instance.getJuego().setEpisodio(new UHCPart(e.getNuevoEpisodio()));
-		for(UHCPlayer mam : UHCLebrel.instance.getHoPokePlayers()) {
+		UHCLebrel.instance.getGameManager().setEpisodio(new UHCPart(e.getNuevoEpisodio()));
+		for(UHCPlayer mam : UHCLebrel.instance.getUHCPlayers()) {
 			//Scoreboard.updateScoreboard(mam, ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), "&e%uhc_episodio%")), 4);	
 			Scoreboard.reloadScoreboard(mam);
 			mam.getPlayer().sendTitle(ChatColor.translateAlternateColorCodes('&', ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(mam.getPlayer(), UHCLebrel.instance.messages.newPart))+e.getNuevoEpisodio()), null, 5, 20, 10);
@@ -55,11 +55,11 @@ public class GameChangePartListener implements Listener{
 		 * Resetear Skins.
 		 */
 		ArrayList<String> nombres = new ArrayList<String>();
-		for(UHCPlayer jugador : UHCLebrel.instance.juego.getParticipantes()) {
+		for(UHCPlayer jugador : UHCLebrel.instance.gameManager.getParticipantes()) {
 			nombres.add(jugador.getPlayer().getName());
 		}
 		Random random = new Random();
-		for(UHCPlayer vict : UHCLebrel.instance.juego.getParticipantes()) {
+		for(UHCPlayer vict : UHCLebrel.instance.gameManager.getParticipantes()) {
 			int tmp = random.nextInt(nombres.size()-1);
 			while(vict.getPlayer().getName().equals(nombres.get(tmp))) {
 				tmp = random.nextInt(nombres.size()-1);

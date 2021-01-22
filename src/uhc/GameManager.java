@@ -93,7 +93,7 @@ public class GameManager {
 				desafortunado.getTeam().getMiembros().put(desafortunado, false);
 				if (!(desafortunado.getTeam().compasVivos())) {
 					equipos.put(desafortunado.getTeam(), false);
-					for (UHCPlayer all : UHCLebrel.instance.getHoPokePlayers()) {
+					for (UHCPlayer all : UHCLebrel.instance.getUHCPlayers()) {
 						all.getPlayer().sendTitle(
 								ChatColor.translateAlternateColorCodes('&', "&4&l¡El equipo "
 										+ desafortunado.getTeam().getNombre() + " ha sido eliminado!"),

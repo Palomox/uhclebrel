@@ -43,18 +43,18 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 * %uhc_episodio%
 		 */
 		case "episodio":
-			return String.valueOf(UHCLebrel.instance.getJuego().getEpisodio().getId());
+			return String.valueOf(UHCLebrel.instance.getGameManager().getEpisodio().getId());
 		/*
 		 * %uhc_ganador%
 		 */
 		case "ganador":
-			return UHCLebrel.instance.getJuego().getGanador().getNombre();
+			return UHCLebrel.instance.getGameManager().getGanador().getNombre();
 		/*
 		 * %uhc_ganadormiembros%
 		 */
 		case "ganadormiembros":
 			StringJoiner sj = new StringJoiner(", ");
-			for(UHCPlayer tmp : UHCLebrel.instance.getJuego().getGanador().getMiembros().keySet()) {
+			for(UHCPlayer tmp : UHCLebrel.instance.getGameManager().getGanador().getMiembros().keySet()) {
 				sj.add(tmp.getPlayer().getName());
 			}
 			return sj.toString();
@@ -63,22 +63,22 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 */
 		case "teamname":
 			
-			if(UHCLebrel.instance.getHPByName(player.getName()).getTeam() !=null) {
-				switch(UHCLebrel.instance.juego.getEstado()) {
+			if(UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam() !=null) {
+				switch(UHCLebrel.instance.gameManager.getEstado()) {
 				case PLAYING:
-					if(UHCLebrel.instance.getHPByName(player.getName()).isEspectador()) {
-						return UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+					if(UHCLebrel.instance.getUHCPlayerByName(player.getName()).isEspectador()) {
+						return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 					}
-					return ChatColor.MAGIC+UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+					return ChatColor.MAGIC+UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 				default:
-					return UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+					return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 				}
 			}else {
 				return "Sin equipo, 1";
 			}
 		case "rarename":
-			if(UHCLebrel.instance.getJuego().getEstado() == GameStatuses.PLAYING) {
-				return UHCLebrel.instance.getHPByName(player.getName()).getDisplayname();
+			if(UHCLebrel.instance.getGameManager().getEstado() == GameStatuses.PLAYING) {
+				return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getDisplayname();
 			}else {
 				return player.getName();
 			}	

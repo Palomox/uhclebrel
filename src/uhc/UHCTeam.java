@@ -48,7 +48,7 @@ public class UHCTeam {
 	}
 	public static UHCTeam getEquipoById(int id) {
 		UHCLebrel plugin = UHCLebrel.instance;
-		for(UHCTeam tmp : plugin.juego.getEquipos().keySet()) {
+		for(UHCTeam tmp : plugin.gameManager.getEquipos().keySet()) {
 			int ac = tmp.getId();
 			if(ac == id) {
 				return tmp;

@@ -44,7 +44,7 @@ public class NChannel implements IChannel{
 	public void sendFormattedMsg(String rawmsg, Player sender) {
 		String formato = plugin.getConfig().getString("chat.channels."+this.name+".format");
 		for(Player tmp : this.lectores) {
-			if(UHCLebrel.instance.getHPByName(tmp.getName()).isDesconectado()) {
+			if(UHCLebrel.instance.getUHCPlayerByName(tmp.getName()).isDesconectado()) {
 				continue;
 			}
 			formato = PlaceholderAPI.setPlaceholders(sender, formato);

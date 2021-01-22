@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -17,9 +20,11 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.RenderType;
@@ -57,27 +62,24 @@ import util.UHCPlayer;
 
 public class UHCLebrel extends JavaPlugin {
 	private final int statsId = 9205;
-	public String rutaConfig;
+	public String configPath;
 	PluginDescriptionFile plugindesc = getDescription();
 	public String version = plugindesc.getVersion();
-	public String nombre = plugindesc.getName();
-	public InventoryManager invm = new InventoryManager(this);
+	public String name = plugindesc.getName();
 	private ArrayList<UHCPlayer> players = new ArrayList<UHCPlayer>();
 	private OpLogger alogger;
-	private ArrayList<Player> admins = new ArrayList<Player>();
-	private ArrayList<IChannel> canales = new ArrayList<IChannel>();
-	public Team todos;
+	private ArrayList<IChannel> channels = new ArrayList<IChannel>();
+	public Team everyone;
 	public static UHCLebrel instance;
-	public GameManager juego;
+	public GameManager gameManager;
 	private SkinsRestorer skrest;
 	public SkinsRestorerBukkitAPI sapi;
-	public Timer matar = new Timer();
+	public Timer killTimer = new Timer();
 	public Scoreboard all;
 	public Messages messages;
 	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>();
 	private FileConfiguration messagesCfg;
 	private File messagesCfgFile;
-
 
 	public void onEnable() {
 		instance = this;
@@ -85,10 +87,9 @@ public class UHCLebrel extends JavaPlugin {
 		startSeconding();
 		registerConfig();
 		registerEvents();
-		registrarComandos();
+		registerCommands();
 		alogger = new OpLogger(this);
-		juego = new GameManager();
-		invm.init();
+		gameManager = new GameManager();
 		for (String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String channelName = getConfig().getString("chat.channels." + nombre + ".name");
 			String tmp = getConfig().getString("chat.channels." + nombre + ".fastprefix");
@@ -103,46 +104,40 @@ public class UHCLebrel extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
 
-
-
 	public void startSeconding() {
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-
-			@Override
-			public void run() {
-				Bukkit.getPluginManager().callEvent(new EachSecondEvent());
-			}
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+			Bukkit.getPluginManager().callEvent(new EachSecondEvent());
 		}, 0, 20);
 	}
 
-	public ArrayList<IChannel> getCanales() {
-		return this.canales;
+	public ArrayList<IChannel> getChannels() {
+		return this.channels;
 	}
+
 	public void startScoreboardTeams() {
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		org.bukkit.scoreboard.Scoreboard all = manager.getNewScoreboard();
 		this.all = all;
-		Objective cnom = all.registerNewObjective("corazonesbajo", "health", ChatColor.translateAlternateColorCodes('&', "❤"), RenderType.INTEGER);
+		Objective cnom = all.registerNewObjective("corazonesbajo", "health",
+				ChatColor.translateAlternateColorCodes('&', "❤"), RenderType.INTEGER);
 
-		Objective ctab = all.registerNewObjective("corazonestab",
-				"health",
-				" ",
-				RenderType.HEARTS);
+		Objective ctab = all.registerNewObjective("corazonestab", "health", " ", RenderType.HEARTS);
 		cnom.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		ctab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-		todos = all.registerNewTeam("todos");
-		todos.allowFriendlyFire();
-		todos.setCanSeeFriendlyInvisibles(false);
-		todos.setColor(org.bukkit.ChatColor.MAGIC);
-		todos.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
+		everyone = all.registerNewTeam("todos");
+		everyone.allowFriendlyFire();
+		everyone.setCanSeeFriendlyInvisibles(false);
+		everyone.setColor(org.bukkit.ChatColor.MAGIC);
+		everyone.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.ALWAYS);
 	}
-	public GameManager getJuego() {
-		return this.juego;
+
+	public GameManager getGameManager() {
+		return this.gameManager;
 	}
 
 	public void registerChannels(String nombre, char pr) {
 		IChannel tmp = new NChannel(this, nombre, pr);
-		this.canales.add(tmp);
+		this.channels.add(tmp);
 	}
 
 	public OpLogger getALogger() {
@@ -150,10 +145,10 @@ public class UHCLebrel extends JavaPlugin {
 	}
 
 	public IChannel getChannelByName(String name) {
-		for (int i = 0; i < this.canales.size(); i++) {
-			String tmp = this.canales.get(i).getName();
+		for (int i = 0; i < this.channels.size(); i++) {
+			String tmp = this.channels.get(i).getName();
 			if (tmp.equalsIgnoreCase(name)) {
-				return this.canales.get(i);
+				return this.channels.get(i);
 			}
 
 		}
@@ -169,28 +164,18 @@ public class UHCLebrel extends JavaPlugin {
 		}
 	}
 
-	public UHCPlayer getHPByName(String name) {
-		for (UHCPlayer p : this.players) {
-			Player tmp = p.getPlayer();
-			if (tmp.getName().equalsIgnoreCase(name)) {
-				return p;
-			}
-		}
-		return null;
+	public UHCPlayer getUHCPlayerByName(String name) {
+		//Bukkit.getScheduler().runTaskAsynchronously(this, (t) -> {} );
+		//Callable<UHCPlayer> executeStream = () -> {
+			return this.players.stream().filter((p) -> {
+				return p.getPlayer().getName().equals(name);
+			}).findFirst().get();
+		//};
+		//Bukkit.getScheduler().runTaskAsynchronously(this, (Runnable) executeStream);
 	}
 
 	public void onDisable() {
-		Bukkit.getConsoleSender()
-				.sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Desactivado Correctamente");
-	}
-
-	public void removeAdmin(Player acomparar) {
-		ArrayList<Player> admins = this.admins;
-		for (int i = 0; i < admins.size(); i++) {
-			if (admins.get(i) == acomparar) {
-				admins.remove(i);
-			}
-		}
+		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] Succesfully disabled the plugin");
 	}
 
 	public void registerPapiExpansions() {
@@ -211,22 +196,20 @@ public class UHCLebrel extends JavaPlugin {
 			double z = cfg.getDouble("juego.equipos." + teamname + ".spawn.z");
 			World world = Bukkit.getServer().getWorld(cfg.getString("juego.equipos." + teamname + ".spawn.world"));
 			spawn = new Location(world, x, y, z);
-			UHCTeam tmp = new UHCTeam(teamname, this.juego.getEquipos().size() + 1);
+			UHCTeam tmp = new UHCTeam(teamname, this.gameManager.getEquipos().size() + 1);
 			tmp.setSpawn(spawn);
-			this.getJuego().getEquipos().put(tmp, true);
+			this.getGameManager().getEquipos().put(tmp, true);
 		}
 	}
-	public void registrarComandos() {
+
+	public void registerCommands() {
 		this.getCommand("c").setExecutor(new ChatCmd(this));
 		this.getCommand("channel").setExecutor(new ChannelCmd(this));
 		this.getCommand("uhc").setExecutor(new UhcCMD(this));
 	}
+
 	public PluginManager getPm() {
 		return this.getServer().getPluginManager();
-	}
-
-	public ArrayList<Player> getAdmins() {
-		return this.admins;
 	}
 
 	public void registerEvents() {
@@ -245,28 +228,29 @@ public class UHCLebrel extends JavaPlugin {
 
 	public void registerConfig() {
 		File config = new File(this.getDataFolder(), "config.yml");
-		rutaConfig = config.getPath();
+		configPath = config.getPath();
 		if (!config.exists()) {
 			this.getConfig().options().copyDefaults(true);
 			saveConfig();
 		}
 	}
 
-	public ArrayList<UHCPlayer> getHoPokePlayers() {
+	public ArrayList<UHCPlayer> getUHCPlayers() {
 		return this.players;
 	}
 
 	public void addPlayer(UHCPlayer player) {
 		this.players.add(player);
 	}
+
 	public FileConfiguration getMessages() {
 		if (messagesCfg == null) {
-			reloadArenas();
+			reloadMessages();
 		}
 		return messagesCfg;
 	}
 
-	public void reloadArenas() {
+	public void reloadMessages() {
 		if (messagesCfg == null) {
 			messagesCfgFile = new File(getDataFolder(), "messages.yml");
 		}
@@ -283,7 +267,7 @@ public class UHCLebrel extends JavaPlugin {
 		}
 	}
 
-	public void saveArenas() {
+	public void saveMessages() {
 		try {
 			messagesCfg.save(messagesCfgFile);
 		} catch (IOException e) {
@@ -291,11 +275,11 @@ public class UHCLebrel extends JavaPlugin {
 		}
 	}
 
-	public void registerArenas() {
-		messagesCfgFile = new File(this.getDataFolder(), "arenas.yml");
+	public void registerMessages() {
+		messagesCfgFile = new File(this.getDataFolder(), "messages.yml");
 		if (!messagesCfgFile.exists()) {
 			this.getMessages().options().copyDefaults(true);
-			saveArenas();
+			saveMessages();
 		}
 	}
 

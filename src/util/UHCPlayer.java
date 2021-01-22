@@ -137,8 +137,8 @@ public class UHCPlayer {
 		}
 	}
 	public static UHCPlayer getHPPlayer(Player jugador, UHCLebrel plugin) {
-		for(int i=0; i<plugin.getHoPokePlayers().size(); i++) {
-			UHCPlayer tmp = plugin.getHoPokePlayers().get(i);
+		for(int i=0; i<plugin.getUHCPlayers().size(); i++) {
+			UHCPlayer tmp = plugin.getUHCPlayers().get(i);
 			Player tmpp = tmp.getPlayer();
 			if(tmpp.equals(jugador)) {
 				return tmp;

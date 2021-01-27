@@ -19,7 +19,7 @@ pipeline {
         }
   	}
   	steps {
-   		sh 'wget repo.palomox.ga/files/downloadLatest.sh; bash downloadLatest.sh ${MCV}'
+   		sh 'wget files.palomox.ga/files/downloadLatest.sh; bash downloadLatest.sh ${MCV}'
    	}
     }
       stage('Maven build') {

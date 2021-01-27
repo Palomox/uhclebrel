@@ -28,7 +28,7 @@ public class PlayerDisconnectListener implements Listener{
 					tmp.getChannelReaders().remove(hpplayer.getPlayer());
 				}
 				hpplayer.getTeam().getMiembros().put(hpplayer, false);
-				UHCLebrel.instance.removeHPPlayer(hpplayer);
+				UHCLebrel.instance.removeUHCPlayer(hpplayer);
 				}
 			}
 		};

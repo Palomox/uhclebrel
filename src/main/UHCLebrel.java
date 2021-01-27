@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -19,12 +16,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.RenderType;
@@ -36,6 +31,7 @@ import org.bukkit.scoreboard.Team.OptionStatus;
 
 import chat.IChannel;
 import chat.NChannel;
+import co.aikar.taskchain.TaskChain;
 import commands.ChannelCmd;
 import commands.ChatCmd;
 import commands.UhcCMD;
@@ -49,7 +45,6 @@ import events.PlayerDisconnectListener;
 import events.PlayerJoinListener;
 import events.SpectatorAttackListener;
 import events.SpectatorInteractionListener;
-import fr.minuskube.inv.InventoryManager;
 import skinsrestorer.bukkit.SkinsRestorer;
 import skinsrestorer.bukkit.SkinsRestorerBukkitAPI;
 import uhc.EachSecondEvent;
@@ -58,6 +53,7 @@ import uhc.UHCTeam;
 import uhc.UhcPlaceholders;
 import util.Messages;
 import util.OpLogger;
+import util.TaskManager;
 import util.UHCPlayer;
 
 public class UHCLebrel extends JavaPlugin {
@@ -80,9 +76,20 @@ public class UHCLebrel extends JavaPlugin {
 	public HashMap<Integer, String> scoreboard = new HashMap<Integer, String>();
 	private FileConfiguration messagesCfg;
 	private File messagesCfgFile;
+	private TaskManager tm;
 
+	/**
+	 * Mock constructor, not to be used
+	 */
+	protected UHCLebrel(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file){
+        super(loader, description, dataFolder, file);
+    }
+	public UHCLebrel() {
+		super();
+	}
 	public void onEnable() {
 		instance = this;
+		this.tm = new TaskManager(this);
 		registerPapiExpansions();
 		startSeconding();
 		registerConfig();
@@ -90,18 +97,27 @@ public class UHCLebrel extends JavaPlugin {
 		registerCommands();
 		alogger = new OpLogger(this);
 		gameManager = new GameManager();
-		for (String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
+		this.tm.newChain().asyncFirst(() -> {
+			getConfig().getConfigurationSection("chat.channels").getKeys(false).forEach((nombre) -> {
+				String channelName = getConfig().getString("chat.channels." + nombre + ".name");
+				String tmp = getConfig().getString("chat.channels." + nombre + ".fastprefix");
+				char pre = tmp.charAt(0);
+				registerChannels(channelName, pre);
+			});
+			return 0;
+		});
+		/*for (String nombre : getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
 			String channelName = getConfig().getString("chat.channels." + nombre + ".name");
 			String tmp = getConfig().getString("chat.channels." + nombre + ".fastprefix");
 			char pre = tmp.charAt(0);
 			registerChannels(channelName, pre);
-		}
+		}*/
 		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
 		sapi = skrest.getSkinsRestorerBukkitAPI();
 		startScoreboardTeams();
 		Metrics metrics = new Metrics(this, statsId);
 		messages = new Messages(messagesCfg);
-		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
+		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] Plugin has been correctly activated");
 	}
 
 	public void startSeconding() {
@@ -145,33 +161,27 @@ public class UHCLebrel extends JavaPlugin {
 	}
 
 	public IChannel getChannelByName(String name) {
-		for (int i = 0; i < this.channels.size(); i++) {
-			String tmp = this.channels.get(i).getName();
-			if (tmp.equalsIgnoreCase(name)) {
-				return this.channels.get(i);
-			}
-
-		}
-		return null;
+		TaskChain<IChannel> ch = this.tm.newChain();
+		ch.asyncFirst(() -> {
+		return this.channels.stream()
+		.filter((c) -> {return c.getName().equalsIgnoreCase(name);}).findFirst().get();})
+		.asyncLast((c) -> ch.setTaskData("channel", c));
+		return ch.getTaskData("channel");
 	}
 
-	public void removeHPPlayer(UHCPlayer pl) {
-		for (int i = 0; i < this.players.size(); i++) {
-			UHCPlayer tmp = this.players.get(i);
-			if (tmp == pl) {
-				this.players.remove(i);
-			}
-		}
+	public void removeUHCPlayer(UHCPlayer pl) {
+		this.tm.newChain().asyncLast((v) -> {
+			this.players.removeIf( p -> {return p.equals(pl);});
+		});
 	}
 
 	public UHCPlayer getUHCPlayerByName(String name) {
-		//Bukkit.getScheduler().runTaskAsynchronously(this, (t) -> {} );
-		//Callable<UHCPlayer> executeStream = () -> {
-			return this.players.stream().filter((p) -> {
+		TaskChain<UHCPlayer> c = this.tm.newChain();
+		c.asyncFirst(() -> {return this.players.stream().filter((p) -> {
 				return p.getPlayer().getName().equals(name);
-			}).findFirst().get();
-		//};
-		//Bukkit.getScheduler().runTaskAsynchronously(this, (Runnable) executeStream);
+			}).findFirst().get();})
+		.asyncLast((player) -> {c.setTaskData("player", player);});
+		return c.getTaskData("player");
 	}
 
 	public void onDisable() {
@@ -282,5 +292,7 @@ public class UHCLebrel extends JavaPlugin {
 			saveMessages();
 		}
 	}
+
+
 
 }

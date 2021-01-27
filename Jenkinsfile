@@ -5,12 +5,6 @@ pipeline {
   }
   stages {
     stage('Check paper depend') {
-	/*input version{
-	    parameters {
-    	    string(name: 'VERSION', defaultValue: '1.16.4', description: 'Version of the plugin')
-    	}
-
-	}*/
     when { //equals excepted: 'NO', actual: sh 'if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT]] then echo \'NO\'; exit 0; fi exit 1;' }
   		expression {
   			 sh '''echo "if [[ ! -d ~.m2/repository/com/destroystokyo/paper/paper/${MCV}-R0.1-SNAPSHOT ]]
@@ -32,6 +26,11 @@ pipeline {
          steps {
              sh 'mvn install'
            }
+      }
+      stage('Deploy to maven') {
+         steps {
+             sh 'mvn deploy'
+         }
       }
       stage('Save artifacts') {
          steps {

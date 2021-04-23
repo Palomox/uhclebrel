@@ -46,7 +46,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.destroystokyo.paper</groupId>
-			<artifactId>paper</artifactId>
+			<artifactId>paper-api</artifactId>
 			<version>1.16.4-R0.1-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>

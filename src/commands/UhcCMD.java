@@ -35,21 +35,21 @@ public class UhcCMD implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command label, String ni, String[] args) {
 		if (!(sender instanceof Player)) {
-			Bukkit.getConsoleSender().sendMessage("No se puede ejecutar este comando desde la consola!");
+			Bukkit.getConsoleSender().sendMessage("You have to be a player to execute this command!");
 			return false;
 		} else {
 			Player ejecutor = (Player) sender;
-			if(!(ejecutor.isOp() || ejecutor.getName() == "Blazekh")) {
+			if(!(ejecutor.isOp() || ejecutor.hasPermission("uhc.command.main"))) {
 				return true;
 			}
 			switch(args[0]) {
 			case "reload":
-				if(!(sender.hasPermission("hopoke.command.reload"))) {
-					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4¡No tienes permiso para ejecutar este comando!"));
+				if(!(sender.hasPermission("uhc.command.reload"))) {
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4You can't execute this command!"));
 					break;
 				}
 				plugin.reloadConfig();
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Se ha recargado la configuracion exitosamente [La configuracion de la base de datos &lNO&r&2]"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Config reloaded succesfully"));
 				break;
 			case "addteam":
 				if(!(args.length <=0)) {
@@ -60,7 +60,7 @@ public class UhcCMD implements CommandExecutor {
 						j.add(tmp);
 					}
 				UHCLebrel.instance.gameManager.addTeam(new UHCTeam(j.toString(), UHCLebrel.instance.gameManager.getEquipos().size()+1));
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha creado el equipo '"+j.toString()+"'!"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Team '"+j.toString()+"' created successfully!"));
 				}
 				break;
 			case "setteamspawn":
@@ -73,16 +73,16 @@ public class UhcCMD implements CommandExecutor {
 					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.y", team.getSpawn().getY());
 					UHCLebrel.instance.getConfig().set("juego.equipos."+team.getNombre()+".spawn.z", team.getSpawn().getZ());
 					UHCLebrel.instance.saveConfig();
-					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha colocado el spawn del equipo '"+team.getNombre()+"'!"));
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Spawn set to team'"+team.getNombre()+"'!"));
 				}
 				break;
 			case "loadteams":
 				UHCLebrel.instance.loadTeamsFromConfig();
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se han cargado los equipos desde la configuraci�n correctamente!"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2Teams succesfully loaded from config!"));
 				break;
 			case "teamlist":
 				ArrayList<String> mensajesal = new ArrayList<String>();
-				mensajesal.add(ChatColor.translateAlternateColorCodes('&', "&8--------&6Lista de equipos&8-----------"));
+				mensajesal.add(ChatColor.translateAlternateColorCodes('&', "&8--------&6Team list&8-----------"));
 				for(UHCTeam tmp : UHCLebrel.instance.getGameManager().getEquipos().keySet()) {
 					int id = tmp.getId();
 					String nombre = tmp.getNombre();
@@ -105,7 +105,7 @@ public class UhcCMD implements CommandExecutor {
 					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).setTeam(team);
 					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).setWritingChannel(team.getChannel());
 					UHCLebrel.instance.getUHCPlayerByName(ejec.getName()).addReadingChannel(team.getChannel());
-					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2�Se ha a�adido a "+personaname+" al equipo '"+team.getNombre()+"'!"));
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2'"+personaname+" added to team'"+team.getNombre()+"'!"));
 				}
 				break;
 			case "start":
@@ -130,13 +130,13 @@ public class UhcCMD implements CommandExecutor {
 				UHCLebrel.instance.getGameManager().setEpisodio(new UHCPart(1));
 				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.PLAYING));
 				Bukkit.getPluginManager().callEvent(new PartChangeEvent(1));
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Se ha iniciado la partida!"));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&2¡Game started!"));
 				break;
 			case "reset":
 				UHCLebrel.instance.gameManager = new GameManager();
 				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.WAITING));
 				break;
-			case "descalificar":
+			case "removeplayer":
 				if(args.length >1) {
 					String playerName = args[1];
 					UHCPlayer adescalificar = UHCLebrel.instance.getUHCPlayerByName(playerName);
@@ -144,13 +144,13 @@ public class UhcCMD implements CommandExecutor {
 					adescalificar.getPlayer().setHealth(0);
 				}
 				break;
-			case "pararserver":
+			case "stopserver":
 				if(UHCLebrel.instance.gameManager.getEstado() == GameStatuses.FINISHING) {
 					Bukkit.getServer().shutdown();
 				}
 				break;
 			default:
-				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4Ese argumento no existe."));
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4That argument doesn't exist!."));
 			}
 			return true;
 		}

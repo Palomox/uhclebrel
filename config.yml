@@ -1,6 +1,36 @@
 chat:
-   channels:
-      global:
-         format: "%luckperms_prefix% %luckperms_meta_namecolor% %player_name% &8> &r%luckperms_meta_chatcolor%"
-         name: "global"
-         
+  defaultwritingchannel: global
+  channels:
+    global:
+      format: '&6[%uhc_teamname%&r&6] &3%uhc_rarename% &8> &r'
+      name: global
+      autojoinperm: none
+      fastprefix: '!'
+      perm: none
+scoreboard:
+  title: "&6&lUHC Lebrel"
+  lobby:
+    lines:
+      - '&8Lobby'
+      - '&6&lBienvenido,'
+      - '&e%player_name%'
+      - '&6&lDisfruta del UHC.'
+      - '&8-------------------'
+
+  durante:
+    lines:
+      - '&6&lParte:'
+      - '&e%uhc_episodio%'
+      - '&6&lTiempo Restante:'
+      - '&e20:00'
+      - '&8---------'
+  final:
+    lines:
+      - '&8Final'
+      - '&6&lEquipo Ganador:'
+      - '&e%uhc_ganador%'
+      - '&6&lFormado Por:'
+      - '&e%uhc_ganadormiembros%'
+      - '&8-------------------'
+juego:
+  equipos:

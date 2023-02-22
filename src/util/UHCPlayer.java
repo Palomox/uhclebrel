@@ -14,33 +14,38 @@ import main.UHCLebrel;
 import uhc.UHCTeam;
 
 public class UHCPlayer {
-	
-	private boolean vanished;
-	private LocalDate firstjoin;
+
 	private String UUID;
 	private IChannel escribiendo;
 	private ArrayList<IChannel> leyendo;
-	private double dinero;
 	private UHCTeam team;
 	private String displayname;
 	private boolean desconectado;
 	private boolean descalificado;
 	private boolean espectador;
+	private boolean muerto;
 	private HashMap<Integer, String> scoreboard;
 	ProfileProperty p;
-	
+
 	public UHCPlayer(String UUID, LocalDate firstjoin) {
 		this.UUID = UUID;
-		this.firstjoin = firstjoin;
 		this.escribiendo = null;
 		this.leyendo = new ArrayList<IChannel>();
-		this.dinero = 0;
 		this.desconectado = false;
 		this.descalificado = false;
 		this.espectador = false;
 		this.scoreboard = new HashMap<Integer, String>();
+		this.muerto = false;
 	}
-	
+
+	public boolean isMuerto() {
+		return muerto;
+	}
+
+	public void setMuerto(boolean muerto) {
+		this.muerto = muerto;
+	}
+
 	public boolean isEspectador() {
 		return espectador;
 	}
@@ -60,7 +65,7 @@ public class UHCPlayer {
 	public String getDisplayname() {
 		return displayname;
 	}
-	
+
 
 	public boolean isDesconectado() {
 		return desconectado;
@@ -99,22 +104,7 @@ public class UHCPlayer {
 		Player jugador = Bukkit.getPlayer(java.util.UUID.fromString(UUID));
 		return jugador;
 	}
-	public void setDinero(double dinero) {
-		this.dinero = dinero;
-	}
-	public void addDinero(double dinero) {
-		this.dinero = this.dinero + dinero;
-	}
-	public void removeDinero(double aremover) {
-		this.dinero = this.dinero - dinero;
-	}
-	public double getDinero() {
-		return this.dinero;
-	}
-	public LocalDate getFJ() {
-		return this.firstjoin;
-	}
-	
+
 	public ArrayList<IChannel> getLeyendo() {
 		return leyendo;
 	}
@@ -150,5 +140,5 @@ public class UHCPlayer {
 	public HashMap<Integer, String> getScoreboard() {
 		return scoreboard;
 	}
-	
+
 }

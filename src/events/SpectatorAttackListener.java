@@ -11,15 +11,12 @@ import util.UHCPlayer;
 public class SpectatorAttackListener implements Listener{
 	public SpectatorAttackListener() {
 	}
-	
+
 	@EventHandler
 	public void onAtaque(EntityDamageByEntityEvent e) {
-		if(e.getDamager() instanceof Player) {
-			Player atacante = (Player) e.getDamager();
-			for(UHCPlayer mam : UHCLebrel.instance.getGameManager().getMuertos()) {
-				if(atacante.equals(mam.getPlayer())) {
-					e.setCancelled(true);
-				}
+		if(e.getDamager() instanceof Player p) {
+			if(UHCLebrel.instance.getUHCPlayerByName(p.getName()).isEspectador()) {
+				e.setCancelled(true);
 			}
 		}
 	}

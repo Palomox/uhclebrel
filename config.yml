@@ -7,6 +7,15 @@ chat:
       autojoinperm: none
       fastprefix: '!'
       perm: none
+partes:
+  #Duración de cada parte (en minutos)
+  duracion: 20
+  #Cantidad de partes
+  cantidad: 10
+  #Episodio en el que inicia el pvp
+  iniciopvp: 3
+  #Episodio en el que el  worldborder disminuye para forzar ir a 0,0
+  worldborder: 10
 scoreboard:
   title: "&6&lUHC Lebrel"
   lobby:
@@ -18,11 +27,12 @@ scoreboard:
       - '&8-------------------'
 
   durante:
+    lineatiempo: 4
     lines:
       - '&6&lParte:'
       - '&e%uhc_episodio%'
       - '&6&lTiempo Restante:'
-      - '&e20:00'
+      - '&e%uhc_time%'
       - '&8---------'
   final:
     lines:
@@ -33,4 +43,14 @@ scoreboard:
       - '&e%uhc_ganadormiembros%'
       - '&8-------------------'
 juego:
+  preequipos: true
+  worldborder:
+     inicial: 3000
+     final: 100
+     #Tiempo en segundos para que se disminuya el worldborder
+     tiempo: 30
+  mundos:
+     overworld: "uhc"
+     nether: "uhc_nether"
+     end: "uhc_the_end"
   equipos:

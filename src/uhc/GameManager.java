@@ -14,7 +14,6 @@ import util.UHCPlayer;
 public class GameManager {
 	private HashMap<UHCTeam, Boolean> equipos = new HashMap<UHCTeam, Boolean>();
 	private ArrayList<UHCPlayer> participantes = new ArrayList<UHCPlayer>();
-	private ArrayList<UHCPlayer> muertos = new ArrayList<UHCPlayer>();
 	private GameStatuses estado;
 	private UHCTeam ganador;
 	private UHCPart episodio;
@@ -22,14 +21,11 @@ public class GameManager {
 	public GameManager() {
 		estado = GameStatuses.WAITING;
 		ganador = null;
-		
+
 	}
-	
+
 	public UHCPart getEpisodio() {
 		return this.episodio;
-	}
-	public ArrayList<UHCPlayer> getMuertos(){
-		return this.muertos;
 	}
 	public void setEpisodio(UHCPart aponer) {
 		this.episodio = aponer;
@@ -53,7 +49,7 @@ public class GameManager {
 	public HashMap<UHCTeam, Boolean> getEquipos() {
 		return equipos;
 	}
-	
+
 	public ArrayList<UHCPlayer> getParticipantes() {
 		return participantes;
 	}
@@ -88,7 +84,7 @@ public class GameManager {
 		for (UHCPlayer tmp : participantes) {
 			if (tmp.equals(desafortunado)) {
 				participantes.remove(tmp);
-				muertos.add(desafortunado);
+				desafortunado.setMuerto(true);
 				this.setSpectator(desafortunado);
 				desafortunado.getTeam().getMiembros().put(desafortunado, false);
 				if (!(desafortunado.getTeam().compasVivos())) {

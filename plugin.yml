@@ -12,3 +12,5 @@ commands:
       description: Lets you change your channels.
    uhc:
       description: Main plugin command.
+   createteam:
+      description: Command for players to create teams.

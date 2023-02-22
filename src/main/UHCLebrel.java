@@ -5,26 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.RenderType;
@@ -38,6 +31,7 @@ import chat.IChannel;
 import chat.NChannel;
 import commands.ChannelCmd;
 import commands.ChatCmd;
+import commands.CreateTeamCMD;
 import commands.UhcCMD;
 import events.DeathEventListener;
 import events.EachSecondListener;
@@ -49,9 +43,8 @@ import events.PlayerDisconnectListener;
 import events.PlayerJoinListener;
 import events.SpectatorAttackListener;
 import events.SpectatorInteractionListener;
-import fr.minuskube.inv.InventoryManager;
-import skinsrestorer.bukkit.SkinsRestorer;
-import skinsrestorer.bukkit.SkinsRestorerBukkitAPI;
+import metrics.Metrics;
+import net.skinsrestorer.api.SkinsRestorerAPI;
 import uhc.EachSecondEvent;
 import uhc.GameManager;
 import uhc.UHCTeam;
@@ -70,10 +63,10 @@ public class UHCLebrel extends JavaPlugin {
 	private OpLogger alogger;
 	private ArrayList<IChannel> channels = new ArrayList<IChannel>();
 	public Team everyone;
+	private boolean premadeTeams;
 	public static UHCLebrel instance;
 	public GameManager gameManager;
-	private SkinsRestorer skrest;
-	public SkinsRestorerBukkitAPI sapi;
+	public SkinsRestorerAPI sapi;
 	public Timer killTimer = new Timer();
 	public Scoreboard all;
 	public Messages messages;
@@ -96,10 +89,12 @@ public class UHCLebrel extends JavaPlugin {
 			char pre = tmp.charAt(0);
 			registerChannels(channelName, pre);
 		}
-		skrest = JavaPlugin.getPlugin(SkinsRestorer.class);
-		sapi = skrest.getSkinsRestorerBukkitAPI();
+		sapi = SkinsRestorerAPI.getApi();
 		startScoreboardTeams();
 		Metrics metrics = new Metrics(this, statsId);
+		registerMessages();
+		reloadMessages();
+		this.premadeTeams = this.getConfig().getBoolean("juego.preequipos");
 		messages = new Messages(messagesCfg);
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[UHC] El Plugin ha sido Activado Correctamente");
 	}
@@ -190,14 +185,7 @@ public class UHCLebrel extends JavaPlugin {
 			return;
 		}
 		for (String teamname : cfg.getConfigurationSection("juego.equipos").getKeys(false)) {
-			Location spawn;
-			double x = cfg.getDouble("juego.equipos." + teamname + ".spawn.x");
-			double y = cfg.getDouble("juego.equipos." + teamname + ".spawn.y");
-			double z = cfg.getDouble("juego.equipos." + teamname + ".spawn.z");
-			World world = Bukkit.getServer().getWorld(cfg.getString("juego.equipos." + teamname + ".spawn.world"));
-			spawn = new Location(world, x, y, z);
 			UHCTeam tmp = new UHCTeam(teamname, this.gameManager.getEquipos().size() + 1);
-			tmp.setSpawn(spawn);
 			this.getGameManager().getEquipos().put(tmp, true);
 		}
 	}
@@ -206,6 +194,11 @@ public class UHCLebrel extends JavaPlugin {
 		this.getCommand("c").setExecutor(new ChatCmd(this));
 		this.getCommand("channel").setExecutor(new ChannelCmd(this));
 		this.getCommand("uhc").setExecutor(new UhcCMD(this));
+		this.getCommand("createteam").setExecutor(new CreateTeamCMD());
+	}
+
+	public boolean isPremadeTeams() {
+		return premadeTeams;
 	}
 
 	public PluginManager getPm() {

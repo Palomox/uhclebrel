@@ -15,17 +15,10 @@ public class UHCTeam {
 	private String nombre;
 	private int id;
 	private IChannel channel;
-	private Location spawn;
 	public UHCTeam(String nombre, int id) {
 		this.nombre = nombre;
 		channel = new TeamChannel(this, '^');
 		this.id = id;
-	}
-	public void setSpawn(Location spawn) {
-		this.spawn = spawn;
-	}
-	public Location getSpawn() {
-		return this.spawn;
 	}
 	public void addMamerto(UHCPlayer add) {
 		this.miembros.put(add, true);
@@ -59,11 +52,10 @@ public class UHCTeam {
 	public boolean compasVivos() {
 		Set<UHCPlayer> nombres = this.miembros.keySet();
 		for(UHCPlayer mam : nombres) {
-			boolean vivo = this.miembros.get(mam);
-			if(!vivo) {
-				return false;
+			if(!mam.isMuerto()) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }

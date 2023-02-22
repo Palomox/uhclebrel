@@ -44,12 +44,12 @@ public class DeathEventListener implements Listener {
 				}
 			}
 			if (vivos.size() <= 1) {
-				// Tenemos un ganador bbs
+				// Tenemos un ganador
 				UHCLebrel.instance.getGameManager().setEstado(GameStatuses.FINISHING);
 				UHCLebrel.instance.getGameManager().setGanador(vivos.get(0));
 				Bukkit.getPluginManager().callEvent(new StatusChangeEvent(GameStatuses.FINISHING));
 			}
-			
+
 			/*
 			 * Poner cabeza
 			 */

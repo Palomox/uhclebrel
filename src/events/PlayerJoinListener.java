@@ -68,7 +68,7 @@ public class PlayerJoinListener implements Listener {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
 					for (int i = 0; i < sb.size(); i++) {
@@ -86,7 +86,7 @@ public class PlayerJoinListener implements Listener {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.durante.lines");
 					for (int i = 0; i < sb.size(); i++) {
@@ -103,7 +103,7 @@ public class PlayerJoinListener implements Listener {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.final.lines");
 					for (int i = 0; i < sb.size(); i++) {

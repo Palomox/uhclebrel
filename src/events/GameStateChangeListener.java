@@ -53,18 +53,6 @@ public class GameStateChangeListener implements Listener {
 				temp.getPlayer().setDisplayName(temp.getDisplayname());
 				temp.getPlayer().setPlayerListName(temp.getDisplayname());
 			}
-			World ovw = Bukkit.getWorld("uhc");
-			World net = Bukkit.getWorld("uhc_nether");
-			World end = Bukkit.getWorld("uhc_the_end");
-			ovw.setPVP(false);
-			net.setPVP(false);
-			end.setPVP(false);
-			ovw.getWorldBorder().setSize(3000);
-			net.getWorldBorder().setSize(1500);
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "time set day");
-			ovw.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-			net.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-			end.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
 			break;
 		default:
 			break;

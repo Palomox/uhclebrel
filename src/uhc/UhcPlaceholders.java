@@ -25,17 +25,17 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 	public String getVersion() {
 		return UHCLebrel.instance.getDescription().getVersion().toString();
 	}
-	
+
 	@Override
 	public boolean persist() {
 		return true;
 	}
-	
+
 	@Override
     public boolean canRegister(){
         return true;
     }
-	
+
 	@Override
 	public String onPlaceholderRequest(Player player, String identifier) {
 		switch(identifier) {
@@ -62,7 +62,7 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 * %uhc_teamname%
 		 */
 		case "teamname":
-			
+
 			if(UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam() !=null) {
 				switch(UHCLebrel.instance.gameManager.getEstado()) {
 				case PLAYING:
@@ -74,16 +74,22 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 					return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 				}
 			}else {
-				return "Sin equipo, 1";
+				return "Sin equipo";
 			}
 		case "rarename":
 			if(UHCLebrel.instance.getGameManager().getEstado() == GameStatuses.PLAYING) {
 				return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getDisplayname();
 			}else {
 				return player.getName();
-			}	
+			}
+			/*
+			 * %uhc_time%
+			 */
+		case "time":
+			long secs = UHCLebrel.instance.getGameManager().getEpisodio().getDuracion().getSeconds();
+			return String.format("%02d:%02d", (secs % 3600) / 60, (secs % 60));
 		}
-		
 		return null;
+
 	}
 }

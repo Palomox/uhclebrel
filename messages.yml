@@ -1,0 +1,9 @@
+messages:
+   prefix: "&2[UHC]"
+   newPart: "&6Comienza la parte "
+   newSkin: "Ahora tienes la Skin de "
+   teamsMade: "Los equipos ya están hechos!"
+   playerTaken: "El jugador %s ya tiene equipo!"
+   addedMember: "Se ha añadido a ese jugador a tu equipo"
+   teamCreated: "Equipo creado exitosamente"
+   tooFar: "Estás demasiado lejos del otro jugador!"

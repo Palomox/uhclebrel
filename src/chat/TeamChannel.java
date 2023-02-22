@@ -5,28 +5,26 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import uhc.Equipo;
-import util.Mamerto;
+import uhc.UHCTeam;
+import util.UHCPlayer;
 
 public class TeamChannel implements IChannel{
-	
-	private Equipo team;
+
+	private UHCTeam team;
 	private char prefix;
-	public TeamChannel(Equipo dueno, char prefix) {
+	public TeamChannel(UHCTeam dueno, char prefix) {
 		this.team = dueno;
 		this.prefix = prefix;
 	}
-	
+
 	public void sendRawMessage(String mensaje) {
-		for(Mamerto tmp : this.team.getMiembros().keySet()) {
-			tmp.getPlayer().sendMessage(mensaje);
-		}
+		this.team.getMiembros().forEach((player, vivo) -> player.getPlayer().sendMessage(mensaje));
 	}
 	@Deprecated
 	public void sendFormattedMsg(String rawmsg, Player sender) {
 		String format = ChatColor.translateAlternateColorCodes('&', "&6[COMPAÑERO] &r%player_name%&8: &r");
 		String mensaje = PlaceholderAPI.setPlaceholders(sender, format)+ rawmsg;
-		for(Mamerto tmp : this.team.getMiembros().keySet()) {
+		for(UHCPlayer tmp : this.team.getMiembros().keySet()) {
 			if(tmp.isDesconectado()) {
 				continue;
 			}
@@ -38,14 +36,14 @@ public class TeamChannel implements IChannel{
 		return team.getNombre();
 	}
 	@Override
-	public ArrayList<Player> getLectores() {
+	public ArrayList<Player> getChannelReaders() {
 		ArrayList<Player> lectores = new ArrayList<Player>();
-		for(Mamerto tmp : this.team.getMiembros().keySet()) {
+		for(UHCPlayer tmp : this.team.getMiembros().keySet()) {
 			lectores.add(tmp.getPlayer());
 		}
 		return lectores;
 	}
-	public boolean addLector(Player player) {
+	public boolean addChannelReader(Player player) {
 		return false;
 	}
 	@Override

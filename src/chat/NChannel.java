@@ -33,7 +33,7 @@ public class NChannel implements IChannel{
 		this.name = name;
 	}
 
-	public ArrayList<Player> getLectores() {
+	public ArrayList<Player> getChannelReaders() {
 		return lectores;
 	}
 	public void sendRawMessage(String rawmsg) {
@@ -44,7 +44,7 @@ public class NChannel implements IChannel{
 	public void sendFormattedMsg(String rawmsg, Player sender) {
 		String formato = plugin.getConfig().getString("chat.channels."+this.name+".format");
 		for(Player tmp : this.lectores) {
-			if(UHCLebrel.instance.getHPByName(tmp.getName()).isDesconectado()) {
+			if(UHCLebrel.instance.getUHCPlayerByName(tmp.getName()).isDesconectado()) {
 				continue;
 			}
 			formato = PlaceholderAPI.setPlaceholders(sender, formato);
@@ -52,7 +52,7 @@ public class NChannel implements IChannel{
 			tmp.sendMessage(ChatColor.translateAlternateColorCodes('&', mensaje));
 		}
 	}
-	public boolean addLector(Player lector) {
+	public boolean addChannelReader(Player lector) {
 		for(Player lectort : lectores) {
 			if(lectort.equals(lector)) {
 				return false;

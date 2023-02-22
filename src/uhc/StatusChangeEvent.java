@@ -3,21 +3,21 @@ package uhc;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EstadoChangeEvent extends Event {
-	private EstadosJuego nuevoestado;
+public class StatusChangeEvent extends Event {
+	private GameStatuses nuevoestado;
 	private static final HandlerList handlers = new HandlerList();
 	
-	public EstadoChangeEvent(EstadosJuego nuevo) {
+	public StatusChangeEvent(GameStatuses nuevo) {
 		this.nuevoestado = nuevo;
 	}
 	
 	
-		public EstadosJuego getNuevoestado() {
+		public GameStatuses getNuevoestado() {
 			return nuevoestado;
 		}
 
 
-		public void setNuevoestado(EstadosJuego nuevoestado) {
+		public void setNuevoestado(GameStatuses nuevoestado) {
 			this.nuevoestado = nuevoestado;
 		}
 

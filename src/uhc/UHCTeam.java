@@ -8,26 +8,19 @@ import org.bukkit.Location;
 import chat.IChannel;
 import chat.TeamChannel;
 import main.UHCLebrel;
-import util.Mamerto;
+import util.UHCPlayer;
 
-public class Equipo {
-	private HashMap<Mamerto, Boolean> miembros = new HashMap<Mamerto, Boolean>();
+public class UHCTeam {
+	private HashMap<UHCPlayer, Boolean> miembros = new HashMap<UHCPlayer, Boolean>();
 	private String nombre;
 	private int id;
 	private IChannel channel;
-	private Location spawn;
-	public Equipo(String nombre, int id) {
+	public UHCTeam(String nombre, int id) {
 		this.nombre = nombre;
 		channel = new TeamChannel(this, '^');
 		this.id = id;
 	}
-	public void setSpawn(Location spawn) {
-		this.spawn = spawn;
-	}
-	public Location getSpawn() {
-		return this.spawn;
-	}
-	public void addMamerto(Mamerto add) {
+	public void addMamerto(UHCPlayer add) {
 		this.miembros.put(add, true);
 	}
 	public String getNombre() {
@@ -40,15 +33,15 @@ public class Equipo {
 		this.nombre = nombre;
 	}
 
-	public HashMap<Mamerto, Boolean> getMiembros(){
+	public HashMap<UHCPlayer, Boolean> getMiembros(){
 		return this.miembros;
 	}
 	public int getId() {
 		return this.id;
 	}
-	public static Equipo getEquipoById(int id) {
+	public static UHCTeam getEquipoById(int id) {
 		UHCLebrel plugin = UHCLebrel.instance;
-		for(Equipo tmp : plugin.juego.getEquipos().keySet()) {
+		for(UHCTeam tmp : plugin.gameManager.getEquipos().keySet()) {
 			int ac = tmp.getId();
 			if(ac == id) {
 				return tmp;
@@ -57,13 +50,12 @@ public class Equipo {
 		return null;
 	}
 	public boolean compasVivos() {
-		Set<Mamerto> nombres = this.miembros.keySet();
-		for(Mamerto mam : nombres) {
-			boolean vivo = this.miembros.get(mam);
-			if(!vivo) {
-				return false;
+		Set<UHCPlayer> nombres = this.miembros.keySet();
+		for(UHCPlayer mam : nombres) {
+			if(!mam.isMuerto()) {
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }

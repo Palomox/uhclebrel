@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import main.UHCLebrel;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.md_5.bungee.api.ChatColor;
-import util.Mamerto;
+import util.UHCPlayer;
 
 public class UhcPlaceholders extends PlaceholderExpansion{
 
@@ -25,17 +25,17 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 	public String getVersion() {
 		return UHCLebrel.instance.getDescription().getVersion().toString();
 	}
-	
+
 	@Override
 	public boolean persist() {
 		return true;
 	}
-	
+
 	@Override
     public boolean canRegister(){
         return true;
     }
-	
+
 	@Override
 	public String onPlaceholderRequest(Player player, String identifier) {
 		switch(identifier) {
@@ -43,18 +43,18 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 * %uhc_episodio%
 		 */
 		case "episodio":
-			return String.valueOf(UHCLebrel.instance.getJuego().getEpisodio().getId());
+			return String.valueOf(UHCLebrel.instance.getGameManager().getEpisodio().getId());
 		/*
 		 * %uhc_ganador%
 		 */
 		case "ganador":
-			return UHCLebrel.instance.getJuego().getGanador().getNombre();
+			return UHCLebrel.instance.getGameManager().getGanador().getNombre();
 		/*
 		 * %uhc_ganadormiembros%
 		 */
 		case "ganadormiembros":
 			StringJoiner sj = new StringJoiner(", ");
-			for(Mamerto tmp : UHCLebrel.instance.getJuego().getGanador().getMiembros().keySet()) {
+			for(UHCPlayer tmp : UHCLebrel.instance.getGameManager().getGanador().getMiembros().keySet()) {
 				sj.add(tmp.getPlayer().getName());
 			}
 			return sj.toString();
@@ -62,28 +62,34 @@ public class UhcPlaceholders extends PlaceholderExpansion{
 		 * %uhc_teamname%
 		 */
 		case "teamname":
-			
-			if(UHCLebrel.instance.getHPByName(player.getName()).getTeam() !=null) {
-				switch(UHCLebrel.instance.juego.getEstado()) {
-				case JUGANDO:
-					if(UHCLebrel.instance.getHPByName(player.getName()).isEspectador()) {
-						return UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+
+			if(UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam() !=null) {
+				switch(UHCLebrel.instance.gameManager.getEstado()) {
+				case PLAYING:
+					if(UHCLebrel.instance.getUHCPlayerByName(player.getName()).isEspectador()) {
+						return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 					}
-					return ChatColor.MAGIC+UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+					return ChatColor.MAGIC+UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 				default:
-					return UHCLebrel.instance.getHPByName(player.getName()).getTeam().getNombre();
+					return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getTeam().getNombre();
 				}
 			}else {
-				return "Sin equipo, 1";
+				return "Sin equipo";
 			}
 		case "rarename":
-			if(UHCLebrel.instance.getJuego().getEstado() == EstadosJuego.JUGANDO) {
-				return UHCLebrel.instance.getHPByName(player.getName()).getDisplayname();
+			if(UHCLebrel.instance.getGameManager().getEstado() == GameStatuses.PLAYING) {
+				return UHCLebrel.instance.getUHCPlayerByName(player.getName()).getDisplayname();
 			}else {
 				return player.getName();
-			}	
+			}
+			/*
+			 * %uhc_time%
+			 */
+		case "time":
+			long secs = UHCLebrel.instance.getGameManager().getEpisodio().getDuracion().getSeconds();
+			return String.format("%02d:%02d", (secs % 3600) / 60, (secs % 60));
 		}
-		
 		return null;
+
 	}
 }

@@ -3,11 +3,11 @@ package uhc;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EpisodioChangeEvent extends Event{
+public class PartChangeEvent extends Event{
 	private static final HandlerList handlers = new HandlerList();
 	private int nuevoEpisodio;
 	
-	public EpisodioChangeEvent(int nuevoEpi) {
+	public PartChangeEvent(int nuevoEpi) {
 		this.nuevoEpisodio = nuevoEpi ;
 	}
 	public HandlerList getHandlers() {

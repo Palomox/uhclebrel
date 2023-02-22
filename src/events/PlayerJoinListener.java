@@ -1,4 +1,4 @@
-package eventos;
+package events;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,30 +13,26 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import chat.IChannel;
 import main.UHCLebrel;
 import me.clip.placeholderapi.PlaceholderAPI;
-import util.Mamerto;
+import util.UHCPlayer;
 import util.Scoreboard;
 
-public class NewPlayer implements Listener {
+public class PlayerJoinListener implements Listener {
 	private UHCLebrel plugin;
 
-	public NewPlayer(UHCLebrel plugin) {
+	public PlayerJoinListener(UHCLebrel plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
 	public void alUnirServidor(PlayerJoinEvent event) {
 		Player jugador = event.getPlayer();
-		// Comprueba si es admin, asi le añade al arraylist de admins.
-		if (jugador.isOp() || jugador.hasPermission("hopoke.admin")) {
-			plugin.getAdmins().add(jugador);
-		}
-		final Mamerto hpp;
-		if (Mamerto.getHPPlayer(jugador, plugin) == null) {
+		final UHCPlayer hpp;
+		if (UHCPlayer.getHPPlayer(jugador, plugin) == null) {
 			LocalDate fj = LocalDate.now();
-			hpp = new Mamerto(jugador.getUniqueId().toString(), fj);
-			plugin.getHoPokePlayers().add(hpp);
+			hpp = new UHCPlayer(jugador.getUniqueId().toString(), fj);
+			plugin.getUHCPlayers().add(hpp);
 		} else {
-			hpp = Mamerto.getHPPlayer(jugador, plugin);
+			hpp = UHCPlayer.getHPPlayer(jugador, plugin);
 		}
 		// Canal por defecto
 		for (String disc : plugin.getConfig().getConfigurationSection("chat.channels").getKeys(false)) {
@@ -44,7 +40,7 @@ public class NewPlayer implements Listener {
 			IChannel tmp = plugin.getChannelByName(plugin.getConfig().getString("chat.channels." + disc + ".name"));
 			if (perm.equalsIgnoreCase("none")) {
 				hpp.addReadingChannel(tmp);
-				if (tmp.addLector(hpp.getPlayer())) {
+				if (tmp.addChannelReader(hpp.getPlayer())) {
 					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora también lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
@@ -53,7 +49,7 @@ public class NewPlayer implements Listener {
 			}
 			if (hpp.getPlayer().hasPermission(perm)) {
 				hpp.addReadingChannel(tmp);
-				if (tmp.addLector(hpp.getPlayer())) {
+				if (tmp.addChannelReader(hpp.getPlayer())) {
 					jugador.getPlayer().sendMessage(ChatColor.DARK_GREEN + "Ahora también lees " + tmp.getName());
 				} else {
 					jugador.getPlayer().sendMessage(
@@ -66,13 +62,13 @@ public class NewPlayer implements Listener {
 		/*
 		 * Creacion de la Scoreboard
 		 */
-		switch (UHCLebrel.instance.juego.getEstado()) {
-		case ESPERANDO:
+		switch (UHCLebrel.instance.gameManager.getEstado()) {
+		case WAITING:
 			Runnable sr = new Runnable() {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.lobby.lines");
 					for (int i = 0; i < sb.size(); i++) {
@@ -85,12 +81,12 @@ public class NewPlayer implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, sr, 40);
 
 			break;
-		case JUGANDO:
+		case PLAYING:
 			Runnable srp = new Runnable() {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.durante.lines");
 					for (int i = 0; i < sb.size(); i++) {
@@ -102,12 +98,12 @@ public class NewPlayer implements Listener {
 			};
 			Bukkit.getScheduler().scheduleSyncDelayedTask(UHCLebrel.instance, srp, 40);
 			break;
-		case FINALIZADO:
+		case FINISHING:
 			Runnable srf = new Runnable() {
 
 				@Override
 				public void run() {
-					Scoreboard.updateScoreboard(event.getPlayer(), ChatColor.translateAlternateColorCodes('&',
+					Scoreboard.updateScoreboard(hpp, ChatColor.translateAlternateColorCodes('&',
 							UHCLebrel.instance.getConfig().getString("scoreboard.title")));
 					List<?> sb = UHCLebrel.instance.getConfig().getList("scoreboard.final.lines");
 					for (int i = 0; i < sb.size(); i++) {
@@ -123,7 +119,7 @@ public class NewPlayer implements Listener {
 			break;
 		}
 
-		UHCLebrel.instance.todos.addEntry(event.getPlayer().getName());
+		UHCLebrel.instance.everyone.addEntry(event.getPlayer().getName());
 		event.getPlayer().setScoreboard(UHCLebrel.instance.all);
 		/*
 		 * Reconectar
